@@ -1,0 +1,29 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+	<body>
+    <p>About Tapestry5 Portlet application ...</p>
+	
+	<p>
+	This library is based on work of Markus Feindler, Le Xuan Trun and Kristina B. Taylor 
+	(see <a href="http://code.google.com/p/tapestry5portlet/">project</a> for more details).<br/> 
+	Like Felix Scheffer (<a href="http://code.google.com/p/tapestry5-portlet-support/">project</a> for more details), 
+	we have updated the dependencies of this library to use Tapestry 5.2.6.
+	</p>
+	<p>
+	This library support:
+	<ul>
+		<li>portlet event processing (JSR 286)</li>
+		<li> serving ajax request as resource </li>  
+		<li> support MARKUP_HEAD_ELEMENT </li>
+		<li> use of Apache Pluto to ease the test of portlet features </li>
+	</ul>
+	</p> 
+	
+		
+	<p>
+	Code is available at <a href="https://github.com/got5/tapestry5-portlet">GOT5</a>	
+	for more details check also https://issues.apache.org/jira/browse/TAP5-64
+	</p>
+		
+	</body>
+</html>

@@ -1,0 +1,18 @@
+<html t:type="layout" title="About tapestryportlet" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+    <p>About tapestryportlet application ...</p>
+	
+	<t:form t:id="testForm">
+	<t:errors/>
+	Data: <t:textfield value="data"/>
+	<input type="submit" value="Abschicken"/>
+	</t:form>
+	
+	<t:actionlink t:id="showdown" zone="show">Show</t:actionlink>
+	<t:zone t:id="show">Zone here</t:zone>
+	
+	<t:block t:id="sample">
+	<t:actionlink t:id="showdownagain" zone="show">Show</t:actionlink>
+		Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+	</t:block>
+</html>

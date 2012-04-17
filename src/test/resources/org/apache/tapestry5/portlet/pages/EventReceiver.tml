@@ -1,0 +1,22 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
+
+<body>
+
+	<div>
+	
+		<h2>Portlet information:</h2>
+		<ul>
+			<li>PortletMode : ${portletMode}</li>
+			<li>WindowState: ${windowState}</li>
+		</ul>
+	</div>
+		
+		<h2>
+			Event processing, lastEvent = ${request.getParameter('lastEvent')}
+		</h2>
+		
+</body>
+
+</html>

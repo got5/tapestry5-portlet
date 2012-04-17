@@ -1,0 +1,104 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+<body>
+
+	<div>
+	
+		<h2>Portlet information:</h2>
+		<ul>
+			<li>PortletMode : ${portletMode}</li>
+			<li>WindowState: ${windowState}</li>
+		</ul>
+	</div>
+
+	<div>
+		<p>${message:greeting}</p>
+
+		<p>${message:testmsg}</p>
+
+		<t:zone t:id="dateZone">
+			<p>The current time is: ${currentTime}.</p>
+		</t:zone>
+
+		<p>
+			${request.getParameter('rp1')}
+			<br />
+			${request.getParameter('rp2')}
+		</p>
+
+		
+		<h2>
+			Link Tests
+		</h2>
+		<ul>
+			<li><t:pagelink page="BlockCaller">To Block Caller</t:pagelink></li>
+			<li><t:pagelink page="Index">Refresh (PageLink)</t:pagelink></li>
+			<li><t:actionlink t:id="refreshWithLink" page="Index">Refresh (LinkSource)</t:actionlink></li>
+			<li><t:actionlink t:id="refreshAction">Refresh (ActionLink) with PortletRenderable </t:actionlink></li>
+			<li><t:actionlink t:zone="${dateZoneId}" t:id="ajaxDateRefresh">Ajax Refresh Date</t:actionlink></li>
+			<li><t:actionlink t:id="toContactPage">Display contact page inside the portlet</t:actionlink></li>
+			<li><t:eventlink t:event="serveresource">Download File</t:eventlink></li>
+			<li><t:pagelink page="ActivationContext" t:context="literal:Activation Test">To activation context test page</t:pagelink></li>
+			<li><t:pagelink page="Contact">Direct Contact Page</t:pagelink></li>
+			<li><t:pagelink page="Exception">Exception page</t:pagelink></li>
+			<li><t:actionlink t:id="actionException">Action Exception</t:actionlink></li>
+			<li><t:actionlink t:id="notHandledAction">Not Handled Action</t:actionlink></li>
+		</ul>
+		
+		<h2>
+			Portlet Link Test
+		</h2>
+		<ul>
+			<li><t:portletPageLink page="Index" windowState="maximized">Maximize and Refresh</t:portletPageLink></li>
+			<li><t:portletPageLink page="Index" windowState="minimized">Minimize and Refresh</t:portletPageLink></li>
+			<li><t:portletPageLink page="Index" windowState="normal">Back to normal ws</t:portletPageLink></li>
+		</ul>
+		
+		
+		<h2>
+			Portal Page Navigation
+		</h2>
+		<ul>
+			<li><t:actionlink t:id="navToAbout">Go to About Portal Page</t:actionlink></li>
+		</ul>
+		
+		<h2>
+			Event processing
+		</h2>
+		
+		<ul>
+			<li><t:eventlink t:event="publishEvent">Publish event</t:eventlink>: ${request.getParameter('lastEvent')}</li>
+		</ul>
+		
+		<h2>
+			Form tests
+		</h2>
+		
+		<h3>Simple Form</h3>
+		<t:if test="lastName">Hi ${lastName} from simple form!</t:if>
+		<form t:type="form" t:id="lastNameSimpleForm">
+			<label t:type="label" t:for="lastName"/><input t:type="textfield" t:id="lastName" t:value="lastName"/>
+			<t:submit />
+		</form>
+		
+		<h3>Ajax Form</h3>
+		<t:zone t:id="formResultZone" id="monFormId">
+			<t:if test="firstName">Hi ${firstName} from Ajax Form!</t:if>
+		</t:zone>
+		
+		<form t:type="form" t:zone="monFormId" t:id="firstNameForm">
+			<label t:type="label" t:for="firstName"/><input t:type="textfield" t:id="firstName"/>
+			<t:submit />
+		</form>
+		
+		<h3>Form upload</h3>
+		<form t:type="form" t:id="uploadForm">
+			<input t:type="upload" t:id="file" t:value="file" validate="required"/>
+			<t:submit />
+		</form>
+		
+	</div>
+</body>
+
+</html>

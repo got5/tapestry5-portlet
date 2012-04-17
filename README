@@ -1,0 +1,19 @@
+This library is based on work of Markus Feindler, Le Xuan Trun and Kristina B. Taylor 
+(see http://code.google.com/p/tapestry5portlet/ for more details).
+
+Like Felix Scheffer (http://code.google.com/p/tapestry5-portlet-support/ for more details), 
+we have updated the dependencies of this library to use Tapestry 5.2.6.
+
+This library also support:
+- portlet event processing (JSR 286)
+- serving ajax request as portlet resource (event name that start with serve or components declared in the PortletResourceResponseIdentifier service)
+- support MARKUP_HEAD_ELEMENT
+- rework on IdAllocator to avoid conflict for generated id when there is more than on tapestry portlet in a page. 
+- use of Apache Pluto to ease the test 
+	
+Code is available at https://github.com/got5/tapestry5-portlet.
+If you want to see it in action, you just need to:
+- Download the sources
+- Go to the repository directory
+- Run "mvn jetty:run"
+- Open your browser to http://localhost:8080/tapestry5-portlet/portal/Index
