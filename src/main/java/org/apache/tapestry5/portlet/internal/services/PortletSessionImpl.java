@@ -117,22 +117,7 @@ public class PortletSessionImpl implements Session
 
     public void restoreDirtyObjects()
     {
-        if (invalidated) return;
-
-        if (sessionAttributeCache.isEmpty()) return;
-
-        for (Map.Entry<String, Object> entry : sessionAttributeCache.entrySet())
-        {
-            String attributeName = entry.getKey();
-
-            Object attributeValue = entry.getValue();
-
-            if (attributeValue == null)
-                continue;
-
-            if (analyzer.isDirty(attributeValue))
-                session.setAttribute(attributeName, attributeValue);
-        }
+       
     }
 
 }

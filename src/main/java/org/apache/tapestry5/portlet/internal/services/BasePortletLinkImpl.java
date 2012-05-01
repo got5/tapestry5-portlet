@@ -6,6 +6,7 @@ import javax.portlet.BaseURL;
 import javax.portlet.PortletResponse;
 
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.internal.services.LinkSecurity;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.PortletConstants;
 import org.apache.tapestry5.portlet.PortletUtilities;
@@ -126,4 +127,15 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
         return toAbsoluteURI();
     }
 
+    //5.3
+    public void setSecurity(LinkSecurity newSecurity)
+    {
+    	this.delegate.setSecurity(newSecurity);
+    }
+
+    public LinkSecurity getSecurity()
+    {
+    	return this.delegate.getSecurity();
+    }
+    
 }

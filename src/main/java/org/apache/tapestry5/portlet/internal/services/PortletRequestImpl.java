@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.PortletUtilities;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
  * Portlet request wrapper
  * 
  * @author ccordenier
+ * @author ffacon
  */
 public class PortletRequestImpl implements Request
 {
@@ -165,15 +167,46 @@ public class PortletRequestImpl implements Request
         return "POST";
     }
 
+    /**
+     * Not allowed in a portlet.
+     * 
+     * @throws IllegalStateException
+     *             Not allowed in a portlet.
+     */
     public int getLocalPort()
     {
-        return 0;
-    	//todo return request.getLocalPort();
+    	if (request instanceof HttpServletRequest) {
+    	return ((HttpServletRequest) request).getLocalPort();
+    	}
+        throw new IllegalStateException("getLocalPort Not allowed in a portlet");
     }
 
+    /**
+     * Not allowed in a portlet.
+     * 
+     * @throws IllegalStateException
+     *             Not allowed in a portlet.
+     */
     public int getServerPort()
     {
-        return request.getServerPort();
+    	if (request instanceof HttpServletRequest) {
+    		return ((HttpServletRequest) request).getServerPort();
+      	}
+    	throw new IllegalStateException("getServerPort Not allowed in a portlet");
+    }
+
+    /**
+    * Not allowed in a portlet.
+    * 
+    * @throws IllegalStateException
+    *             Not allowed in a portlet.
+    */
+    public String getRemoteHost() 
+    {
+    	if (request instanceof HttpServletRequest) {
+      			return ((HttpServletRequest) request).getRemoteHost();
+       		}
+      		throw new IllegalStateException("getRemoteHost Not allowed in a portlet");
     }
 
 }

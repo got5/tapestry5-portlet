@@ -8,6 +8,7 @@ import javax.portlet.WindowState;
  * needed between Tapestry link API and Portlet API.
  * 
  * @author ccordenier
+ * @author ffacon
  */
 public interface PortletLink
 {

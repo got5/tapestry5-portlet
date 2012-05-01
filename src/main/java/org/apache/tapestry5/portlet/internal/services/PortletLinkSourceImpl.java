@@ -256,7 +256,7 @@ public class PortletLinkSourceImpl
 	        	ParameterConduit paramConduit = internalRes.getParameterConduit("zone");
 	        	log.info(cptName+" "+paramConduit.toString());
 	        	//Fix: make sure zone is bound to a real component       
-	        	if(paramConduit.get()==null) return false;
+	        	if(!paramConduit.isBound()) return false;
 	        	else return true;
 	        	
 	        }

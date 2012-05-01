@@ -1,8 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="tapestryportlet2 Application Test Suite" annotations="1.5">
-    <test name="Unit Tests">
+<suite name="tapestry5-portlet Application Test Suite" annotations="1.5">
+    <test name="Pluto Integration Tests" enabled="true">
+        <parameter name="tapestry.web-app-folder" value="src/main/webapp"/>
+
         <packages>
-            <package name="de.wiv.tapestryportlet2"/>
+            <package name="org.apache.tapestry5.portlet"/>
         </packages>
     </test>
 </suite>

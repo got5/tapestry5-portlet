@@ -151,11 +151,11 @@ public class Index
         return renderable;
     }
 
-    public Object onActionFromReDownloadResource()
+    /*public Object onActionFromReDownloadResource()
     {
         System.out.println("fromredownload");
         return Contact.class;
-    }
+    }*/
 
     @OnEvent(component = "actionException")
     void onActionFromActionException()
