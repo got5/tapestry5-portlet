@@ -139,6 +139,12 @@
 			<version>2.0.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.ccpp</groupId>
+			<artifactId>ccpp</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -228,6 +234,19 @@
 							</tapestry-Module-Classes>
 						</manifestEntries>
 					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<!--  additionalClasspathElements>
+            			<additionalClasspathElement>path/to/additional/resources</additionalClasspathElement>
+            			<additionalClasspathElement>path/to/additional/jar</additionalClasspathElement>
+          			</additionalClasspathElements-->
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
 				</configuration>
 			</plugin>
 		</plugins>

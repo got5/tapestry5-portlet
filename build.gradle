@@ -1,0 +1,101 @@
+import org.gradle.api.Project
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+// Specific to top-level build, not set for subprojects:
+
+configurations {
+   provided
+   deployerJars
+   binaries // additional dependencies included in the binary archive
+}
+
+
+// See http://jira.codehaus.org/browse/GRADLE-784
+
+  sourceSets {
+    main {
+      compileClasspath += configurations.provided
+    }
+    test {
+      compileClasspath += configurations.provided
+      runtimeClasspath += configurations.provided
+    }
+  }
+
+Project projectDef = project;
+
+tapestryVersion = "5.3.3"
+liferayVersion = "6.1.0"
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+    //mavenRepo urls: "https://repository.apache.org/content/repositories/staging/"
+        
+}
+
+dependencies {
+	compile "org.apache.tapestry:tapestry-core:$tapestryVersion"
+	compile "org.apache.tapestry:tapestry-upload:$tapestryVersion"
+    compile "org.slf4j:slf4j-api:1.6.1"
+    compile "org.slf4j:slf4j-log4j12:1.6.1"
+    compile "javax.servlet:servlet-api:2.5"
+    compile group: 'javax.servlet', name: 'jsp-api', version: '2.0'
+
+	providedCompile group: 'javax.portlet', name: 'portlet-api', version: '2.0'
+	providedCompile group: 'com.liferay.portal', name: 'portal-service', version:'6.1.0'
+	
+	testCompile "org.apache.tapestry:tapestry-test:$tapestryVersion"
+	testCompile("org.apache.portals.pluto:pluto-container:2.0.3")  {
+        exclude module: 'slf4j-api'
+    }         
+    testCompile group: 'com.liferay.portal', name: 'portal-service', version:'6.1.0'
+	testCompile "org.apache.portals.pluto:pluto-container-api:2.0.3"
+	testCompile "org.apache.portals.pluto:pluto-portal-driver-impl:2.0.3"
+	testCompile "org.apache.portals.pluto:pluto-container-driver-api:2.0.3"
+	//testCompile "org.apache.portals.pluto:pluto-taglib:2.0.3"
+	//testCompile "javax.ccpp:ccpp:1.0"
+	
+	testRuntime("org.apache.portals.pluto:pluto-container:2.0.3")  {
+        exclude module: 'slf4j-api'
+    }         
+    //testRuntime group: 'com.liferay.portal', name: 'portal-service', version:'6.1.0'
+	testRuntime "org.apache.portals.pluto:pluto-container-api:2.0.3"
+	testRuntime "org.apache.portals.pluto:pluto-portal-driver-impl:2.0.3"
+	testRuntime "org.apache.portals.pluto:pluto-container-driver-api:2.0.3"
+	testRuntime "org.apache.portals.pluto:pluto-taglib:2.0.3"
+	testRuntime "javax.ccpp:ccpp:1.0"
+
+	
+}
+
+jettyRun {
+	dependsOn testClasses
+    classpath =  sourceSets.main.runtimeClasspath + sourceSets.test.runtimeClasspath
+	httpPort = 8080
+	webXml = new File("$projectDef.projectDir/src/main/webapp/WEB-INF/plugin-web.xml")
+	
+	
+}
+
+test {
+        useTestNG()
+        options.suites("src/test/conf/testng.xml")
+        maxHeapSize = "400M"
+        systemProperties["tapestry.service-reloading-enabled"] = "false"
+        jvmArgs("-XX:MaxPermSize=512m")
+        logging.captureStandardOutput LogLevel.INFO
+        getLogging().setLevel(LogLevel.INFO)
+}
+
+jar {	
+
+	manifest {	
+		attributes 'Tapestry-Module-Classes': 'org.apache.tapestry5.portlets.services.PortletModule'
+		}
+ }
+
+

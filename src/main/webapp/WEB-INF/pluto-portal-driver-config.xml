@@ -41,18 +41,18 @@ limitations under the License.
   </supports>
 
   <!-- Render configuration which defines the portal pages. -->
-     <render-config default="Pluto Admin">
+  <render-config default="Pluto Admin">
     <page name="Pluto Admin" uri="/WEB-INF/themes/pluto-default-theme.jsp">
-      <portlet context="/tapestry5-portlet" name="PlutoPageAdmin"/>
-      <portlet context="/tapestry5-portlet" name="AboutPortlet"/>
+      <portlet context="tapestry5-portlet" name="PlutoPageAdmin"/>
+      <portlet context="tapestry5-portlet" name="AboutPortlet"/>
     </page>
     <page name="Index" uri="/WEB-INF/themes/pluto-default-theme.jsp">
-      <portlet context="/tapestry5-portlet" name="Index"/>
-      <portlet context="/tapestry5-portlet" name="EventReceiver"/>
+      <portlet context="tapestry5-portlet" name="Index"/>
+      <portlet context="tapestry5-portlet" name="EventReceiver"/>
     </page>
     <page name="About" uri="/WEB-INF/themes/pluto-default-theme.jsp">
-      <portlet context="/tapestry5-portlet" name="About"/>
-      <portlet context="/tapestry5-portlet" name="EventReceiver"/>
+      <portlet context="tapestry5-portlet" name="About"/>
+      <portlet context="tapestry5-portlet" name="EventReceiver"/>
     </page>
   </render-config>
 
