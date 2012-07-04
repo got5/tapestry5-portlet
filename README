@@ -1,3 +1,13 @@
+# Tapestry 5 Portlet Bridge Module - 5.3.1
+
+
+## Changelog
+- 5.3.1-SNAPSHOT : Update to Tapestry 5.3.4
+- 5.3.0-SNAPSHOT : Update to Tapestry 5.3.3
+- 5.2.0-SNAPSHOT : Update to Tapestry 5.2.6
+
+
+
 This library is based on work of Markus Feindler, Le Xuan Trun and Kristina B. Taylor 
 (see http://code.google.com/p/tapestry5portlet/ for more details).
 

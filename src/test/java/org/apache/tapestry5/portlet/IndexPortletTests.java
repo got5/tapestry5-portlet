@@ -28,7 +28,7 @@ public class IndexPortletTests extends SeleniumTestCase
     @Test
     public void PublishEvent()
     {
-    	open("/tapestry5-portlet/portal/index");
+    	open("/tapestry5-portlet/portal/Index");
     	sleep(10000);
 
         clickAndWait("link=Publish event");

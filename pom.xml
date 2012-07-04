@@ -5,8 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.3.0-SNAPSHOT</version>
+	<version>5.3.1-SNAPSHOT</version>
 	<name>Tapestry5 Portlet 2.0 Integration</name>
+	<!--  packaging>war</packaging-->
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -45,8 +46,8 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>5.8</version>
-			<classifier>jdk15</classifier>
+			<version>6.5.2</version>
+			<!--  >classifier>jdk15</classifier-->
 			<scope>test</scope>
 		</dependency>
 
@@ -102,7 +103,7 @@
 			<version>${liferay.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Pluto dependencies -->
+		<!-- Pluto dependencies test -->
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
@@ -144,7 +145,81 @@
 			<artifactId>ccpp</artifactId>
 			<version>1.0</version>
 			<scope>test</scope>
+		</dependency> 
+		
+		<!--  -->
+		<dependency>
+        	<groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-server</artifactId>
+        	<version>7.0.0.v20091005</version>
+            <scope>test</scope>
+    	</dependency>
+    	<dependency>
+        	<groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-webapp</artifactId>
+        	<version>7.0.0.v20091005</version>
+            <scope>test</scope>
+    	</dependency>
+
+	    <dependency>
+    	    <groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-jsp-2.1</artifactId>
+        	<version>7.1.0.v20100505</version>
+            <scope>test</scope>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jsp-2.1-glassfish</artifactId>
+			<version>2.1.v20091210</version>
+			<scope>test</scope>
 		</dependency>
+    	
+    	<dependency>
+  			<groupId>com.bekk.boss</groupId>
+  			<artifactId>maven-jetty-pluto-embedded</artifactId>
+  			<version>1.0.1</version>
+  			<scope>test</scope>
+		</dependency>
+		
+		<!-- war 
+		<dependency>
+			<groupId>org.apache.portals.pluto</groupId>
+			<artifactId>pluto-container</artifactId>
+			<version>2.0.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.portals.pluto</groupId>
+			<artifactId>pluto-taglib</artifactId>
+			<version>2.0.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.portals.pluto</groupId>
+				<artifactId>pluto-container-api</artifactId>
+				<version>2.0.3</version>
+				</dependency>
+			<dependency>
+						<groupId>org.apache.portals.pluto</groupId>
+						<artifactId>pluto-container-driver-api</artifactId>
+						<version>2.0.3</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.portlet</groupId>
+						<artifactId>portlet-api</artifactId>
+						<version>2.0</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.ccpp</groupId>
+						<artifactId>ccpp</artifactId>
+						<version>1.0</version>
+					</dependency>
+		-->
 	</dependencies>
 	<build>
 		<plugins>
@@ -179,7 +254,7 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
-				<version>6.1.9</version>
+				<version>6.1.26</version><!-- 6.1.9 -->
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.portals.pluto</groupId>
@@ -238,15 +313,18 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.8.1</version>
+				<version>2.12</version>
+				<!--  >version>2.8.1</version-->
 				<configuration>
 					<!--  additionalClasspathElements>
-            			<additionalClasspathElement>path/to/additional/resources</additionalClasspathElement>
-            			<additionalClasspathElement>path/to/additional/jar</additionalClasspathElement>
+            			<additionalClasspathElement>/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/target/test-classes</additionalClasspathElement>
+            			<additionalClasspathElement>/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/</additionalClasspathElement>
+            			<additionalClasspathElement>/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/target/classes</additionalClasspathElement>
           			</additionalClasspathElements-->
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					 <forkMode>never</forkMode>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -305,20 +383,25 @@
 	</reporting>
 
 	<repositories>
+    
+        <repository>
+			<id>repo.maven</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
 
 		<!-- This repository is only needed if the Tapestry released artifacts 
-			haven't made it to the central Maven repository yet. -->
+			haven't made it to the central Maven repository yet. 
 		<repository>
 			<id>tapestry</id>
-			<url>http://tapestry.formos.com/maven-repository/</url>
-		</repository>
+			<url>http://tapestry.formos.com/maven-repository</url>
+		</repository>-->
 
 		<!-- This repository is only needed when the tapestry-release-version is 
-			a snapshot release. -->
+			a snapshot release. 
 		<repository>
 			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</repository>
+			<url>http://tapestry.formos.com/maven-snapshot-repository</url>
+		</repository>-->
 
 		<repository>
 			<id>codehaus.snapshots</id>
@@ -335,16 +418,43 @@
 
 		<!-- As above, this can be commented out when access to the snapshot version 
 			of a Tapestry Maven plugin is not required. -->
+
 		<pluginRepository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
+			<id>apache-maven-repository</id>
+			<url>http://repo.maven.apache.org/maven2/org/apache/maven/plugins/</url>
 		</pluginRepository>
 
+
+		 <pluginRepository>
+            <id>jettySnapshots</id>
+            <name>Jetty Maven2 Snapshot Repository</name>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <layout>default</layout>
+        </pluginRepository>
+        
+        <pluginRepository>
+            <id>jettySnapshots</id>
+            <name>Jetty Maven2 Snapshot Repository</name>
+            <url>http://repository.codehaus.org</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <layout>default</layout>
+        </pluginRepository>
 
 	</pluginRepositories>
 
 	<properties>
-		<tapestry-release-version>5.3.3</tapestry-release-version>
+		<tapestry-release-version>5.3.4</tapestry-release-version>
 		<liferay.version>6.1.0</liferay.version>
 	</properties>
 </project>
