@@ -209,4 +209,16 @@ public class PortletRequestImpl implements Request
       		throw new IllegalStateException("getRemoteHost Not allowed in a portlet");
     }
 
+	@Override
+	public boolean isSessionInvalidated() {
+		// Double check to ensure that the session exists, but don't create it.
+        if (session == null)
+        {
+            //toDo session = sessionFactory.getSession(false);
+        	PortletSession portletSession = request.getPortletSession(false);
+        }
+
+        return session != null && session.isInvalidated();
+	}
+
 }

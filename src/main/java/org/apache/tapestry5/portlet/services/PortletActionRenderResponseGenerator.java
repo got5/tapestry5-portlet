@@ -2,7 +2,6 @@ package org.apache.tapestry5.portlet.services;
 
 import java.io.IOException;
 
-import org.apache.tapestry5.internal.services.ActionRenderResponseGenerator;
 import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.portlet.PortalPage;
 

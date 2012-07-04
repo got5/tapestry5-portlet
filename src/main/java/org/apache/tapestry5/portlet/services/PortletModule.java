@@ -61,9 +61,7 @@ import org.apache.tapestry5.internal.services.ajax.JavaScriptSupportImpl;
 import org.apache.tapestry5.internal.services.javascript.JavaScriptStackPathConstructor;
 import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.ioc.Configuration;
-import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ScopeConstants;
@@ -85,6 +83,8 @@ import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.ioc.util.IdAllocator;
 import org.apache.tapestry5.ioc.util.StrategyRegistry;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.plastic.MethodAdvice;
+import org.apache.tapestry5.plastic.MethodInvocation;
 import org.apache.tapestry5.portlet.DeclaredResourceResponseSender;
 import org.apache.tapestry5.portlet.PortalPage;
 import org.apache.tapestry5.portlet.PortletConstants;
@@ -575,7 +575,7 @@ public final class PortletModule
     }
 
     /**
-     * Intercept FormSupport push calls and adpat it to prefix generated ids with portlet window id.
+     * Intercept FormSupport push calls and adapt it to prefix generated ids with portlet window id.
      * Doing we assure that there will be no collision between control name on client side.
      * 
      * @param receiver
@@ -590,7 +590,7 @@ public final class PortletModule
         MethodAdvice advice = new MethodAdvice()
         {
             @Override
-            public void advise(Invocation invocation)
+            public void advise(MethodInvocation invocation)
             {
                 Object instance = invocation.getParameter(1);
                 if (FormSupportImpl.class.equals(instance.getClass()))
@@ -598,10 +598,12 @@ public final class PortletModule
                     FormSupport adapter = new PortletFormSupportAdapter((FormSupport) instance,
                             globals.getPortletRequest().getWindowID()
                                     .replaceAll("[^A-za-z0-9]", ""));
-                    invocation.override(1, adapter);
+                    invocation.setParameter(1, adapter);
                 }
                 invocation.proceed();
             }
+
+			
         };
 
         Method push = Environment.class.getMethod("push", Class.class, Object.class);

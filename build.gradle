@@ -1,4 +1,4 @@
-description = "Tapestry 5 Jquery Module"
+description = "Tapestry 5 portlet Module"
 import org.gradle.api.Project
 
 apply plugin: 'java'
@@ -29,7 +29,7 @@ configurations {
 
 Project projectDef = project;
 
-tapestryVersion = "5.3.3"
+tapestryVersion = "5.4.beta1"
 liferayVersion = "6.1.0"
 servletapi = "2.5"
 spock = "0.6-groovy-1.8"
