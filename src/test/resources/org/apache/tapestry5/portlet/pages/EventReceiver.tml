@@ -16,7 +16,24 @@
 		<h2>
 			Event processing, lastEvent = ${request.getParameter('lastEvent')}
 		</h2>
+	
+	<h3>Portlet Session Scope</h3>
 		
+			<form t:type="form" t:id="persistStategie">
+			<t:if test="applicationScope">
+				<br/>${applicationScope} is stored in portlet session in scope Application 
+				with @Persist(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE)!
+			</t:if>
+			<label t:type="label" t:for="applicationScope"/><input t:type="textfield" t:id="applicationScope" t:value="applicationScope"/>
+			<t:if test="portletScope">
+				<br/>${portletScope} is stored in portlet session in scope Portlet 
+				with @Persist!
+			</t:if>
+			<br/>
+			<label t:type="label" t:for="portletScope"/><input t:type="textfield" t:id="portletScope" t:value="portletScope"/>
+			<br/>
+			<t:submit />
+		</form>	
 </body>
 
 </html>
