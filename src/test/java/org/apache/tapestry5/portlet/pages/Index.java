@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.portlet.Event;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 
 import org.apache.pluto.driver.services.container.EventImpl;
@@ -69,11 +72,38 @@ public class Index
         return globals.getPortletRequest().getPortletMode().toString();
     }
 
+   
+    public String getLastNamefromPortletSession()
+    {
+    	PortletSession session = globals.getPortletRequest().getPortletSession();
+    	String WindowsId = globals.getPortletRequest().getWindowID();
+    	String fabricatedAttributeNameBase = "javax.portlet.p."+WindowsId+"?";
+    	String tapestryAttributeName= "state:Index::lastName";
+    	
+    	String lastNamefromApplicationScope = (String)session.getAttribute(fabricatedAttributeNameBase+tapestryAttributeName,PortletSession.APPLICATION_SCOPE);
+    	String lastNamefromPortletScope = (String)session.getAttribute(tapestryAttributeName,PortletSession.PORTLET_SCOPE);
+    	
+    	assert(lastNamefromApplicationScope.equalsIgnoreCase(lastNamefromPortletScope));
+    	
+    	return lastNamefromPortletScope; 
+    }
+    
+    
+    public String getHttpServletRequestFromRenderRequest()
+    {
+    	RenderRequest renderRequest = globals.getRenderRequest();
+    	HttpServletRequest httpRequest = (HttpServletRequest)  renderRequest.getAttribute("javax.portlet.portletc.httpServletRequest");		
+    	return httpRequest.toString();
+    }
+    
     public Date getCurrentTime()
     {
         return new Date();
     }
 
+    
+    
+    
     //
     public PortletRenderable onActionFromToContactPage()
     {

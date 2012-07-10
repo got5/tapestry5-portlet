@@ -9,7 +9,7 @@
 		<ul>
 			<li>PortletMode : ${portletMode}</li>
 			<li>WindowState: ${windowState}</li>
-		</ul>
+			</ul>
 	</div>
 
 	<div>
@@ -76,11 +76,13 @@
 		</h2>
 		
 		<h3>Simple Form</h3>
-		<t:if test="lastName">Hi ${lastName} from simple form!</t:if>
+		<t:if test="lastName"> ${lastName} is stored in portlet session scope Application with @Persist!</t:if>
 		<form t:type="form" t:id="lastNameSimpleForm">
 			<label t:type="label" t:for="lastName"/><input t:type="textfield" t:id="lastName" t:value="lastName"/>
 			<t:submit />
 		</form>
+		
+		
 		
 		<h3>Ajax Form</h3>
 		<t:zone t:id="formResultZone" id="monFormId">

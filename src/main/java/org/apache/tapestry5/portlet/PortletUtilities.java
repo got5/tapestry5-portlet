@@ -15,12 +15,17 @@
 package org.apache.tapestry5.portlet;
 
 import java.util.BitSet;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.internal.services.PortletRequestImpl;
 import org.apache.tapestry5.portlet.services.liferay.LiferayRequestImpl;
@@ -159,4 +164,33 @@ public final class PortletUtilities {
         return qsIdx > -1 ? URI.substring(0, qsIdx) : URI;
     }
 
+    /**
+     * Returns a list of the names of all attributes stored in the session whose name has the provided prefix. The names
+     * are returned in alphabetical order.
+     * 
+     *  @param session
+     *  			The Portlet Session
+     *  @param prefix
+	 *            	The attributeName prefix.
+	 * 
+	 * 	@return listofAttributesNames
+     * 
+     */
+    public static List<String> getAttributeNames(PortletSession session,int scope,String prefix)
+    {
+        List<String> result = CollectionFactory.newList();
+
+        Enumeration e = session.getAttributeNames(scope);
+        while (e.hasMoreElements())
+        {
+        	String name = (String) e.nextElement();
+
+        	if (name.startsWith(prefix)) result.add(name);
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+    
 }
