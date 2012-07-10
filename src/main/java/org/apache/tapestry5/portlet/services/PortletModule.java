@@ -89,6 +89,7 @@ import org.apache.tapestry5.portlet.DeclaredResourceResponseSender;
 import org.apache.tapestry5.portlet.PortalPage;
 import org.apache.tapestry5.portlet.PortletConstants;
 import org.apache.tapestry5.portlet.PortletPageResolver;
+import org.apache.tapestry5.portlet.PortletPersistenceConstants;
 import org.apache.tapestry5.portlet.PortletRenderable;
 import org.apache.tapestry5.portlet.PortletSymbolConstants;
 import org.apache.tapestry5.portlet.PortletUtilities;
@@ -96,6 +97,7 @@ import org.apache.tapestry5.portlet.annotations.Portlet;
 import org.apache.tapestry5.portlet.internal.services.PortalPageNameComponentEventResultProcessor;
 import org.apache.tapestry5.portlet.internal.services.PortletActionRenderResponseGeneratorImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletActionResultProcessor;
+import org.apache.tapestry5.portlet.internal.services.PortletApplicationScopePersistentFieldStrategy;
 import org.apache.tapestry5.portlet.internal.services.PortletClassResultProcessor;
 import org.apache.tapestry5.portlet.internal.services.PortletComponentEventRequestFilter;
 import org.apache.tapestry5.portlet.internal.services.PortletComponentEventRequestHandler;
@@ -131,6 +133,7 @@ import org.apache.tapestry5.services.MarkupWriterFactory;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.PartialMarkupRenderer;
 import org.apache.tapestry5.services.PartialMarkupRendererFilter;
+import org.apache.tapestry5.services.PersistentFieldStrategy;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestExceptionHandler;
 import org.apache.tapestry5.services.RequestGlobals;
@@ -682,6 +685,22 @@ public final class PortletModule
         
         
         
+    }
+    
+    /**
+     * Contributes Persistent Field strategies:
+     * <dl>
+     * <dt>PORTLET_SESSION_APPLICATION_SCOPE
+     * <dd>Values are stored in the the field's value is stored in the APPLICATION_SCOPE in  PortletSession
+     * 
+     * </dl>
+     */
+    public void contributePersistentFieldManager(MappedConfiguration<String, PersistentFieldStrategy> configuration,
+    		 @InjectService("PortletRequestGlobals")
+    		PortletRequestGlobals globals)
+    {
+        configuration.add(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE, new PortletApplicationScopePersistentFieldStrategy(globals));
+       
     }
 
 }

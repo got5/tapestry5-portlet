@@ -44,4 +44,10 @@ public final class PortletConstants
 	 * action request.
 	 */
 	public static final String LAST_ACTION_EXCEPTION = "LAST_ACTION_EXCEPTION";
+	
+	
+	
+
+
+	
 }
