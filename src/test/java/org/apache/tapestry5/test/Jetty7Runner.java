@@ -56,17 +56,13 @@ public class Jetty7Runner implements ServletContainerRunner
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath(contextPath);
         webapp.setWar(expandedPath);
-       /*
-        webapp.setExtraClasspath("/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/target/test-classes,"+
-        		"/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/,"+
-        		"/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/target/classes");
-        webapp.setWar(expandedPath);*/
+        File desc = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/main/webapp/WEB-INF/plugin-web-testng.xml");
         
-        webapp.setDescriptor("/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/src/main/webapp/WEB-INF/plugin-web-testng.xml");
+        webapp.setDescriptor(desc.getAbsolutePath());
+       
         /*
         System.setProperty("org.apache.pluto.embedded.portletId", "my-portlet");*/
-        //webapp.setDefaultsDescriptor("/Data/Dev/workspace/Tapestry-5.3/tapestry5-portlet/src/main/webapp/WEB-INF/jetty-pluto-web-default.xml");
-
+       
         // SSL support
         File keystoreFile = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/test/conf/keystore");
 
