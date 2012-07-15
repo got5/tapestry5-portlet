@@ -1,10 +1,10 @@
-// Copyright 2009, 2010, 2011 The Apache Software Foundation
+// Copyright 2009, 2010 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,32 +19,27 @@ import java.io.File;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.apache.tapestry5.test.TapestryTestConstants;
+
 
 /**
  * Launches an instance of Jetty7.
  */
-public class Jetty7Runner implements ServletContainerRunner
+public class Jetty7Runner
 {
-    private Server jettyServer;
+	
+    private final Server jettyServer;
 
-    private String description;
+    private final String description;
 
-    private int port;
+    private final int port;
+    
+    private final int sslPort;
 
-    private int sslPort;
-
-    public Jetty7Runner() {
-        // un-configured runner
-    }
-
-    public Jetty7Runner(String webappFolder, String contextPath, int port, int sslPort) throws Exception {
-        configure(webappFolder, contextPath, port, sslPort).start();
-    }
-
-    public Jetty7Runner configure(String webappFolder, String contextPath, int port, int sslPort) throws Exception
+    public Jetty7Runner(String webappFolder, String contextPath, int port, int sslPort) throws Exception
     {
         this.port = port;
-
+        
         this.sslPort = sslPort;
 
         String expandedPath = expand(webappFolder);
@@ -56,13 +51,7 @@ public class Jetty7Runner implements ServletContainerRunner
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath(contextPath);
         webapp.setWar(expandedPath);
-        File desc = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/main/webapp/WEB-INF/plugin-web-testng.xml");
-        
-        webapp.setDescriptor(desc.getAbsolutePath());
-       
-        /*
-        System.setProperty("org.apache.pluto.embedded.portletId", "my-portlet");*/
-       
+
         // SSL support
         File keystoreFile = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/test/conf/keystore");
 
@@ -82,10 +71,7 @@ public class Jetty7Runner implements ServletContainerRunner
         }
 
         jettyServer.setHandler(webapp);
-        return this;
-    }
 
-    public void start() throws Exception {
         jettyServer.start();
     }
 
@@ -107,11 +93,6 @@ public class Jetty7Runner implements ServletContainerRunner
         System.out.println("Jetty instance has stopped.");
     }
 
-    public Server getServer()
-    {
-        return jettyServer;
-    }
-
     @Override
     public String toString()
     {
@@ -122,7 +103,7 @@ public class Jetty7Runner implements ServletContainerRunner
      * Needed inside Maven multi-projects to expand a path relative to the module to a complete
      * path. If the path already is absolute and points to an existing directory, it will be used
      * unchanged.
-     *
+     * 
      * @param moduleLocalPath
      * @return expanded path
      * @see TapestryTestConstants#MODULE_BASE_DIR
@@ -132,9 +113,9 @@ public class Jetty7Runner implements ServletContainerRunner
         File path = new File(moduleLocalPath);
 
         // Don't expand if the path provided already exists.
-        if (path.isAbsolute() && path.isDirectory())
+        if(path.isAbsolute() && path.isDirectory())
             return moduleLocalPath;
-
+        
         return new File(TapestryTestConstants.MODULE_BASE_DIR, moduleLocalPath).getPath();
     }
 }
