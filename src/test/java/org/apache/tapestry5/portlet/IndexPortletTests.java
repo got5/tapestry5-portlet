@@ -29,11 +29,22 @@ public class IndexPortletTests extends SeleniumTestCase
     public void PublishEvent()
     {
     	open("/tapestry5-portlet/portal/Index");
-    	sleep(10000);
-
         clickAndWait("link=Publish event");
-
         assertTextPresent("sampleEvent");
+    }
+    
+    @Test
+    public void To_Block_Caller()
+    {
+    	open("/tapestry5-portlet/portal/Index");
+    	click("link=To Block Caller");
+    	waitForPageToLoad();
+    	clickAndWait("link=1");
+    	assertTextPresent("Page activation context: 1");
+    	clickAndWait("link=2");
+    	assertTextPresent("Page activation context: 2");
+    	clickAndWait("link=3");
+    	assertTextPresent("Page activation context: 3");
     }
 
    
