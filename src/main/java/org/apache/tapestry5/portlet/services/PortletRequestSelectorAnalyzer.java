@@ -29,7 +29,6 @@ public class PortletRequestSelectorAnalyzer implements
 
 	@Override
 	public ComponentResourceSelector buildSelectorForRequest() {
-		System.out.println("######### " + request.getPortletRequest());
 		return new ComponentResourceSelector(threadLocale.getLocale())
 				.withAxis(WindowState.class, request.getPortletRequest()
 						.getWindowState());
