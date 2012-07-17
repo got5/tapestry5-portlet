@@ -24,11 +24,12 @@ import org.testng.annotations.Test;
  */
 public class IndexPortletTests extends SeleniumTestCase
 {
+	String indexLocation = "/tapestry5-portlet/portal/Index";
 
     @Test
     public void PublishEvent()
     {
-    	open("/tapestry5-portlet/portal/Index");
+    	open(indexLocation);
         clickAndWait("link=Publish event");
         assertTextPresent("sampleEvent");
     }
@@ -36,7 +37,7 @@ public class IndexPortletTests extends SeleniumTestCase
     @Test
     public void To_Block_Caller()
     {
-    	open("/tapestry5-portlet/portal/Index");
+    	open(indexLocation);
     	click("link=To Block Caller");
     	waitForPageToLoad();
     	clickAndWait("link=1");
@@ -57,5 +58,27 @@ public class IndexPortletTests extends SeleniumTestCase
             // Ignore.
         }
     }
+    
+    @Test
+    public void form_validation_test()
+    {
+    	String SubmitLastName = "//form[contains(@id,'lastName')]/input[@type='submit']";
+    	String InputLastName = "//input[starts-with(@id,'lastName')]";
+    	
+    	open(indexLocation);
+    	
+        type(InputLastName, "");
+
+        click(SubmitLastName);
+
+        assertText("//div[contains(@id,'errorpopup')][starts-with(@id,'lastName')]/span", "You must provide a value for Last Name.");
+
+        type(InputLastName, "fac");
+        click(SubmitLastName);
+        waitForPageToLoad();
+        assertTextPresent(" fac is stored in portlet session scope Application with @Persist!");
+    }
+    
+    
     
 }
