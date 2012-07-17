@@ -78,7 +78,8 @@
 		<h3>Simple Form</h3>
 		<t:if test="lastName"> ${lastName} is stored in portlet session scope Application with @Persist!</t:if>
 		<form t:type="form" t:id="lastNameSimpleForm">
-			<label t:type="label" t:for="lastName"/><input t:type="textfield" t:id="lastName" t:value="lastName"/>
+			<label t:type="label" t:for="lastName"/>
+			<input t:type="textfield" t:id="lastName" t:value="lastName" t:validate="required"/>
 			<t:submit />
 		</form>
 		
