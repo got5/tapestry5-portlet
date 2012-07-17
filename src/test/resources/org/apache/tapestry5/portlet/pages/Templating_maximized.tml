@@ -1,0 +1,19 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
+
+<body>
+
+	<div>
+	
+		<h2>Portlet information:</h2>
+		<ul>
+			<li class="template">Template : Max</li>
+			<li class="template_bundle">${message:templating}</li>
+			<li class="template_component"><t:fakeComponent /></li>
+		</ul>
+	</div>
+
+</body>
+
+</html>

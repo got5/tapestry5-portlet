@@ -44,6 +44,7 @@
 			<li><t:pagelink page="Exception">Exception page</t:pagelink></li>
 			<li><t:actionlink t:id="actionException">Action Exception</t:actionlink></li>
 			<li><t:actionlink t:id="notHandledAction">Not Handled Action</t:actionlink></li>
+			<li><t:pageLink t:page="templating" id="templating">Templating</t:pageLink></li>
 		</ul>
 		
 		<h2>
