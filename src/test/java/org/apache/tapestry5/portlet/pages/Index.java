@@ -48,9 +48,15 @@ public class Index
 
     @InjectComponent
     private Zone formResultZone;
+    
+    @InjectComponent
+    private Zone surNameZone;
 
     @Property
     private String firstName;
+    
+    @Property
+    private String surName;
 
     @Property
     @Persist
@@ -102,9 +108,6 @@ public class Index
     }
 
     
-    
-    
-    //
     public PortletRenderable onActionFromToContactPage()
     {
         return new PortletRenderable("Contact");
@@ -144,6 +147,11 @@ public class Index
     public String getFormResultZoneId()
     {
         return formResultZone.getClientId();
+    }
+    
+    public String getSurNameZoneId()
+    {
+        return surNameZone.getClientId();
     }
 
     @OnEvent("serveResource")
@@ -196,6 +204,11 @@ public class Index
     Object onSuccessFromFirstNameForm()
     {
         return formResultZone.getBody();
+    }
+    
+    Object onSuccessFromSurNameForm()
+    {
+        return surNameZone.getBody();
     }
 
     public void onSuccessFromUploadForm() throws IOException
