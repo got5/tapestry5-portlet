@@ -71,5 +71,34 @@ public class IndexPortletTests extends SeleniumTestCase
     }
     
     
+    @Test
+    public void Ajax_form_with_client_Id_test()
+    {
+    	String SubmitFirstName = "//form[contains(@id,'firstName')]/input[@type='submit']";
+    	String InputFirstName = "//input[starts-with(@id,'firstName')]";
+    	
+    	open(indexLocation);	
+        type(InputFirstName, "fra"); 
+        click(SubmitFirstName);
+        
+        waitForAjaxRequestsToComplete("1000");
+        assertTextPresent("Hi fra from Ajax Form!");
+    }
+    
+    @Test
+    public void Ajax_form_without_client_Id_test()
+    {
+    	String SubmitSurname = "//form[contains(@id,'surname')]/input[@type='submit']";
+    	String InputSurname = "//input[starts-with(@id,'surname')]";
+    	
+    	open(indexLocation);	
+        type(InputSurname, "frafac"); 
+        click(SubmitSurname);
+        
+        waitForAjaxRequestsToComplete("1000");
+        assertTextPresent("Hi fra from Ajax Form!");
+    }
+    
+    
     
 }
