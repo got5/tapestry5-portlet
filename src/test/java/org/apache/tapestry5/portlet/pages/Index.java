@@ -157,7 +157,7 @@ public class Index
     @OnEvent("serveResource")
     public StreamResponse onServeResource()
     {
-        System.out.println("fromdownload");
+        System.out.println("fromdownload " + globals.getPortletRequest().getWindowState());
         return new StreamResponse()
         {
 

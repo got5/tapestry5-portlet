@@ -10,6 +10,7 @@
 		<ul>
 			<li>PortletMode : ${portletMode}</li>
 			<li>WindowState: ${windowState}</li>
+			<li>Normal Template Used : <t:fakeComponent /></li>
 		</ul>
 	</div>
 		

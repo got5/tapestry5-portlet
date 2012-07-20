@@ -70,6 +70,7 @@ import org.apache.tapestry5.ioc.ScopeConstants;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Advise;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
+import org.apache.tapestry5.ioc.annotations.Decorate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Local;
@@ -120,10 +121,13 @@ import org.apache.tapestry5.portlet.internal.services.PortletResponseImpl;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ApplicationGlobals;
 import org.apache.tapestry5.services.ApplicationInitializer;
+import org.apache.tapestry5.services.AssetFactory;
 import org.apache.tapestry5.services.AssetSource;
+import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.ComponentEventRequestFilter;
 import org.apache.tapestry5.services.ComponentEventRequestHandler;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
+import org.apache.tapestry5.services.ContextProvider;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.FormSupport;
@@ -142,6 +146,8 @@ import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.apache.tapestry5.services.pageload.ComponentRequestSelectorAnalyzer;
+import org.apache.tapestry5.services.pageload.ComponentResourceLocator;
 import org.slf4j.Logger;
 
 public final class PortletModule
@@ -162,8 +168,20 @@ public final class PortletModule
         binder.bind(PortletIdAllocatorFactory.class, PortletIdAllocatorFactoryImpl.class);
         binder.bind(PortletResourceResponseIdentifier.class,
                 PortletResourceResponseIdentifierImpl.class);
+                
+        binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");        
+
     }
 
+    @Decorate(serviceInterface = ComponentResourceLocator.class)
+    public static Object customComponentResourceLocator(
+           ComponentResourceLocator delegate,
+			@ContextProvider AssetFactory assetFactory,
+			ComponentClassResolver componentClassResolver,
+			@Symbol(SymbolConstants.APPLICATION_FOLDER) String applicationFolder) {
+
+		return new PortletResourceLocator(delegate);
+	}
     public PortletRequest build(PortletRequestGlobals portletGlobals,
             PropertyShadowBuilder shadowBuilder)
     {
@@ -569,12 +587,15 @@ public final class PortletModule
     final CookieSource cookieSource,
 
     @InjectService("PortletLinkSource")
-    final PortletLinkSource linkSource)
+    final PortletLinkSource linkSource,
+			
+    @InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
 
     
     {
         configuration.add(LinkSource.class, linkSource);
         configuration.add(CookieSource.class, cookieSource);
+        configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
     }
 
     /**

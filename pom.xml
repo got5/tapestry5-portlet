@@ -439,7 +439,7 @@
         </pluginRepository>
         
         <pluginRepository>
-            <id>jettySnapshots</id>
+            <id>jettyRelease</id>
             <name>Jetty Maven2 Snapshot Repository</name>
             <url>http://repository.codehaus.org</url>
             <releases>

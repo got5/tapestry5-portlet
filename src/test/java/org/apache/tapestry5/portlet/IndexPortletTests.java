@@ -14,10 +14,10 @@
 
 package org.apache.tapestry5.portlet;
 
-import org.apache.tapestry5.corelib.components.Form;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.test.SeleniumTestCase;
 import org.testng.annotations.Test;
+
+import com.thoughtworks.selenium.Wait;
 
 /**
  * Tests related to the Index Portlet.
@@ -96,7 +96,7 @@ public class IndexPortletTests extends SeleniumTestCase
         click(SubmitSurname);
         
         waitForAjaxRequestsToComplete("1000");
-        assertTextPresent("Hi fra from Ajax Form!");
+        assertTextPresent("your surname is frafac from Ajax Form without client id!");
     }
     
     
