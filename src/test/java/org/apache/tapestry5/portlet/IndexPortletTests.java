@@ -96,7 +96,7 @@ public class IndexPortletTests extends SeleniumTestCase
         click(SubmitSurname);
         
         waitForAjaxRequestsToComplete("1000");
-        assertTextPresent("Hi fra from Ajax Form!");
+        assertTextPresent("your surname is frafac from Ajax Form without client id!");
     }
     
     
