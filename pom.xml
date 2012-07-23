@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.3.1-SNAPSHOT</version>
+	<version>5.3.1</version>
 	<name>Tapestry5 Portlet 2.0 Integration</name>
 	<!--  packaging>war</packaging-->
 	<dependencies>
@@ -388,20 +388,6 @@
 			<id>repo.maven</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
-
-		<!-- This repository is only needed if the Tapestry released artifacts 
-			haven't made it to the central Maven repository yet. 
-		<repository>
-			<id>tapestry</id>
-			<url>http://tapestry.formos.com/maven-repository</url>
-		</repository>-->
-
-		<!-- This repository is only needed when the tapestry-release-version is 
-			a snapshot release. 
-		<repository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository</url>
-		</repository>-->
 
 		<repository>
 			<id>codehaus.snapshots</id>
