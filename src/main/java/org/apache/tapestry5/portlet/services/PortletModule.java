@@ -49,6 +49,7 @@ import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.FormInjector;
 import org.apache.tapestry5.corelib.internal.FormSupportImpl;
 import org.apache.tapestry5.corelib.mixins.Autocomplete;
+import org.apache.tapestry5.internal.services.CookieSink;
 import org.apache.tapestry5.internal.services.CookieSource;
 import org.apache.tapestry5.internal.services.DocumentLinker;
 import org.apache.tapestry5.internal.services.LinkSource;
@@ -124,6 +125,7 @@ import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.AssetFactory;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClassResolver;
+import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventRequestFilter;
 import org.apache.tapestry5.services.ComponentEventRequestHandler;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
@@ -131,6 +133,7 @@ import org.apache.tapestry5.services.ContextProvider;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.FormSupport;
+import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRenderer;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.MarkupWriterFactory;
@@ -151,31 +154,23 @@ import org.apache.tapestry5.services.pageload.ComponentResourceLocator;
 import org.slf4j.Logger;
 
 public final class PortletModule {
+	
+	 
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(PortletRequestGlobals.class,
-				PortletRequestGlobalsImpl.class)
-				.scope(ScopeConstants.PERTHREAD);
-		binder.bind(PortletConfigProvider.class,
-				PortletConfigProviderImpl.class)
-				.scope(ScopeConstants.PERTHREAD);
-		binder.bind(PortletLinkSource.class, PortletLinkSourceImpl.class)
-				.withId("PortletLinkSource");
-		binder.bind(PortletActionRenderResponseGenerator.class,
-				PortletActionRenderResponseGeneratorImpl.class).withId(
-				"PortletActionRenderResponseGenerator");
+		binder.bind(PortletRequestGlobals.class,PortletRequestGlobalsImpl.class).scope(ScopeConstants.PERTHREAD);
+		binder.bind(PortletConfigProvider.class,PortletConfigProviderImpl.class).scope(ScopeConstants.PERTHREAD);
+		binder.bind(PortletLinkSource.class, PortletLinkSourceImpl.class).withId("PortletLinkSource");
+		binder.bind(PortletActionRenderResponseGenerator.class,PortletActionRenderResponseGeneratorImpl.class).withId("PortletActionRenderResponseGenerator");
 		binder.bind(PortletPageResolver.class, PortletPageResolverImpl.class);
-		binder.bind(PortletIdAllocatorFactory.class,
-				PortletIdAllocatorFactoryImpl.class);
-		binder.bind(PortletResourceResponseIdentifier.class,
-				PortletResourceResponseIdentifierImpl.class);
+		binder.bind(PortletIdAllocatorFactory.class,PortletIdAllocatorFactoryImpl.class);
+		binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
 		binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");
 	}
 
 	public PortletRequest build(PortletRequestGlobals portletGlobals,
-			PropertyShadowBuilder shadowBuilder) {
-		return shadowBuilder.build(portletGlobals, "PortletRequest",
-				PortletRequest.class);
+								PropertyShadowBuilder shadowBuilder) {
+		return shadowBuilder.build(portletGlobals, "PortletRequest",PortletRequest.class);
 	}
 
 	public static void contributeFactoryDefaults(
@@ -372,14 +367,27 @@ public final class PortletModule {
 				portletGlobals);
 	}
 
-	public CookieSource buildPortletCookieSource() {
+	public CookieSource buildPortletCookieSource(@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals) {
 		return new CookieSource() {
-			public Cookie[] getCookies() {
-				return new Cookie[0];
-			}
+			public Cookie[] getCookies()
+            {
+                return portletRequestGlobals.getPortletRequest().getCookies();
+            }
 
 		};
 	}
+	
+    public CookieSink buildPortletCookieSink(@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals)
+    {
+        return new CookieSink()
+        {
+
+            public void addCookie(Cookie cookie)
+            {
+            	portletRequestGlobals.getPortletResponse().addProperty(cookie);
+            }
+        };
+    }
 
 	public void contributeMarkupRenderer(
 			OrderedConfiguration<MarkupRendererFilter> configuration,
@@ -587,7 +595,9 @@ public final class PortletModule {
 			MappedConfiguration<Class, Object> configuration,
 
 			@InjectService("PortletCookieSource") final CookieSource cookieSource,
-
+			
+			@InjectService("PortletCookieSink") final CookieSink cookieSink,
+			
 			@InjectService("PortletLinkSource") final PortletLinkSource linkSource, 
 			
 			@InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
@@ -595,6 +605,7 @@ public final class PortletModule {
 	{
 		configuration.add(LinkSource.class, linkSource);
 		configuration.add(CookieSource.class, cookieSource);
+		configuration.add(CookieSink.class, cookieSink);
 		configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
 	}
 
