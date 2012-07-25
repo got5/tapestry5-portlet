@@ -49,6 +49,7 @@ import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.FormInjector;
 import org.apache.tapestry5.corelib.internal.FormSupportImpl;
 import org.apache.tapestry5.corelib.mixins.Autocomplete;
+import org.apache.tapestry5.internal.services.CookieSink;
 import org.apache.tapestry5.internal.services.CookieSource;
 import org.apache.tapestry5.internal.services.DocumentLinker;
 import org.apache.tapestry5.internal.services.LinkSource;
@@ -155,20 +156,13 @@ public final class PortletModule
 
     public static void bind(ServiceBinder binder)
     {
-        binder.bind(PortletRequestGlobals.class, PortletRequestGlobalsImpl.class).scope(
-                ScopeConstants.PERTHREAD);
-        binder.bind(PortletConfigProvider.class, PortletConfigProviderImpl.class).scope(
-                ScopeConstants.PERTHREAD);
-        binder.bind(PortletLinkSource.class, PortletLinkSourceImpl.class).withId(
-                "PortletLinkSource");
-        binder.bind(PortletActionRenderResponseGenerator.class,
-                PortletActionRenderResponseGeneratorImpl.class).withId(
-                "PortletActionRenderResponseGenerator");
+        binder.bind(PortletRequestGlobals.class, PortletRequestGlobalsImpl.class).scope( ScopeConstants.PERTHREAD);
+        binder.bind(PortletConfigProvider.class, PortletConfigProviderImpl.class).scope( ScopeConstants.PERTHREAD);
+        binder.bind(PortletLinkSource.class, PortletLinkSourceImpl.class).withId("PortletLinkSource");
+        binder.bind(PortletActionRenderResponseGenerator.class, PortletActionRenderResponseGeneratorImpl.class).withId("PortletActionRenderResponseGenerator");
         binder.bind(PortletPageResolver.class, PortletPageResolverImpl.class);
         binder.bind(PortletIdAllocatorFactory.class, PortletIdAllocatorFactoryImpl.class);
-        binder.bind(PortletResourceResponseIdentifier.class,
-                PortletResourceResponseIdentifierImpl.class);
-                
+        binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
         binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");        
 
     }
@@ -375,15 +369,25 @@ public final class PortletModule
                 pageContentTypeAnalyzer, response, portletGlobals);
     }
 
-    public CookieSource buildPortletCookieSource()
-    {
-        return new CookieSource()
-        {
-            public Cookie[] getCookies()
+    public CookieSource buildPortletCookieSource(@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals) {
+		return new CookieSource() {
+			public Cookie[] getCookies()
             {
-                return new Cookie[0];
+                return portletRequestGlobals.getPortletRequest().getCookies();
             }
 
+		};
+	}
+	
+    public CookieSink buildPortletCookieSink(@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals)
+    {
+        return new CookieSink()
+        {
+
+            public void addCookie(Cookie cookie)
+            {
+            	portletRequestGlobals.getPortletResponse().addProperty(cookie);
+            }
         };
     }
 
@@ -581,22 +585,19 @@ public final class PortletModule
         return strategyBuilder.build(registry);
     }
 
-    public void contributeServiceOverride(MappedConfiguration<Class, Object> configuration,
+    public void contributeServiceOverride(
+			MappedConfiguration<Class, Object> configuration,
+			@InjectService("PortletCookieSource") final CookieSource cookieSource,
+			@InjectService("PortletCookieSink") final CookieSink cookieSink,
+			@InjectService("PortletLinkSource") final PortletLinkSource linkSource, 
+			@InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
 
-    @InjectService("PortletCookieSource")
-    final CookieSource cookieSource,
-
-    @InjectService("PortletLinkSource")
-    final PortletLinkSource linkSource,
-			
-    @InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
-
-    
-    {
-        configuration.add(LinkSource.class, linkSource);
-        configuration.add(CookieSource.class, cookieSource);
-        configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
-    }
+	{
+		configuration.add(LinkSource.class, linkSource);
+		configuration.add(CookieSource.class, cookieSource);
+		configuration.add(CookieSink.class, cookieSink);
+		configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
+	}
 
     /**
      * Intercept FormSupport push calls and adpat it to prefix generated ids with portlet window id.

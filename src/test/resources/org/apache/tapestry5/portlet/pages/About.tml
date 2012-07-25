@@ -25,5 +25,8 @@
 	for more details check also https://issues.apache.org/jira/browse/TAP5-64
 	</p>
 		
+	<p>nb view = ${nb}</p>	
+	<li><t:actionlink t:id="resetCount">resetCount</t:actionlink></li>
+		
 	</body>
 </html>

@@ -25,6 +25,7 @@ import com.thoughtworks.selenium.Wait;
 public class IndexPortletTests extends SeleniumTestCase
 {
 	String indexLocation = "/tapestry5-portlet/portal/Index";
+	String AboutLocation = "/tapestry5-portlet/portal/About";
 
     @Test
     public void PublishEvent()
@@ -99,6 +100,18 @@ public class IndexPortletTests extends SeleniumTestCase
         assertTextPresent("your surname is frafac from Ajax Form without client id!");
     }
     
-    
+    @Test
+    public void cookies_test()
+    {
+    	
+    	open(AboutLocation);	
+    	click("link=resetCount");
+        waitForAjaxRequestsToComplete("1000");
+        
+        assertTextPresent("nb view = 1");
+        open(AboutLocation);
+        assertTextPresent("nb view = 2");
+        
+    }
     
 }
