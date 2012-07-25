@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 public class IndexPortletTests extends SeleniumTestCase
 {
 	String indexLocation = "/tapestry5-portlet/portal/Index";
+	String AboutLocation = "/tapestry5-portlet/portal/About";
 
     @Test
     public void PublishEvent()
@@ -48,16 +49,7 @@ public class IndexPortletTests extends SeleniumTestCase
     	assertTextPresent("Page activation context: 3");
     }
 
-    protected final void sleep(long millis)
-    {
-        try
-        {
-            Thread.sleep(millis);
-        } catch (InterruptedException ex)
-        {
-            // Ignore.
-        }
-    }
+   
     
     @Test
     public void form_validation_test()
@@ -80,5 +72,51 @@ public class IndexPortletTests extends SeleniumTestCase
     }
     
     
+    @Test
+    public void Ajax_form_with_client_Id_test()
+    {
+    	String SubmitFirstName = "//form[contains(@id,'firstName')]/input[@type='submit']";
+    	String InputFirstName = "//input[starts-with(@id,'firstName')]";
+    	
+    	open(indexLocation);	
+        type(InputFirstName, "fra"); 
+        click(SubmitFirstName);
+        
+        waitForAjaxRequestsToComplete("1000");
+        assertTextPresent("Hi fra from Ajax Form!");
+    }
+    
+    @Test
+    public void Ajax_form_without_client_Id_test()
+    {
+    	String SubmitSurname = "//form[contains(@id,'surname')]/input[@type='submit']";
+    	String InputSurname = "//input[starts-with(@id,'surname')]";
+    	
+    	open(indexLocation);	
+        type(InputSurname, "frafac"); 
+        click(SubmitSurname);
+        
+        waitForAjaxRequestsToComplete("1000");
+        assertTextPresent("your surname is frafac from Ajax Form without client id!");
+    }
+    
+    @Test
+    public void cookies_test()
+    {
+    	
+    	open(AboutLocation);	
+    	click("link=resetCount");
+        waitForAjaxRequestsToComplete("1000");
+        
+        assertTextPresent("nb view = 1");
+        open(AboutLocation);
+        assertTextPresent("nb view = 2");
+        
+    }
+
+	private void waitForAjaxRequestsToComplete(String string) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

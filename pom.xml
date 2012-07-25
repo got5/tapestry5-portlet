@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.2.0</version>
+	<version>5.2.1-SNAPSHOT</version>
 	<name>Tapestry5 Portlet 2.0 Integration</name>
 	<dependencies>
 		<dependency>
@@ -132,6 +132,8 @@
 			<version>2.0.3</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- todo resolve test confict with jetty run for 5.2 
 		<dependency>
         	<groupId>org.eclipse.jetty</groupId>
         	<artifactId>jetty-server</artifactId>
@@ -146,7 +148,7 @@
             <scope>test</scope>
     	</dependency>
 
-	    <dependency>
+	    < dependency>
     	    <groupId>org.eclipse.jetty</groupId>
         	<artifactId>jetty-jsp-2.1</artifactId>
         	<version>7.1.0.v20100505</version>
@@ -165,7 +167,7 @@
   			<artifactId>maven-jetty-pluto-embedded</artifactId>
   			<version>1.0.1</version>
   			<scope>test</scope>
-		</dependency>
+		</dependency-->
 	</dependencies>
 	<build>
 		<plugins>
