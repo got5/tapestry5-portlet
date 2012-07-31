@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="tapestry5-portlet Application Test Suite" annotations="1.5">
     <test name="Pluto Integration Tests" enabled="true">
-        <parameter name="tapestry.browser-start-command" value="*googlechrome" />
+        <!-- parameter name="tapestry.browser-start-command" value="*googlechrome" /-->
         <parameter name="tapestry.web-app-folder" value="src/main/webapp"/>        
 		<parameter name="tapestry.context-path" value="/tapestry5-portlet"/>
         <packages>

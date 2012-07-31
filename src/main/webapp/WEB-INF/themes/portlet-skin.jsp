@@ -32,12 +32,13 @@ limitations under the License.
 	</td>
         <td class="header" align="right">
 	      <!-- Portlet Mode Controls -->
-	      <pluto:modeDropDown />
+	      <!-- pluto:modeDropDown /-->
 	
 	      <!-- Window State Controls -->
-	      <pluto:windowStateAnchor windowState="minimized" icon='<%= request.getContextPath() + "/images/controls/min.png"%>' />
-	      <pluto:windowStateAnchor windowState="maximized" icon='<%= request.getContextPath() + "/images/controls/max.png"%>' />
-	      <pluto:windowStateAnchor windowState="normal" icon='<%= request.getContextPath() + "/images/controls/norm.png"%>' />
+	      <!-- pluto:windowStateAnchor windowState="minimized" icon='<%= request.getContextPath() + "/images/controls/min.png"%>' /-->
+	      <!-- pluto:windowStateAnchor windowState="maximized" icon='<%= request.getContextPath() + "/images/controls/max.png"%>' /-->
+	      <!-- pluto:windowStateAnchor windowState="normal" icon='<%= request.getContextPath() + "/images/controls/norm.png"%>' /-->
+	      
     	</td>
     	</tr>
     </table>

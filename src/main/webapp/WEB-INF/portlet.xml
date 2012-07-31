@@ -15,9 +15,6 @@
 			<short-title>T5 Portlet Index</short-title>
 			<keywords>Portlet Tapestry Integration</keywords>
 		</portlet-info>
-		<supported-processing-event>
-			<name>sampleEvent</name>
-		</supported-processing-event>
 		<supported-publishing-event>
 			<name>sampleEvent</name>
 		</supported-publishing-event>
@@ -59,9 +56,6 @@
 			<short-title>T5 Portlet About</short-title>
 			<keywords>Portlet Tapestry About</keywords>
 		</portlet-info>
-		<supported-processing-event>
-			<name>sampleEvent</name>
-		</supported-processing-event>
 		<container-runtime-option>
 			<name>javax.portlet.renderHeaders</name>
 			<value>true</value>

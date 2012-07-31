@@ -85,13 +85,23 @@
 		
 		
 		
-		<h3>Ajax Form</h3>
-		<t:zone t:id="formResultZone" id="monFormId">
+		<h3>Ajax Form with client id (not recommended)</h3>
+		<t:zone t:id="formResultZone" id="IdConflictIfmoreThanOneInstanceOfThePortletisUsedInPortalPage">
 			<t:if test="firstName">Hi ${firstName} from Ajax Form!</t:if>
 		</t:zone>
 		
-		<form t:type="form" t:zone="monFormId" t:id="firstNameForm">
+		<form t:type="form" t:zone="IdConflictIfmoreThanOneInstanceOfThePortletisUsedInPortalPage" t:id="firstNameForm">
 			<label t:type="label" t:for="firstName"/><input t:type="textfield" t:id="firstName"/>
+			<t:submit />
+		</form>
+		
+		<h3>Ajax Form without client id</h3>
+		<t:zone t:id="surnameZone" >
+			<t:if test="surname">your surname is ${surName} from Ajax Form without client id!</t:if>
+		</t:zone>
+		
+		<form t:type="form" t:zone="${surnameZoneId}" t:id="surnameForm">
+			<label t:type="label" t:for="surname"/><input t:type="textfield" t:id="surname"/>
 			<t:submit />
 		</form>
 		

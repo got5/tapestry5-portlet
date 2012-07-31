@@ -30,6 +30,7 @@ public class IndexPortletTests extends SeleniumTestCase
     @Test
     public void PublishEvent()
     {
+    	
     	open(indexLocation);
         clickAndWait("link=Publish event");
         assertTextPresent("sampleEvent");
@@ -75,6 +76,7 @@ public class IndexPortletTests extends SeleniumTestCase
     @Test
     public void Ajax_form_with_client_Id_test()
     {
+    	sleep(1000);
     	String SubmitFirstName = "//form[contains(@id,'firstName')]/input[@type='submit']";
     	String InputFirstName = "//input[starts-with(@id,'firstName')]";
     	
@@ -105,8 +107,8 @@ public class IndexPortletTests extends SeleniumTestCase
     {
     	
     	open(AboutLocation);	
-    	click("link=resetCount");
-        waitForAjaxRequestsToComplete("1000");
+    	clickAndWait("link=resetCount");
+        waitForAjaxRequestsToComplete("10000");
         
         assertTextPresent("nb view = 1");
         open(AboutLocation);
@@ -114,9 +116,31 @@ public class IndexPortletTests extends SeleniumTestCase
         
     }
 
-	private void waitForAjaxRequestsToComplete(String string) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * Waits until all active XHR requests are completed.
+     *
+     * @param timeout timeout to wait for
+     * @since 5.3
+     */
+    protected final void waitForAjaxRequestsToComplete(String timeout)
+    {
+        waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0", timeout);
+    }
+
+    /**
+     * Sleeps for the indicated number of seconds.
+     *
+     * @since 5.3
+     */
+    protected final void sleep(long millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        } catch (InterruptedException ex)
+        {
+            // Ignore.
+        }
+    }
     
 }
