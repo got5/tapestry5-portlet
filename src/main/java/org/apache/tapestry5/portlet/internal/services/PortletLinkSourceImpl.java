@@ -108,7 +108,7 @@ public class PortletLinkSourceImpl
 
 			// If event starts with serve prefix that means we need to serve a
 			// resource
-			if (eventType!=null && ( isXHR || eventType.startsWith("serve")) ) 
+			if (eventType!=null && (  eventType.startsWith("serve")) || isXHR  ) 
 			{
 				ResourceURL resourceUrl = MimeResponse.class.cast(portletGlobals.getPortletResponse()).createResourceURL();
 				Link res = new ResourceLinkImpl(resourceUrl, link, portletGlobals.getPortletResponse());
@@ -248,9 +248,30 @@ public class PortletLinkSourceImpl
 	        Class cpt = component.getClass();
 	        String cptClassName = cpt.getName();
 	       
-	         	
+	        //specific check for Grid Component
+	        Component Container = componentResources.getContainer();
+	        if(Container!=null)
+	        {	
+	        	ComponentResources componentContainerResources = Container.getComponentResources();
+	        	InternalComponentResources internalResContainer = (InternalComponentResources) componentContainerResources;
+	 	        Class cptContainer = Container.getClass();
+	 	        String cptContainerClassName = cptContainer.getName();
+	        	if(cptContainerClassName.equals("org.apache.tapestry5.corelib.components.Grid"))
+	        	{
+	        		boolean inPlaceBound =  componentContainerResources.isBound("inPlace");
+	        		if(inPlaceBound) 
+	        		{
+	        			ParameterConduit paramInPlaceConduit = internalResContainer.getParameterConduit("inPlace");
+	        			log.info(cptName+" "+paramInPlaceConduit.toString());
+	        			return true;
+	        		}
+	        		else
+	        			return false;
+	        	}
+	        }
 	        componentResources.getComponentModel().getEmbeddedComponentIds();
 	        boolean zoneBounded = componentResources.isBound("zone");
+	        
 	        if(zoneBounded)
 	        {
 	        	ParameterConduit paramConduit = internalRes.getParameterConduit("zone");
