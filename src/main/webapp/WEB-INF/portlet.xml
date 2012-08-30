@@ -64,6 +64,24 @@
 			<value>true</value>
 		</container-runtime-option>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>Grid</portlet-name>
+		<portlet-class>org.apache.tapestry5.portlet.ApplicationPortlet</portlet-class>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Tapestry Porlet Grid</title>
+			<short-title>T5 Portlet Grid</short-title>
+			<keywords>Portlet Tapestry Grid</keywords>
+		</portlet-info>
+		<container-runtime-option>
+			<name>javax.portlet.renderHeaders</name>
+			<value>true</value>
+		</container-runtime-option>
+	</portlet>
 
 	<portlet>
 		<description>AboutPortletDescription</description>

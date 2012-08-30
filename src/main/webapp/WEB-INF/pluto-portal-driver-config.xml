@@ -55,6 +55,10 @@ limitations under the License.
       <portlet context="/tapestry5-portlet" name="About"/>
       <portlet context="/tapestry5-portlet" name="EventReceiver"/>
     </page>
+     <page name="Grid" uri="/WEB-INF/themes/pluto-default-theme.jsp">
+      <portlet context="/tapestry5-portlet" name="Grid"/>
+      <portlet context="/tapestry5-portlet" name="EventReceiver"/>
+    </page>
   </render-config>
 
 </pluto-portal-driver>
