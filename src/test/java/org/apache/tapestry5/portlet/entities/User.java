@@ -22,9 +22,6 @@ import java.util.UUID;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.apache.tapestry5.tree.DefaultTreeModel;
-import org.apache.tapestry5.tree.TreeModel;
-import org.apache.tapestry5.tree.TreeModelAdapter;
 
 public class User
 {
@@ -116,40 +113,5 @@ public class User
 		
 	}
 	
-	public static TreeModel<User> createTreeModel(){
-		
-		ValueEncoder encoder = new ValueEncoder<User>() {
-
-			public String toClient(User arg0) {
-				return arg0.uuid;
-			}
-
-			public User toValue(String arg0) {
-				return User.ROOT.seek(arg0);
-			}
-		};
-		
-		TreeModelAdapter<User> adapter = new TreeModelAdapter<User>() {
-
-			public List<User> getChildren(User arg0) {
-				return arg0.children;
-			}
-
-			public String getLabel(User arg0) {
-				return arg0.getLastName();
-			}
-
-			public boolean hasChildren(User arg0) {
-				return !arg0.children.isEmpty();
-			}
-
-			public boolean isLeaf(User arg0) {
-				return arg0.children.isEmpty();
-			}
-			
-		};
-		
-		return new DefaultTreeModel<User>(encoder, adapter, User.ROOT.children);
-			
-	}
+	
 }
