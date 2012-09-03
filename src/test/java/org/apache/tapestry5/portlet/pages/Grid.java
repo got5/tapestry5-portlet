@@ -1,5 +1,5 @@
 //
-// Copyright 2010 GOT5 (GO Tapestry 5)
+// Copyright 2012 Apache Tapestry 5
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,22 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.json.JSONObject;
+
+
 import org.apache.tapestry5.portlet.entities.User;
+import org.apache.tapestry5.portlet.services.PortletRequestGlobals;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
 
 
-
+@Import(stylesheet="context:styles/styledgrid.css")
 public class Grid
 {
     @Property
@@ -50,16 +51,19 @@ public class Grid
 
     @SuppressWarnings("unchecked")
 	@Property
-	@Retain
+	@Persist
 	private BeanModel _myModel;
     
     
     @InjectComponent
     private Zone detailZone;
+    
+    @Inject
+    private PortletRequestGlobals globals;
 
     public String getDetailZoneId()
     {
-        return detailZone.getClientId();
+        return "detailZone" + globals.getPortletRequest().getWindowID();
     } 
     
     @Inject
@@ -87,7 +91,7 @@ public class Grid
     @OnEvent("serveDetail")
     Object onServeDetail(int index)
     {
-        //if (!request.isXHR()) { return this; }
+        if (!request.isXHR()) { return this; }
         user= (User)users.get(index);
         return detailZone.getBody();
     }
@@ -95,6 +99,7 @@ public class Grid
     private User createUser(int i)
     {
         User u = new User();
+        u.setId(i);
         u.setAge(i);
         u.setFirstName("Humpty" + i + 10);
         u.setLastName("Dumpty" + i + 200);

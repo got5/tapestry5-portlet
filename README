@@ -2,7 +2,8 @@
 
 
 ## Changelog
-- 5.3.2-SNAPSHOT : CookieSink & CookieSource
+- 5.3.2-SNAPSHOT : CookieSink & CookieSource 
+				   Update To Tapestry 5.3.5	
 - 5.3.1 : Adding templating, PortletApplicationScopePersistentFieldStrategy
 - 5.3.1-SNAPSHOT : Update to Tapestry 5.3.4
 - 5.3.0-SNAPSHOT : Update to Tapestry 5.3.3
