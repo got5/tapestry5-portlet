@@ -2,24 +2,31 @@
 	xmlns:p="tapestry:parameter">
 
 <body>
-    <h1> Grid t:inplace="true"</h1> 	
-    <t:grid source="users" row="user" model="myModel" t:inplace="true" rowIndex="currentIndex" t:pagerPosition="top" t:rowsPerPage="3">
+
+	<h1> Grid t:inplace="true" </h1> 
+	<p>${detailZoneId}</p>	
+    <t:grid source="users" row="user" model="myModel"  t:inplace="true" rowIndex="currentIndex" t:pagerPosition="top" t:rowsPerPage="3">
         <p:actionCell>
-        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="currentIndex" >Detail</t:eventlink>
+        	<t:eventlink t:event="serveDetail" t:zone="prop:detailZoneId" t:context="user.id" >Detail</t:eventlink>
 	</p:actionCell>
     </t:grid>
     
-   		<t:zone t:id="detailZone">
+   	<t:zone t:id="DetailZone" id="${detailZoneId}" visible="false">
 		<div>
-			<t:beandisplay object="user"/>
-		</div>
-		<br/>
-		</t:zone>
+			<t:if test="user">
+            <t:beandisplay object="user"/>
+            <p:else>
+                	click on details
+           	</p:else>
+        	</t:if>
+		</div>	
+	</t:zone>
     
-    <h1> Grid t:inplace="false"</h1> 	
+    <h1> Grid t:inplace="false" </h1> 	
+    <p>${detailZoneId}</p>	
     <t:grid source="users" row="user" model="myModel"  rowIndex="currentIndex" t:pagerPosition="bottom" t:rowsPerPage="3">
         <p:actionCell>
-        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="currentIndex" >Detail</t:eventlink>
+        	<t:eventlink t:event="serveDetail" t:zone="prop:detailZoneId" t:context="user.id" >Detail</t:eventlink>
 	</p:actionCell>
     </t:grid>
     

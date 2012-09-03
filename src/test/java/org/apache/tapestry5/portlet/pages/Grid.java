@@ -29,7 +29,9 @@ import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+
 import org.apache.tapestry5.portlet.entities.User;
+import org.apache.tapestry5.portlet.services.PortletRequestGlobals;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
 
@@ -55,10 +57,13 @@ public class Grid
     
     @InjectComponent
     private Zone detailZone;
+    
+    @Inject
+    private PortletRequestGlobals globals;
 
     public String getDetailZoneId()
     {
-        return detailZone.getClientId();
+        return "detailZone" + globals.getPortletRequest().getWindowID();
     } 
     
     @Inject
@@ -94,6 +99,7 @@ public class Grid
     private User createUser(int i)
     {
         User u = new User();
+        u.setId(i);
         u.setAge(i);
         u.setFirstName("Humpty" + i + 10);
         u.setLastName("Dumpty" + i + 200);

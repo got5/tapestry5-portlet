@@ -19,7 +19,7 @@ public class AppModule
 
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
-        configuration.add(SymbolConstants.APPLICATION_VERSION, "5.2.1");
+        configuration.add(SymbolConstants.APPLICATION_VERSION, "5.2.1-SNAPSHOT");
         configuration.add(SymbolConstants.APPLICATION_CATALOG, "context:WEB-INF/app.properties");
     }
 

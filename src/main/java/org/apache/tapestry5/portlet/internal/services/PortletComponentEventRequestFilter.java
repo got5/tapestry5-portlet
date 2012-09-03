@@ -39,7 +39,7 @@ public class PortletComponentEventRequestFilter implements ComponentEventRequest
     public void handle(ComponentEventRequestParameters parameters,
             ComponentEventRequestHandler handler) throws IOException
     {
-
+    
         if (globals.getActionRequest() != null || globals.getEventRequest() != null)// &&
                                                                                     // !request.isXHR()
                                                                                     // )
