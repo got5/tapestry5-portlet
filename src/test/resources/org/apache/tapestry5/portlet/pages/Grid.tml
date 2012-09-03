@@ -5,7 +5,7 @@
     <h1> Grid t:inplace="true"</h1> 	
     <t:grid source="users" row="user" model="myModel" t:inplace="true" rowIndex="currentIndex" t:pagerPosition="top" t:rowsPerPage="3">
         <p:actionCell>
-        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="${currentIndex}" >Detail</t:eventlink>
+        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="currentIndex" >Detail</t:eventlink>
 	</p:actionCell>
     </t:grid>
     
@@ -19,7 +19,7 @@
     <h1> Grid t:inplace="false"</h1> 	
     <t:grid source="users" row="user" model="myModel"  rowIndex="currentIndex" t:pagerPosition="bottom" t:rowsPerPage="3">
         <p:actionCell>
-        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="${currentIndex}" >Detail</t:eventlink>
+        	<t:eventlink t:event="serveDetail" t:zone="${detailZoneId}" t:context="currentIndex" >Detail</t:eventlink>
 	</p:actionCell>
     </t:grid>
     
