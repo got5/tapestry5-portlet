@@ -1,3 +1,25 @@
+# Tapestry 5 Portlet Bridge Module - 5.2.1 
+5.2.x version is based on Tapestry5 5.2.6
+
+
+## Changelog
+
+- 5.2.2-SNAPSHOT : maintenance branch -> branch : maint-5.2
+- 5.2.1 : CookieSink & CookieSource, 
+		  PortletApplicationScopePersistentFieldStrategy
+		  ->tag 5.2.1
+- 5.2.0: Update to Tapestry 5.2.6 -> tag : 5.2.0
+
+If you want to see it in action, you just need to:
+- Download the sources
+- Go to the repository directory
+- Run "mvn jetty:run"
+- Open your browser to http://localhost:8080/tapestry5-portlet/portal/Index
+
+If you are gradle user you can try:
+- gradle jettyRun
+
+
 This library is based on work of Markus Feindler, Le Xuan Trun and Kristina B. Taylor 
 (see http://code.google.com/p/tapestry5portlet/ for more details).
 
