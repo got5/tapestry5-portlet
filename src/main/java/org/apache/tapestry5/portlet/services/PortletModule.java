@@ -681,6 +681,7 @@ public final class PortletModule
                 AjaxFormLoop.class.getName());
         ajaxFormLoop.addEvent(EventConstants.ADD_ROW);
         ajaxFormLoop.addEvent(EventConstants.REMOVE_ROW);
+        ajaxFormLoop.addEvent("triggerRemoveRow"); //See AjaxFormLoop.formLoopContext for more details
         configuration.add(ajaxFormLoop);
         // declare core mixin that will return resource response form ajax call
         configuration.add(new DeclaredResourceResponseSender(Autocomplete.class.getName(), true));

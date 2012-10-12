@@ -26,7 +26,8 @@ public class IndexPortletTests extends SeleniumTestCase
 {
 	String indexLocation = "/tapestry5-portlet/portal/Index";
 	String AboutLocation = "/tapestry5-portlet/portal/About";
-
+	String GridLocation = "/tapestry5-portlet/portal/Grid";
+	
     @Test
     public void PublishEvent()
     {
@@ -105,12 +106,74 @@ public class IndexPortletTests extends SeleniumTestCase
     {
     	
     	open(AboutLocation);	
+    	waitForPageToLoad();
     	click("link=resetCount");
-        waitForAjaxRequestsToComplete("1000");
+    	waitForPageToLoad();
+        //waitForAjaxRequestsToComplete("1000");
         
         assertTextPresent("nb view = 1");
         open(AboutLocation);
         assertTextPresent("nb view = 2");
+        
+    }
+    
+    
+    @Test
+    public void AjaxFormLoop_test()
+    {
+    	String InputName = "//input[starts-with(@id,'nom')]";
+    	String InputId = "//input[starts-with(@id,'id')]";
+    	String addRow = "//*[starts-with(@id,'addrowlink')]";
+    	String textarea = "//textarea[starts-with(@id,'texte')]";
+    	
+    	open(AboutLocation);	
+
+    	    	
+    	new Wait()
+        {
+            @Override
+            public boolean until()
+            {
+                return getXpathCount("//input[contains(@id,'nom')]").equals(1);
+            }
+        }.wait("We should have just one input with id nom.", 1000);
+    	
+    	
+    	type(InputName, "AjaxFormLoop");
+    	    	
+    	click("xpath=//a[contains(@id,'addrowlink')]");
+    	    	
+    	
+    	new Wait()
+        {
+            @Override
+            public boolean until()
+            {
+                return getXpathCount("//fieldset[starts-with(@id,'rowInjector_')]").equals(1);
+            }
+        }.wait("We should have just one row.", 1000);
+    	
+        
+        type(InputId, "1"); 
+        type(textarea, "MyAjaxFormLoopTexte");
+        click("//input[starts-with(@id,'save')]");
+        waitForPageToLoad();
+        
+        assertTextPresent("MyAjaxFormLoopTexte");
+        
+             
+        click("xpath=//a[contains(@id,'removerowlink')]");
+    	
+    	new Wait()
+        {
+            @Override
+            public boolean until()
+            {
+                return getXpathCount("//fieldset[starts-with(@id,'rowInjector_')]").equals(0);
+            }
+        }.wait("The first row should be deleted.", 1000);
+        
+       
         
     }
     
