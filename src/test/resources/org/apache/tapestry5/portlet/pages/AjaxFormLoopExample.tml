@@ -1,0 +1,32 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+<body>
+		<t:form t:id="exampleForm" t:clientValidation="none">
+			<p>
+				<t:errors />
+				<t:label for="nom" />
+				<t:textfield t:id="nom" value="modelObject.nom" validate="required,maxLength=100"/>
+			</p>
+			<fieldset t:type="ajaxformloop" t:id="items" source="modelObject.items"
+			value="currentItem" formState="none" encoder="encoder">
+			<p>
+					<t:label for="id" />
+					<t:textfield t:id="id" value="currentItem.id"
+						type="number" min="0" validate="required" />
+			</p>
+			<p>
+					<t:label for="texte" />
+					<t:textarea t:id="texte" value="currentItem.texte"
+						validate="required,maxLength=500" />
+			</p>
+			<p>
+					<t:removerowlink>Supprimer cet item</t:removerowlink>
+			</p>
+		</fieldset>
+			<p>
+				<input t:type="submit" t:id="save" value="Enregistrer" />
+			</p>
+		</t:form>
+
+</body>	
+</html>
