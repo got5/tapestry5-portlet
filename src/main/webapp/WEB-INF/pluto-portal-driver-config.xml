@@ -54,10 +54,12 @@ limitations under the License.
     <page name="About" uri="/WEB-INF/themes/pluto-default-theme.jsp">
       <portlet context="/tapestry5-portlet" name="About"/>
       <portlet context="/tapestry5-portlet" name="EventReceiver"/>
+      <portlet context="/tapestry5-portlet" name="AjaxFormLoopExample"/>
     </page>
      <page name="Grid" uri="/WEB-INF/themes/pluto-default-theme.jsp">
       <portlet context="/tapestry5-portlet" name="Grid"/>
       <portlet context="/tapestry5-portlet" name="Grid"/>
+       <portlet context="/tapestry5-portlet" name="About"/>
     </page>
   </render-config>
 
