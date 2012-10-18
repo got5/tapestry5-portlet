@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+ï»¿<!DOCTYPE html> 
 <html>
 	<head>
 	<meta charset="utf-8">
@@ -34,11 +34,11 @@
 		- Download the sources<br/>
 		- Go to the repository directory<br/>
 		- Run "mvn jetty:run"<br/>
-		- Open your browser to http://localhost:8080/tapestry5-portlet/portal/Index<br/>
+		- Open your browser to <a href="http://localhost:8080/tapestry5-portlet/portal/Index">http://localhost:8080/tapestry5-portlet/portal/Index</a> <br/>
 		</p> 	
 
 		<p>
-		If you are gradle user you can try:<br/>
+		If you are a gradle user you can try:<br/>
 		- gradle jettyRun</p>
 		
 		<h2>Create your first portlet</h2>	
@@ -70,13 +70,13 @@
 		</p>
 		
 		<p><strong>Important Note :</strong> 
-		the provided scope for "portlet-api" dependency; this is important to avoid conflicts while deploying your application in a portlet container.
+		the provided scope for "portlet-api" dependency is important to avoid conflicts while deploying your application in a portlet container.
 		</p>
 		
 		<h3>Deployment Descriptors</h2>
 		<p>This file is the standard descriptor recognized by all the portlet specifications implementors. 
 		   It contains the descriptions of all the existing portlets packaged inside your application. 
-		   Let’s start with a brief example:
+		   Let's start with a brief example:
 		</p> 
 		<textarea readonly="readonly">
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -139,14 +139,14 @@
 		   The implementation we provide is generic and acts as a dispatcher on your Tapestry application
 		</p>    
 		<p>
-		   Then we have the "supports" element that describes the supported mime types and their corresponding mode. 
+		   The "supports" element  describes the supported mime types and their corresponding mode. 
 		   As a reminder, three modes exist in Portlet specifications: VIEW, EDIT and HELP.
 		</p>    
 		<p>
 	           Then, we have general information about the current Portlet
 	        </p>    
 		<p>
-		   After that, you will define the list of preferences associated to your Portlet and define their default values<br/>
+		   Afterwards, you will define the list of preferences associated to your Portlet and define their default values<br/>
 		</p>    
 		<p>
 	  	The "supported-public-render-parameter" is important because it describes which render parameter must be passed to the portlet instance. 
@@ -154,7 +154,7 @@
 		</p> 
 		
 		<p>
-		Finally, you have to declare at least one runtime option, without javax.portlet.renderHeaders set to true,  
+		Finally, you have to declare at least one runtime option. Without javax.portlet.renderHeaders set to true,  
 		the Tapestry portlet contribution will not be able to properly include JS and CSS files in the containing portal page.
 		</p> 
 		
@@ -200,8 +200,11 @@
 		</web-app></textarea>
 
 		<p>
-		The "tapestry.app-package" context parameter that points to the root application package where Tapestry 
+		The "tapestry.app-package" context parameter that points to the root application package is the place where Tapestry 
 		will find pages and components.
+		</p>
+		
+		<p>
 		Setting the "tapestry.combine-scripts" to false will ease the JS and CSS include in portal page Markup.
 		</p>
 

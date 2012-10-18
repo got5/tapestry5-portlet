@@ -26,11 +26,12 @@
 		
 	<h2>Communicate with Render Parameters</h2>
 		
-	<p>This is probably the easiest way to share information between portlet. 
-	In fact, after each action request there will be a render request. 
-	Portlet can declare public render parameter that will be passed by the container during the render request. </p>
+	<p>This is probably the easiest way to share information between portlets. 
+	According to JSR 168, after each action request there will be a render request. 
+	Portlet can declare public render parameter during action phase 
+	that will be passed by the container during the render request. </p>
 
-	<p>Configure your portlet to accept render parameters, 
+	<p>If you want your portlet to use render parameter, you have to Configure your portlet to accept render parameters.
 	this is done by using the "supported-public-render-parameter" element in the portlet 
 	definition and by providing public render parameter supported by the application
 	</p> 
@@ -47,7 +48,8 @@
   <qname xmlns:x="http://www.liferay.com/public-render-parameters">x:publicParam</qname>
 </public-render-parameter></textarea> 
 
-	<p> On action request, generate a link and add parameter to it.<p/>
+	<p>By default for non ajax event, the bridge generate a action url for each event handler. 
+	So the following code demonstrate how to generate a render link and how to add parameter to it.<p/>
 	
 <textarea readonly="readonly">
 @OnEvent(value = EventConstants.ACTION, component = "actionLink")
@@ -64,8 +66,8 @@ public Link clickLink() {
        
        <h2>Communicate with Events</h2>
        
-       <p>JSR 286 Introduced the concept of portlet events to allow loosely coupled communication between portlet. 
-	In order to be allowed to send an event to other portlet, a portlet must first define then event in portlet.xml<p/>
+       <p>JSR 286 Introduced the concept of portlet events to allow loosely coupled communication between portlets. 
+	In order to be allowed to send an event to other portlet, a portlet must first define this event in portlet.xml<p/>
  		    
 <textarea readonly="readonly">
 <portlet-app>
@@ -79,11 +81,11 @@ public Link clickLink() {
 			
 	<p>Portlet can ask the portal to transmit an event by using the method setEvent of the interface stateAwareResponse.
 	This interface is only available form ActionResponse and eventReponse. 
-	in other word, you can only send event during action or event phases. 
+	In other words, you can only send event during action or event phases. 
 	Thanks to PortletEventResultProcessor, 
-	in a tapestry page you just need to return an object that implement the interface javax.portlet.Event.<p/>
+	in a tapestry page you just need to return an object that implements the interface javax.portlet.Event.<p/>
 	
-	<p>First you will need to request a server side action phase <p/>	    		    
+	<p>First, you will need to request a server side action phase <p/>	    		    
 	    
 <textarea readonly="readonly"><t:eventlink t:event="publishEvent">Publish event</t:eventlink></textarea> 
 
@@ -110,7 +112,7 @@ public Event onPublishEvent()
  </portlet>
 ...</textarea>
 
-	<p>To process the event, the portlet just have to declare an event handler for the related event</P>
+	<p>To process the event, the portlet just has to declare an event handler for the related event</P>
 		    
 <textarea readonly="readonly">
 public Object onSampleEvent(String event)

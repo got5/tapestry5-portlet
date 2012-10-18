@@ -47,17 +47,18 @@ configuration.add(CookieSource.class, cookieSource);
 configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
 } </textarea>
 
-		<p>more precisely the method called createComponentEventLink return a resource URL when:<br/>
-		   	1) the event name of the component start with the keyword "serve"
- 		</p>
+		<p>more precisely the method called createComponentEventLink returns a resource URL when:</p>
+		
+		<p>   	1) the event name start with the keyword "serve"</p>
+ 		
 		
 <textarea readonly="readonly">
 <t:eventlink t:event="serveresource">Download File</t:eventlink></li> </textarea>
 		
-		<p>2) the component referenced by the link is declared as a resource sender.</p>
+		<p>	2) the component referenced by the link is declared as a resource sender.</p>
 		
 		<p>The following code extracted from the PortletModule, show us how the bridge contributes values to the PortletResourceResponseIdentifier's 
-		configuration for component that come from tapestry-core and tapestry5-jQuery.</p>
+		configuration for components that come from tapestry-core and tapestry5-jQuery.</p>
 		
 <textarea readonly="readonly">
 public static void contributePortletResourceResponseIdentifier(
@@ -94,14 +95,15 @@ configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.
 configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.ZoneRefresh",true));
 // for page or mixin like  org.got5.tapestry5.jquery.mixins.Bind you have to declare the full pagename
 // and the eventname that should be treat as resource URL } </textarea>
-		<p>
-		if you have to add a component to the list you are able to:<br/> 
+
+		<p>if you have to add a component to the list you have to:<br/> 
 		- declare all the events raised by the component that request a resource serving url like</p>
+
 <textarea readonly="readonly">
 configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.AjaxUpload"));
 </textarea>
-		<p>
-		- declare only the events raised by the component that should be declared as a resource sender.</p>
+		<p>- declare only the events raised by the component that should be declared as a resource sender.</p>
+
 <textarea readonly="readonly">
  DeclaredResourceResponseSender ajaxFormLoop = new DeclaredResourceResponseSender(
 	AjaxFormLoop.class.getName());
@@ -109,14 +111,11 @@ configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.
 	ajaxFormLoop.addEvent(EventConstants.REMOVE_ROW);
 configuration.add(ajaxFormLoop);</textarea>
 
-		<p>
-		- declare a mixin that raised that should be declared as a resource sender.</p>
+		<p>- declare a mixin that raised that should be declared as a resource sender.</p>
 		
 <textarea readonly="readonly">
 configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.Autocomplete",true));</textarea>
 		
-		
-
 
 	</div><!-- /content -->
 	

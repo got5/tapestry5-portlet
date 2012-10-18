@@ -29,7 +29,6 @@
 	<p>Making page data persist across requests to a single page is accomplished with the @Persist annotation. 
 	This annotation is applied to private instance fields of components:</p>
 
-	
 		
 <textarea readonly="readonly">
 @Persist
@@ -40,7 +39,7 @@ private int value;
 
 	<p> Objects stored in the session using the PORTLET_SCOPE must be available to the portlet 
 during requests for the same portlet window that the objects where stored from.
-By default the @Persist annotation sotre objetc in PORTLET_SCOPE.<p/>
+By default the @Persist annotation store object in PORTLET_SCOPE.<p/>
 
 	<p>The  PortletSession interface defines two scopes for storing objects, 
 APPLICATION_SCOPE and PORTLET_SCOPE. Any object stored in the session using the APPLICATION_SCOPE is available to any other portlet that belongs to the same portlet application and that handles a request identified as 
@@ -54,7 +53,7 @@ being a part of the same session.</p>
     private String applicationScope;
 </textarea>
 
-	<p> This make you data synchronise across any instance of the porlet use by any page for the current PortletSession.
+	<p> This make you data synchronized across any instance of the porlet used by any portal page for the current PortletSession.
 	    This is a powerful way to share data across portlet and  portal pages but 
 	    <strong>The portlet should take into account that objects that are stored in the application scope can be accessed 
 	    by other portlets in parallel and thus should synchronize write access to these objects. <strong/><p/>
@@ -68,7 +67,7 @@ being a part of the same session.</p>
 		<ul data-role="listview"  data-theme="c" data-dividertheme="d">
 			<li data-role="list-divider">Features</li>
 			<li ><a href="../../docs/features/Ajax.html">Ajax</a></li>
-			<li ><a href="../../docs/features/clientid.html">ClientId</a></li>
+			<li ><a href="../../docs/features/clientId.html">ClientId</a></li>
 			<li ><a href="../../docs/features/preferences.html">Preferences</a></li>
 			<li ><a href="../../docs/features/persist.html">Persist</a></li>
 			<li data-theme="a"><a href="../../docs/features/portletCommunication.html">portletCommunication</a></li>	
