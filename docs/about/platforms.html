@@ -39,7 +39,18 @@
 					The current version (2.0) of this specification is known as JSR-286.  </li>
 				</ul>
 				
+				<p>For other portlet container, this bridge will work fine as long as the portlet container implements MARKUP_HEADER. This
+will avoid adding any js twice for any portal page that use more thanone portlet instance. If your portal does not support this header, you will have to use manually add 
+you css and js file and ask tapestry to exclude assets ref from his generated code.</p> 
 
+<textarea readonly="readonly">
+<context-param>
+		<param-name>tapestry.portlet.exclude-assets</param-name>
+		<param-value>true</param-value>
+</context-param>
+</textarea>
+				
+				
 				
 				</div>
 
