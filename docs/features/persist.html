@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html> 
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Tapestry5 Portlet - Persist</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+
+	<script src="../../js/jquery.js"></script>
+	<script src="../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+
+	<div data-role="header" data-theme="f">
+		<h1>Persist in PortletSession </h1>
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		
+	<h2>Persist in PortletSession</h2>
+		
+	<p>Making page data persist across requests to a single page is accomplished with the @Persist annotation. 
+	This annotation is applied to private instance fields of components:</p>
+
+	
+		
+<textarea readonly="readonly">
+@Persist
+private int value;
+</textarea> 
+
+	<p>In portlet world, each portlet application has its own distinct  PortletSession object per user session.</p> 
+
+	<p> Objects stored in the session using the PORTLET_SCOPE must be available to the portlet 
+during requests for the same portlet window that the objects where stored from.
+By default the @Persist annotation sotre objetc in PORTLET_SCOPE.<p/>
+
+	<p>The  PortletSession interface defines two scopes for storing objects, 
+APPLICATION_SCOPE and PORTLET_SCOPE. Any object stored in the session using the APPLICATION_SCOPE is available to any other portlet that belongs to the same portlet application and that handles a request identified as 
+being a part of the same session.</p> 
+
+	<p>If your want to store your data in the APPLICATION_SCOPE you can use the new persistence strategie for that. </p>
+	
+<textarea readonly="readonly">
+@Persist(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE)
+    @Property
+    private String applicationScope;
+</textarea>
+
+	<p> This make you data synchronise across any instance of the porlet use by any page for the current PortletSession.
+	    This is a powerful way to share data across portlet and  portal pages but 
+	    <strong>The portlet should take into account that objects that are stored in the application scope can be accessed 
+	    by other portlets in parallel and thus should synchronize write access to these objects. <strong/><p/>
+       
+       
+      		
+	<div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+				
+		<h3>More in this section</h3>
+					
+		<ul data-role="listview"  data-theme="c" data-dividertheme="d">
+			<li data-role="list-divider">Features</li>
+			<li ><a href="../../docs/features/Ajax.html">Ajax</a></li>
+			<li ><a href="../../docs/features/clientid.html">ClientId</a></li>
+			<li ><a href="../../docs/features/preferences.html">Preferences</a></li>
+			<li ><a href="../../docs/features/persist.html">Persist</a></li>
+			<li data-theme="a"><a href="../../docs/features/portletCommunication.html">portletCommunication</a></li>	
+		</ul>
+	</div>	
+		
+
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</div>	
+	
+	
+</div><!-- /page -->
+
+</body>
+</html>
