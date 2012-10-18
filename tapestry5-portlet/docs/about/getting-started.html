@@ -1,0 +1,238 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Tapestry5 Portlet - Quick start</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+
+	<script src="../../js/jquery.js"></script>
+	<script src="../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+
+	<div data-role="header" data-theme="f">
+		<h1>Quick start guide</h1>
+		
+		
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		
+		<div class="content-primary">
+		
+		<h2>Getting Started with Tapestry5 Portlet</h2>
+
+		<p>If you want to see it in action with Apache Pluto, you just need to:<br/>
+		- Download the sources<br/>
+		- Go to the repository directory<br/>
+		- Run "mvn jetty:run"<br/>
+		- Open your browser to http://localhost:8080/tapestry5-portlet/portal/Index<br/>
+		</p> 	
+
+		<p>
+		If you are gradle user you can try:<br/>
+		- gradle jettyRun</p>
+		
+		<h2>Create your first portlet</h2>	
+		
+		<h3>Maven Dependencies</h3>	
+		<p>First of all, you will need to add those dependencies in your pom.xml. 
+		   Of course your pom.xml file will also contain the common dependencies needed 
+		   to develop web application with Tapestry (tapestry-core, tapestry-ioc, servlet-api)
+		</p>
+	
+		<textarea readonly="readonly">
+		<dependency>
+  			<groupId>org.apache.tapestry.portlet</groupId>
+  			<artifactId>tapestry5-portlet</artifactId>
+  			<version>5.3.2</version> //for Tapestry 5.3.x 
+		</dependency>
+		<dependency>
+  			<groupId>javax.portlet</groupId>
+  			<artifactId>portlet-api</artifactId>
+  			<version>2.0</version>
+  			<type>jar</type>
+  			<scope>provided</scope>
+		</dependency>
+		</textarea>
+
+		<p>The "tapestry5-portlet" is a contribution to Tapestry default implementation that adds portlet support to your Tapestry developments.
+		   The "portlet-api" dependency is required to allow you to manipulate portlet API features like PortletRequest or PortletPreferences inside your Tapestry pages.
+		   
+		</p>
+		
+		<p><strong>Important Note :</strong> 
+		the provided scope for "portlet-api" dependency; this is important to avoid conflicts while deploying your application in a portlet container.
+		</p>
+		
+		<h3>Deployment Descriptors</h2>
+		<p>This file is the standard descriptor recognized by all the portlet specifications implementors. 
+		   It contains the descriptions of all the existing portlets packaged inside your application. 
+		   Let’s start with a brief example:
+		</p> 
+		<textarea readonly="readonly">
+		<?xml version="1.0" encoding="UTF-8"?>
+			<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+       			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+       			 xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
+       			 		     http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+   		</portlet-app>
+   		...
+    		<portlet>
+      		      <portlet-name>TapestryPortlet</portlet-name>
+      		      <portlet-class>org.apache.tapestry5.portlet.ApplicationPortlet</portlet-class>
+      		      <supports>
+        		<mime-type>text/html</mime-type>
+        	         <portlet-mode>VIEW</portlet-mode>
+      		      </supports>
+		      <supports>
+		        <mime-type>image/png</mime-type>
+		        <portlet-mode>VIEW</portlet-mode>
+		      </supports>
+		      <portlet-info>
+		        <title>Tapestry Portlet</title>
+		        <short-title>Tapestry Portlet</short-title>
+		        <keywords> Tapestry  Portlet</keywords>
+		      </portlet-info>
+		      <portlet-preferences>
+		        <preference>
+		          <name>MyPreference</name>
+		        </preference>
+		      </portlet-preferences>
+		      <security-role-ref>
+		        <role-name>user</role-name>
+		      </security-role-ref>
+		      <supported-public-render-parameter>publicParam</supported-public-render-parameter>
+		      <container-runtime-option>
+		        <name>javax.portlet.renderHeaders</name>
+		        <value>true</value>
+		      </container-runtime-option>
+		 </portlet>
+		    ...
+		 <default-namespace>http://localhost:8080</default-namespace>
+		    <public-render-parameter>
+		      <identifier>publicParam</identifier>
+		      <name>publicParam</name>
+		     </public-render-parameter>     
+		</portlet-app></textarea>
+		
+		<p>Let's describe this snippet in details:</p> 
+		
+		<p>
+		   First of all, we have the "portlet-app" element that is the root element of portlet.xml descriptor.</p>
+		<p>
+		   Then we have a "portlet" element for each portlet definition, 
+		   inside this element we will describe all the features related to the current portlet definition.</p>
+		<p>
+		   The "portlet-name" is the name of the portlet as it will appear in the portal administration GUI. 
+		   This name must match an existing Tapestry page in your application. Without a matching page, the page resolution will fail.</p>
+		<p>
+		   The "portlet-class" is the class of your portlet. In case of Tapestry this will always be the same class unless you need to implement specific behaviour in init() and destroy() methods. 
+		   The implementation we provide is generic and acts as a dispatcher on your Tapestry application
+		</p>    
+		<p>
+		   Then we have the "supports" element that describes the supported mime types and their corresponding mode. 
+		   As a reminder, three modes exist in Portlet specifications: VIEW, EDIT and HELP.
+		</p>    
+		<p>
+	           Then, we have general information about the current Portlet
+	        </p>    
+		<p>
+		   After that, you will define the list of preferences associated to your Portlet and define their default values<br/>
+		</p>    
+		<p>
+	  	The "supported-public-render-parameter" is important because it describes which render parameter must be passed to the portlet instance. 
+		<strong>Important :</strong> This must refer to an existing "public-render-parameter"
+		</p> 
+		
+		<p>
+		Finally, you have to declare at least one runtime option, without javax.portlet.renderHeaders set to true,  
+		the Tapestry portlet contribution will not be able to properly include JS and CSS files in the containing portal page.
+		</p> 
+		
+		<h3>Web.xml</h3>
+		<p>
+		Because a portlet application is also a web application, you have to define the web.xml file. 
+		In this file you will declare a regular Tapestry configuration. 
+		That will also be useful if you want to run the page you have developed in a standard servlet container.
+		</p>
+
+		<p><strong>Important note</strong>: Tapestry filter must be declared and fully configured in the "web.xml" file. 
+		The generic Tapestry ApplicationPortlet is not in charge of loading Tapestry registry; 
+		it will only retrieve it from the portlet context that is shared with servlet context. 
+		Follow the snippet below to create your "web.xml" file:
+		</p>
+		
+		<textarea readonly="readonly">
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE web-app
+		        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+		        "http://java.sun.com/dtd/web-app_2_3.dtd">
+		<web-app>
+		  <display-name>Tapestry Demo Application</display-name>
+		  <context-param>
+		    <param-name>tapestry.app-package</param-name>
+		    <param-value>net.atos.tapestry</param-value>
+		  </context-param>
+		       
+		  <context-param>
+		    <param-name>tapestry.combine-scripts</param-name>
+		    <param-value>false</param-value>
+		  </context-param>
+		 
+		   <filter>
+		     <filter-name>TapestryPortlet</filter-name>
+		     <filter-class>org.apache.tapestry5.TapestryFilter</filter-class>
+		   </filter>
+		 
+		   <filter-mapping>
+		     <filter-name>TapestryPortlet</filter-name>
+		     <url-pattern>/*</url-pattern>
+		   </filter-mapping>
+		</web-app></textarea>
+
+		<p>
+		The "tapestry.app-package" context parameter that points to the root application package where Tapestry 
+		will find pages and components.
+		Setting the "tapestry.combine-scripts" to false will ease the JS and CSS include in portal page Markup.
+		</p>
+
+	
+		</div><!--/content-primary -->		
+		
+		<div class="content-secondary">
+			
+			<div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+				
+					<h3>More in this section</h3>
+					
+					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
+						<li data-role="list-divider">Overview</li>
+						<li><a href="../../docs/about/intro.html">Intro to Tapestry5 portlet</a></li>
+						<li data-theme="a"><a href="../../docs/about/getting-started.html">Quick start guide</a></li>				
+						<li><a href="../../docs/about/features.html">Features</a></li>
+						<li><a href="../../docs/about/platforms.html">Supported Portals</a></li>
+					</ul>
+			</div>
+		</div>		
+
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</div>	
+	
+	
+</div><!-- /page -->
+
+</body>
+</html>

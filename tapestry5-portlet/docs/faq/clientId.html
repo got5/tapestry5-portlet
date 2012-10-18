@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html> 
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Tapestry5 Portlet - ClientId</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+
+	<script src="../../js/jquery.js"></script>
+	<script src="../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+
+	<div data-role="header" data-theme="f">
+		<h1>ClientId</h1>
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		
+		<div class="content-primary">
+		
+		<h2>Contribution to MarkupRenderer</h2>
+		
+		<p>MarkupRenderer  is an object which will perform rendering of a page (or portion of a page).
+		This interface exists to be filtered via MarkupRendererFilter.The MarkupRenderer service takes an ordered configuration of MarkupRendererFilters, 
+		which are used for ordinary page rendering (as opposed to partial page rendering for Ajax requests). </p>
+
+		<p>The following code show that in this module, the default JavaScriptSupport MarkupRendererFilter 
+		defined in TapestryModule.java is replaced by an other MarkupRendererFilter.</p> 
+		
+		<textarea readonly="readonly">
+public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+           final Environment environment, final Request request,
+           final PortletRequestGlobals globals, final JavaScriptStackSource javascriptStackSource,
+           final JavaScriptStackPathConstructor javascriptStackPathConstructor,
+           final PortletIdAllocatorFactory iaFactory)
+{
+		
+      MarkupRendererFilter javaScriptSupport = new MarkupRendererFilter()
+      {
+            public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer)
+            {
+                DocumentLinker linker = environment.peekRequired(DocumentLinker.class);
+                IdAllocator idAllocator = iaFactory.getNewPortletIdAllocator();
+                JavaScriptSupportImpl support = new JavaScriptSupportImpl(linker,
+	                        javascriptStackSource, javascriptStackPathConstructor, idAllocator, false);
+                environment.push(JavaScriptSupport.class, support);
+                renderer.renderMarkup(writer);
+                environment.pop(JavaScriptSupport.class);
+                support.commit();
+           }
+       };
+     configuration.override("JavaScriptSupport", javaScriptSupport, "after:DocumentLinker");
+} </textarea> 
+
+		   <p>
+		   IdAllocator is used to "uniquify" names within a given context.
+		   A base name is passed in, and the return value is the base name, 
+		   or the base name extended with a suffix to make it unique. 
+		   In a portlet container, a portal page can use more than one instance of a portlet. 
+		   So the portlet bridge need to give to each component id a suffix that is unique accross the portlet page.
+		    To do that, the new javaScriptSupport MarkupRendererFilter pass a specific IdAllocator instance with 
+		    a namespace that start with the portletId to the JavaScriptSupport service.<p/>
+
+		    <p>
+		    In practice, if you want to use your portlet more than once in your portal page, 
+		    don't fix the client id in your template.<p/>
+
+ 		    <h3>Ajax Form with client id (Don't do that)</h3>
+ 		    
+<textarea readonly="readonly">
+<t:zone t:id="formResultZone" id="IdConflictIfmoreThanOneInstanceOfThePortletisUsedInPortalPage">
+  <t:if test="firstName">Hi ${firstName} from Ajax Form!</t:if>
+</t:zone>
+<form t:type="form" t:zone="IdConflictIfmoreThanOneInstanceOfThePortletisUsedInPortalPage" t:id="firstNameForm">
+	<label t:type="label" t:for="firstName"/>
+	<input t:type="textfield" t:id="firstName"/>
+	<t:submit />
+</form></textarea>
+			
+		
+		    <p>Instead, let's the component create a unique client ID with the namespace provided by t:id parameter.<p/>
+		    		    
+		    <h3>Ajax Form without client id</h3>
+		    
+<textarea readonly="readonly">
+<t:zone t:id="surnameZone" >
+   <t:if test="surname">your surname is ${surName} from Ajax Form without client id!</t:if>
+</t:zone>
+			  
+<form t:type="form" t:zone="${surnameZoneId}" t:id="surnameForm">
+   <label t:type="label" t:for="surname"/><input t:type="textfield" t:id="surname"/>
+   <t:submit />
+</form></textarea> 
+
+		    <p>and get the clientID form the component</P>
+		    
+<textarea readonly="readonly">
+    @InjectComponent
+    private Zone surNameZone;
+		
+    public String getSurNameZoneId()
+    {
+        return surNameZone.getClientId();
+    }</textarea>
+
+  	           <p>If you want more details about What's the difference between id and t:id? 
+		    see http://tapestry.apache.org/templating-and-markup-faq.html </p>
+
+		
+		</div><!--/content-primary -->		
+		
+		<div class="content-secondary">
+			
+			<div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+				
+					<h3>More in this section</h3>
+					
+					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
+						<li data-role="list-divider">Features</li>
+						<li><a href="../../docs/features/ajax.html">Ajax</a></li>
+						<li data-theme="a"><a href="../../docs/features/clientid.html">ClientId</a></li>	
+						<li><a href="../../docs/features/features.html">Features</a></li>
+						<li><a href="../../docs/features/platforms.html">Supported Portals</a></li>
+
+				
+					</ul>
+			</div>
+		</div>		
+
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</div>	
+	
+	
+</div><!-- /page -->
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html> 
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Tapestry5 Portlet - Ajax</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+
+	<script src="../../js/jquery.js"></script>
+	<script src="../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+
+	<div data-role="header" data-theme="f">
+		<h1>Ajax</h1>
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+	</div><!-- /header -->
+
+	
+		
+	<h2>Ressources serving</h2>
+
+	<p>Through the  render method of the Portlet interface the Portlet produces its complete markup that is embedded as a fragment into  
+	   the overall page by the portal application. However, there are use cases where the portlet would like to only replace a part of its  markup, 
+	   e.g. via an AJAX call.  
+	   Serving fragments via  serveResource is under the complete control of the portlet. 
+	   Typically a portlet would issue an XMLHttpRequest with a resource URL and provide either markup or data as response in the serveResource method. </p>
+	<p>In order to provide a resource URL for each event handler that are supposed to serve either partial markup or data, 
+	   the portletModule replaced the default implementation of the Linksource service by a class called PortletLinkSource.</p>
+
+<textarea readonly="readonly">
+public void contributeServiceOverride(
+	  MappedConfiguration<Class, Object> configuration,
+	  @InjectService("PortletCookieSource") final CookieSource cookieSource,
+	  @InjectService("PortletLinkSource") final PortletLinkSource linkSource, 
+	  @InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
+		
+{
+configuration.add(LinkSource.class, linkSource);// <-----overrided service 
+configuration.add(CookieSource.class, cookieSource);
+configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
+} </textarea>
+
+		<p>more precisely the method called createComponentEventLink return a resource URL when:<br/>
+		   	1) the event name of the component start with the keyword "serve"
+ 		</p>
+		
+<textarea readonly="readonly">
+<t:eventlink t:event="serveresource">Download File</t:eventlink></li> </textarea>
+		
+		<p>2) the component referenced by the link is declared as a resource sender.</p>
+		
+		<p>The following code extracted from the PortletModule, show us how the bridge contributes values to the PortletResourceResponseIdentifier's 
+		configuration for component that come from tapestry-core and tapestry5-jQuery.</p>
+		
+<textarea readonly="readonly">
+public static void contributePortletResourceResponseIdentifier(
+         	Configuration<DeclaredResourceResponseSender> configuration)
+{
+// declare core component that will return resource response form ajax call
+configuration.add(new DeclaredResourceResponseSender(DateField.class.getName()));
+configuration.add(new DeclaredResourceResponseSender(FormInjector.class.getName()));
+configuration.add(new DeclaredResourceResponseSender(BeanEditForm.class.getName()));
+// ajaxFormLoop
+DeclaredResourceResponseSender ajaxFormLoop = new DeclaredResourceResponseSender(
+                AjaxFormLoop.class.getName());
+	        ajaxFormLoop.addEvent(EventConstants.ADD_ROW);
+	        ajaxFormLoop.addEvent(EventConstants.REMOVE_ROW);
+	        configuration.add(ajaxFormLoop);
+// declare core mixin that will return resource response form ajax call
+configuration.add(new DeclaredResourceResponseSender(Autocomplete.class.getName(), true));
+		
+// declare tapestry-jquery component that will return resource response
+// form ajax call
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.AjaxUpload"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.CarouselItem"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.DataTable"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.DialogAjaxLink"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.InPlaceEditor"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.ProgressiveDisplay"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.RangeSlider"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.Slider"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.Tabs"));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.TwitterView"));
+// declare tapestry-jquery mixin that will return resource response from ajax call
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.Autocomplete",true));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.ZoneDroppable",true));
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.ZoneRefresh",true));
+// for page or mixin like  org.got5.tapestry5.jquery.mixins.Bind you have to declare the full pagename
+// and the eventname that should be treat as resource URL } </textarea>
+		<p>
+		if you have to add a component to the list you are able to:<br/> 
+		- declare all the events raised by the component that request a resource serving url like</p>
+<textarea readonly="readonly">
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.AjaxUpload"));
+</textarea>
+		<p>
+		- declare only the events raised by the component that should be declared as a resource sender.</p>
+<textarea readonly="readonly">
+ DeclaredResourceResponseSender ajaxFormLoop = new DeclaredResourceResponseSender(
+	AjaxFormLoop.class.getName());
+	ajaxFormLoop.addEvent(EventConstants.ADD_ROW);
+	ajaxFormLoop.addEvent(EventConstants.REMOVE_ROW);
+configuration.add(ajaxFormLoop);</textarea>
+
+		<p>
+		- declare a mixin that raised that should be declared as a resource sender.</p>
+		
+<textarea readonly="readonly">
+configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.mixins.Autocomplete",true));</textarea>
+		
+		
+
+
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</div>	
+	
+	
+</div><!-- /page -->
+
+</body>
+</html>
