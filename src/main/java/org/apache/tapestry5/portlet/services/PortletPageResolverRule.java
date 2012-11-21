@@ -1,4 +1,4 @@
-// Copyright 2005 The Apache Software Foundation
+// Copyright 2012 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,8 +24,7 @@ import javax.portlet.PortletRequest;
  */
 public class PortletPageResolverRule implements Comparable<PortletPageResolverRule>
 {
-//	private static final Logger _logger = LoggerFactory.getLogger(PortletPageResolverRule.class);
-	
+		
 	private String _portletName;
     
     private String _mimeType;
@@ -122,20 +121,17 @@ public class PortletPageResolverRule implements Comparable<PortletPageResolverRu
 
     public boolean match(String portletName, PortletRequest request)
     {
-//    	_logger.info(request.getResponseContentType());
-    	System.out.println("CONTENT TYPE:");
-    	System.out.println(request.getResponseContentType());
     	if (_portletName != null && !_portletName.equals(portletName))
-    			return false;
+    		return false;
     	
     	if (_mimeType != null && !_mimeType.equals(request.getResponseContentType()))
-          return false;
+    		return false;
 
-      if (_portletMode != null && !_portletMode.equals(request.getPortletMode().toString()))
-          return false;
+    	if (_portletMode != null && !_portletMode.equals(request.getPortletMode().toString()))
+    		return false;
 
-      if (_windowState != null && !_windowState.equals(request.getWindowState().toString()))
-          return false;
+    	if (_windowState != null && !_windowState.equals(request.getWindowState().toString()))
+    		return false;
 
       return true;
     }

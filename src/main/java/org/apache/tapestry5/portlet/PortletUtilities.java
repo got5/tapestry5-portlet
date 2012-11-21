@@ -1,4 +1,4 @@
-// Copyright 2005 The Apache Software Foundation
+// Copyright 2012 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.apache.commons.codec.net.URLCodec;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.internal.services.PortletRequestImpl;
-import org.apache.tapestry5.portlet.services.liferay.LiferayRequestImpl;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
 import org.slf4j.Logger;
@@ -115,26 +114,7 @@ public final class PortletUtilities {
 		return pattern.matcher(input).replaceAll(replacement);
 	}
 
-	/**
-	 * This method create the correspond PortletRequest depending on the request
-	 * type. If in Liferay then we have to use specific features, by default we
-	 * use a standard implementation.
-	 * 
-	 * @param request
-	 *            The incoming portlet request
-	 * @param pageName
-	 *            The Tapestry pageName requested
-	 * @param analyzer
-	 *            Needed to create the subsequent tapestry portletRequest
-	 *            object.
-	 * @return
-	 */
-	public static Request buildPortlet(PortletRequest request, String pageName, SessionPersistedObjectAnalyzer analyzer) {
-		boolean isLiferayRequest = request.getClass().getName().startsWith("com.liferay");
-
-		return isLiferayRequest ? new LiferayRequestImpl(request, pageName, analyzer) : new PortletRequestImpl(request,
-				pageName, analyzer);
-	}
+	
 
 	/**
 	 * Remove the servlet context from the path.

@@ -96,6 +96,8 @@ import org.apache.tapestry5.portlet.PortletSymbolConstants;
 import org.apache.tapestry5.portlet.PortletUtilities;
 import org.apache.tapestry5.portlet.annotations.Portlet;
 import org.apache.tapestry5.portlet.internal.services.PortalPageNameComponentEventResultProcessor;
+import org.apache.tapestry5.portlet.internal.services.PortalUtilities;
+import org.apache.tapestry5.portlet.internal.services.PortalUtilitiesImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletActionRenderResponseGeneratorImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletActionResultProcessor;
 import org.apache.tapestry5.portlet.internal.services.PortletApplicationScopePersistentFieldStrategy;
@@ -145,6 +147,8 @@ import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
 
+
+
 public final class PortletModule
 {
 
@@ -157,6 +161,7 @@ public final class PortletModule
         binder.bind(PortletPageResolver.class, PortletPageResolverImpl.class);
         binder.bind(PortletIdAllocatorFactory.class, PortletIdAllocatorFactoryImpl.class);
         binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
+        binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class).eagerLoad();
     }
 
     public PortletRequest build(PortletRequestGlobals portletGlobals,
@@ -190,12 +195,19 @@ public final class PortletModule
     }
 
     public PortletActionRequestHandler build(Logger logger,
-            List<PortletActionRequestFilter> configuration, @InjectService("PipelineBuilder")
-            PipelineBuilder builder, final PortletPageResolver pageResolver,
+            List<PortletActionRequestFilter> configuration, 
+            @InjectService("PipelineBuilder")
+            PipelineBuilder builder, 
+            final PortletPageResolver pageResolver,
             @InjectService("RequestGlobals")
-            final RequestGlobals requestGlobals, @InjectService("PortletRequestGlobals")
-            final PortletRequestGlobals portletRequestGlobals, @InjectService("RequestHandler")
-            final RequestHandler handler, @Primary
+            final RequestGlobals requestGlobals, 
+            @InjectService("PortletRequestGlobals")
+            final PortletRequestGlobals portletRequestGlobals, 
+            @InjectService("RequestHandler")
+            final RequestHandler handler, 
+            @InjectService("PortalUtilities")
+            final PortalUtilities portalUtil, 
+            @Primary
             final SessionPersistedObjectAnalyzer analyzer, final Logger log)
     {
 
@@ -207,7 +219,7 @@ public final class PortletModule
                 String pageName = pageResolver.resolve(request);
                 log.info("PORTLET ACTION REQUEST HANDLER for page " + pageName);
 
-                Request portletRequest = PortletUtilities.buildPortlet(request, pageName, analyzer);
+                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
                 Response portletResponse = new PortletResponseImpl(response, portletRequest);
 
                 requestGlobals.storeRequestResponse(portletRequest, portletResponse);
@@ -224,14 +236,23 @@ public final class PortletModule
 
     public PortletRenderRequestHandler build(List<PortletRenderRequestFilter> configuration,
             @InjectService("PipelineBuilder")
-            PipelineBuilder builder, final PortletPageResolver pageResolver,
+            PipelineBuilder builder, 
+            final PortletPageResolver pageResolver,
             @InjectService("RequestGlobals")
-            final RequestGlobals requestGlobals, @InjectService("PortletRequestGlobals")
-            final PortletRequestGlobals portletRequestGlobals, @InjectService("RequestHandler")
-            final RequestHandler handler, Logger logger, @Primary
-            final SessionPersistedObjectAnalyzer analyzer, @Inject
+            final RequestGlobals requestGlobals, 
+            @InjectService("PortletRequestGlobals")
+            final PortletRequestGlobals portletRequestGlobals, 
+            @InjectService("RequestHandler")
+            final RequestHandler handler, Logger logger, 
+            @Primary
+            final SessionPersistedObjectAnalyzer analyzer, 
+            @Inject
             @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE)
-            final String exceptionPage, final RequestPageCache pageCache, final Logger log)
+            final String exceptionPage,
+            @InjectService("PortalUtilities")
+            final PortalUtilities portalUtil, 
+            final RequestPageCache pageCache, 
+            final Logger log)
     {
 
         PortletRenderRequestHandler terminator = new PortletRenderRequestHandler()
@@ -256,7 +277,7 @@ public final class PortletModule
                             PortletConstants.LAST_ACTION_EXCEPTION);
                 }
 
-                Request portletRequest = PortletUtilities.buildPortlet(request, pageName, analyzer);
+                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
                 Response portletResponse = new PortletRenderResponseImpl(response);
 
                 requestGlobals.storeRequestResponse(portletRequest, portletResponse);
@@ -272,12 +293,19 @@ public final class PortletModule
 
     public PortletResourceRequestHandler build(List<PortletResourceRequestFilter> configuration,
             @InjectService("PipelineBuilder")
-            PipelineBuilder builder, final PortletPageResolver pageResolver,
+            PipelineBuilder builder, 
+            final PortletPageResolver pageResolver,
             @InjectService("RequestGlobals")
-            final RequestGlobals requestGlobals, @InjectService("PortletRequestGlobals")
-            final PortletRequestGlobals portletRequestGlobals, @InjectService("RequestHandler")
-            final RequestHandler handler, @Primary
-            final SessionPersistedObjectAnalyzer analyzer, final Logger log)
+            final RequestGlobals requestGlobals, 
+            @InjectService("PortletRequestGlobals")
+            final PortletRequestGlobals portletRequestGlobals, 
+            @InjectService("RequestHandler")
+            final RequestHandler handler, 
+            @Primary
+            final SessionPersistedObjectAnalyzer analyzer,
+            @InjectService("PortalUtilities")
+            final PortalUtilities portalUtil, 
+            final Logger log)
     {
 
         PortletResourceRequestHandler terminator = new PortletResourceRequestHandler()
@@ -288,7 +316,7 @@ public final class PortletModule
                 String pageName = pageResolver.resolve(request);
                 log.info("PORTLET RESSOURCES REQUEST HANDLER for page " + pageName);
 
-                Request portletRequest = PortletUtilities.buildPortlet(request, pageName, analyzer);
+                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
                 Response portletResponse = new PortletResourceResponseImpl(response);
 
                 requestGlobals.storeRequestResponse(portletRequest, portletResponse);
@@ -304,14 +332,23 @@ public final class PortletModule
     }
 
     public PortletEventRequestHandler buildPortletEventRequestHandler(
-            List<PortletEventRequestFilter> configuration, @InjectService("PipelineBuilder")
-            PipelineBuilder builder, final PortletPageResolver pageResolver,
+            List<PortletEventRequestFilter> configuration, 
+            @InjectService("PipelineBuilder")
+            PipelineBuilder builder, 
+            final PortletPageResolver pageResolver,
             @InjectService("RequestGlobals")
-            final RequestGlobals requestGlobals, @InjectService("PortletRequestGlobals")
-            final PortletRequestGlobals portletRequestGlobals, @InjectService("RequestHandler")
+            final RequestGlobals requestGlobals, 
+            @InjectService("PortletRequestGlobals")
+            final PortletRequestGlobals portletRequestGlobals, 
+            @InjectService("RequestHandler")
             final RequestHandler handler, @Primary
-            final SessionPersistedObjectAnalyzer analyzer, final RequestPageCache pageCache, @Local
-            final PortletLinkSource linkSource, final Logger log)
+            final SessionPersistedObjectAnalyzer analyzer, 
+            final RequestPageCache pageCache, 
+            @Local
+            final PortletLinkSource linkSource,
+            @InjectService("PortalUtilities")
+            final PortalUtilities portalUtil, 
+            final Logger log)
     {
 
         PortletEventRequestHandler terminator = new PortletEventRequestHandler()
@@ -324,7 +361,7 @@ public final class PortletModule
                 String pageName = pageResolver.resolve(null);
                 log.info("PORTLET EVENT REQUEST HANDLER for page " + pageName);
 
-                Request portletRequest = PortletUtilities.buildPortlet(request, pageName + ":"
+                Request portletRequest = portalUtil.buildPortletRequest(request, pageName + ":"
                         + request.getEvent().getName() + "/"
                         + request.getEvent().getValue().toString(), analyzer);
                 Response portletResponse = new PortletResponseImpl(response, portletRequest);

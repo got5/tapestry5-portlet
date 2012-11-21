@@ -1,4 +1,4 @@
-// Copyright 2005 The Apache Software Foundation
+// Copyright 2012 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,8 +63,8 @@ public class PortletResponseImpl implements Response
     {
         if (_response instanceof ActionResponse)
         {
-            ActionResponse liferayResponse = (ActionResponse) _response;
-            liferayResponse.sendRedirect(URL);
+            ActionResponse response = (ActionResponse) _response;
+            response.sendRedirect(URL);
             _isCommited = true;
             return;
         }

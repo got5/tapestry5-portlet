@@ -1,4 +1,4 @@
-// Copyright 2005 The Apache Software Foundation
+// Copyright 2012 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.apache.tapestry5.portlet.PortletPageResolver;
 import org.apache.tapestry5.portlet.services.PortletConfigProvider;
 import org.apache.tapestry5.portlet.services.PortletPageResolverRule;
 import org.apache.tapestry5.services.ComponentClassResolver;
+import org.slf4j.Logger;
 
 /**
  * Implements the PortletPageResolver for a basic portlet. It runs through all
@@ -41,7 +42,9 @@ public class PortletPageResolverImpl implements PortletPageResolver
 
     private final PortletConfigProvider portletConfig;
 
-    public PortletPageResolverImpl(List<PortletPageResolverRule> configuration,
+    public PortletPageResolverImpl(
+    		Logger logger,
+    		List<PortletPageResolverRule> configuration,
             ComponentClassResolver componentClassResolver, PortletConfigProvider portletConfig)
     {
         this.configuration.addAll(configuration);
