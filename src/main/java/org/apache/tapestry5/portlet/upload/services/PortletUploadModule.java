@@ -2,13 +2,11 @@ package org.apache.tapestry5.portlet.upload.services;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.io.FileCleaner;
-import org.apache.tapestry5.ioc.Configuration;
+import org.apache.commons.io.FileCleaningTracker;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ScopeConstants;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Marker;
 import org.apache.tapestry5.ioc.annotations.Scope;
@@ -17,7 +15,6 @@ import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 import org.apache.tapestry5.portlet.annotations.Portlet;
 import org.apache.tapestry5.portlet.services.PortletActionRequestFilter;
-import org.apache.tapestry5.portlet.services.PortletLinkSource;
 import org.apache.tapestry5.portlet.upload.internal.services.PortletMultipartDecoderFilter;
 import org.apache.tapestry5.portlet.upload.internal.services.PortletMultipartDecoderImpl;
 import org.apache.tapestry5.upload.services.MultipartDecoder;
@@ -32,7 +29,8 @@ import org.apache.tapestry5.upload.services.MultipartDecoder;
 public class PortletUploadModule
 {
     private static final AtomicBoolean needToAddShutdownListener = new AtomicBoolean(true);
-
+    private static final FileCleaningTracker fileCleaningTracker = new FileCleaningTracker();
+    
     @Scope(ScopeConstants.PERTHREAD)
     @Marker(Portlet.class)
     public static PortletMultipartDecoder buildPortletMultipartDecoder(
@@ -48,10 +46,9 @@ public class PortletUploadModule
         {
             shutdownHub.addRegistryShutdownListener(new RegistryShutdownListener()
             {
-                @SuppressWarnings("deprecation")
-				public void registryDidShutdown()
+                public void registryDidShutdown()
                 {
-                    FileCleaner.exitWhenFinished();
+                	fileCleaningTracker.exitWhenFinished();
                 }
             });
         }
