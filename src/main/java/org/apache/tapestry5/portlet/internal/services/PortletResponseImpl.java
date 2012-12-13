@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletResponse;
+import javax.portlet.ResourceResponse;
 
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.services.Request;
@@ -99,6 +100,11 @@ public class PortletResponseImpl implements Response
     public void setHeader(String name, String value)
     {
         _logger.info("Response Header: " + name + " " + value + " Class: " + _response.getClass());
+        if(_response instanceof ResourceResponse )
+        {
+        	ResourceResponse res = (ResourceResponse)_response;
+        	res.addProperty(name,value);
+        }
     }
 
     public void setIntHeader(String name, int value)

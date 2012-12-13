@@ -46,4 +46,11 @@ public class PortletResourceResponseImpl extends PortletResponseImpl
         return _resourceResponse.getWriter();
     }
 
+    @Override
+    public void setHeader(String name, String value)
+    {
+        _logger.info("ResourceResponse Header: " + name + " " + value + " Class: " + _resourceResponse.getClass());
+        _resourceResponse.addProperty(name, value);
+    }
+    
 }
