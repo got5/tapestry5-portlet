@@ -163,7 +163,6 @@ public class Index
 
             public String getContentType()
             {
-                // TODO Auto-generated method stub
                 return "application/schmock";
             }
 
@@ -174,7 +173,10 @@ public class Index
 
             public void prepareResponse(Response arg0)
             {
-                // TODO Auto-generated method stub
+                arg0.setHeader("Content-Disposition", "attachment; filename=greetings.txt");
+                arg0.setHeader("Expires", "0");
+                arg0.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+                arg0.setHeader("Pragma", "public");
 
             }
 

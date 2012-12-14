@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class PortletResourceResponseImpl extends PortletResponseImpl
 {
 
-    private final Logger _logger = LoggerFactory.getLogger(PortletRenderResponseImpl.class);
+    private final Logger _logger = LoggerFactory.getLogger(PortletResourceResponseImpl.class);
 
     private final ResourceResponse _resourceResponse;
 

@@ -122,9 +122,6 @@ public class PortletPageResolverRule implements Comparable<PortletPageResolverRu
 
     public boolean match(String portletName, PortletRequest request)
     {
-//    	_logger.info(request.getResponseContentType());
-    	System.out.println("CONTENT TYPE:");
-    	System.out.println(request.getResponseContentType());
     	if (_portletName != null && !_portletName.equals(portletName))
     			return false;
     	
