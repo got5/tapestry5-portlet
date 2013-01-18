@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+      
+	<body>
+        <div t:type='zone' t:id='topZone'>
+             Zone ${date}
+        </div>
+
+        <a href='#' t:type='eventLink'
+           t:event='multipleZoneUpdate' t:zone="${topZoneId}" t:id='multipleZoneLink'>
+            Multiple Zone Update
+        </a>
+
+        <div t:type='zone' t:id='bottomZone'>
+            Bottom Zone ${date}
+        </div>
+
+        
+
+
+        <a t:type='eventLink' t:zone="${topZoneId}"
+           t:id='javaScriptCallbackLink' t:event='serverAlert'>
+            Show Feedback alert
+        </a>
+
+        
+
+
+        <a t:type='eventLink' t:id='jsonCallbackLink' t:event='sendJSON'>
+            Get alert message from server!
+        </a>
+    </body>
+
+</html>
