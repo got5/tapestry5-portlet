@@ -97,6 +97,8 @@ import org.apache.tapestry5.portlet.PortletSymbolConstants;
 import org.apache.tapestry5.portlet.PortletUtilities;
 import org.apache.tapestry5.portlet.annotations.Portlet;
 import org.apache.tapestry5.portlet.internal.services.PortalPageNameComponentEventResultProcessor;
+import org.apache.tapestry5.portlet.internal.services.PortalUtilities;
+import org.apache.tapestry5.portlet.internal.services.PortalUtilitiesImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletActionRenderResponseGeneratorImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletActionResultProcessor;
 import org.apache.tapestry5.portlet.internal.services.PortletApplicationScopePersistentFieldStrategy;
@@ -166,6 +168,7 @@ public final class PortletModule {
 		binder.bind(PortletIdAllocatorFactory.class,PortletIdAllocatorFactoryImpl.class);
 		binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
 		binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");
+		binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class);
 	}
 
 	public PortletRequest build(PortletRequestGlobals portletGlobals,
@@ -195,149 +198,181 @@ public final class PortletModule {
 				terminator);
 	}
 
-	public PortletActionRequestHandler build(
-			Logger logger,
-			List<PortletActionRequestFilter> configuration,
-			@InjectService("PipelineBuilder") PipelineBuilder builder,
-			final PortletPageResolver pageResolver,
-			@InjectService("RequestGlobals") final RequestGlobals requestGlobals,
-			@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals,
-			@InjectService("RequestHandler") final RequestHandler handler,
-			@Primary final SessionPersistedObjectAnalyzer analyzer,
-			final Logger log) {
+	 public PortletActionRequestHandler build(Logger logger,
+	            List<PortletActionRequestFilter> configuration, 
+	            @InjectService("PipelineBuilder")
+	            PipelineBuilder builder, final PortletPageResolver pageResolver,
+	            @InjectService("RequestGlobals")
+	            final RequestGlobals requestGlobals, 
+	            @InjectService("PortletRequestGlobals")
+	            final PortletRequestGlobals portletRequestGlobals, 
+	            @InjectService("RequestHandler")
+	            final RequestHandler handler,
+	        	final PortalUtilities portalUtil,
+	            @Primary
+	            final SessionPersistedObjectAnalyzer analyzer, 
+	            final Logger log)
+	    {
 
-		PortletActionRequestHandler terminator = new PortletActionRequestHandler() {
-			public boolean service(ActionRequest request,
-					ActionResponse response) throws IOException {
-				String pageName = pageResolver.resolve(request);
-				log.info("PORTLET ACTION REQUEST HANDLER for page " + pageName);
+	        PortletActionRequestHandler terminator = new PortletActionRequestHandler()
+	        {
+	            public boolean service(ActionRequest request, ActionResponse response)
+	                    throws IOException
+	            {
+	                String pageName = pageResolver.resolve(request);
+	                log.info("PORTLET ACTION REQUEST HANDLER for page " + pageName);
 
-				Request portletRequest = PortletUtilities.buildPortlet(request,pageName, analyzer);
-				Response portletResponse = new PortletResponseImpl(response,portletRequest);
+	                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
+	                Response portletResponse = new PortletResponseImpl(response, portletRequest);
 
-				requestGlobals.storeRequestResponse(portletRequest,	portletResponse);
-				portletRequestGlobals.store(request, response);
+	                requestGlobals.storeRequestResponse(portletRequest, portletResponse);
+	                portletRequestGlobals.store(request, response);
 
-				return handler.service(portletRequest, portletResponse);
-			}
+	                return handler.service(portletRequest, portletResponse);
+	            }
 
-		};
+	        };
 
-		return builder.build(logger, PortletActionRequestHandler.class,
-				PortletActionRequestFilter.class, configuration, terminator);
-	}
+	        return builder.build(logger, PortletActionRequestHandler.class,
+	                PortletActionRequestFilter.class, configuration, terminator);
+	    }
 
-	public PortletRenderRequestHandler build(
-			List<PortletRenderRequestFilter> configuration,
-			@InjectService("PipelineBuilder") PipelineBuilder builder,
-			final PortletPageResolver pageResolver,
-			@InjectService("RequestGlobals") final RequestGlobals requestGlobals,
-			@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals,
-			@InjectService("RequestHandler") final RequestHandler handler,
-			Logger logger,
-			@Primary final SessionPersistedObjectAnalyzer analyzer,
-			@Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) final String exceptionPage,
-			final RequestPageCache pageCache, final Logger log) {
+	 public PortletRenderRequestHandler build(List<PortletRenderRequestFilter> configuration,
+	            @InjectService("PipelineBuilder")
+	            PipelineBuilder builder, 
+	            final PortletPageResolver pageResolver,
+	            @InjectService("RequestGlobals")
+	            final RequestGlobals requestGlobals, 
+	            @InjectService("PortletRequestGlobals")
+	            final PortletRequestGlobals portletRequestGlobals, 
+	            @InjectService("RequestHandler")
+	            final RequestHandler handler, Logger logger, 
+	            @Primary
+	            final SessionPersistedObjectAnalyzer analyzer, 
+	            @Inject
+	            @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE)
+	            final String exceptionPage, 
+	        	final PortalUtilities portalUtil,
+	            final RequestPageCache pageCache, final Logger log)
+	    {
 
-		PortletRenderRequestHandler terminator = new PortletRenderRequestHandler() {
-			public boolean service(RenderRequest request,
-					RenderResponse response) throws IOException {
-				String pageName = pageResolver.resolve(request);
-				log.info("PORTLET RENDER REQUEST HANDLER for page " + pageName);
+	        PortletRenderRequestHandler terminator = new PortletRenderRequestHandler()
+	        {
+	            public boolean service(RenderRequest request, RenderResponse response)
+	                    throws IOException
+	            {
+	                String pageName = pageResolver.resolve(request);
+	                log.info("PORTLET RENDER REQUEST HANDLER for page " + pageName);
 
-				// In case of exception page, let the page set up for the new
-				// exception.
-				if (request.getPortletSession().getAttribute(
-						PortletConstants.LAST_ACTION_EXCEPTION) != null) {
-					pageName = exceptionPage;
-					Page page = pageCache.get(exceptionPage);
-					ExceptionReporter rootComponent = (ExceptionReporter) page.getRootComponent();
-					rootComponent.reportException((Throwable) request.getPortletSession().getAttribute(PortletConstants.LAST_ACTION_EXCEPTION));
-					request.getPortletSession().removeAttribute(PortletConstants.LAST_ACTION_EXCEPTION);
-				}
+	                // In case of exception page, let the page set up for the new
+	                // exception.
+	                if (request.getPortletSession().getAttribute(PortletConstants.LAST_ACTION_EXCEPTION) != null)
+	                {
+	                    pageName = exceptionPage;
+	                    portletRequestGlobals.store(request, response);
+	                    Page page = pageCache.get(exceptionPage);
+	                    ExceptionReporter rootComponent = (ExceptionReporter) page.getRootComponent();
+	                    rootComponent.reportException((Throwable) request.getPortletSession()
+	                            .getAttribute(PortletConstants.LAST_ACTION_EXCEPTION));
+	                    request.getPortletSession().removeAttribute(
+	                            PortletConstants.LAST_ACTION_EXCEPTION);
+	                }
 
-				Request portletRequest = PortletUtilities.buildPortlet(request,	pageName, analyzer);
-				Response portletResponse = new PortletRenderResponseImpl(response);
+	                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
+	                Response portletResponse = new PortletRenderResponseImpl(response);
 
-				requestGlobals.storeRequestResponse(portletRequest,	portletResponse);
-				portletRequestGlobals.store(request, response);
+	                requestGlobals.storeRequestResponse(portletRequest, portletResponse);
+	                portletRequestGlobals.store(request, response);
 
-				return handler.service(portletRequest, portletResponse);
-			}
-		};
+	                return handler.service(portletRequest, portletResponse);
+	            }
+	        };
 
-		return builder.build(logger, PortletRenderRequestHandler.class,
-				PortletRenderRequestFilter.class, configuration, terminator);
-	}
+	        return builder.build(logger, PortletRenderRequestHandler.class,
+	                PortletRenderRequestFilter.class, configuration, terminator);
+	    }
 
-	public PortletResourceRequestHandler build(
-			List<PortletResourceRequestFilter> configuration,
-			@InjectService("PipelineBuilder") PipelineBuilder builder,
-			final PortletPageResolver pageResolver,
-			@InjectService("RequestGlobals") final RequestGlobals requestGlobals,
-			@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals,
-			@InjectService("RequestHandler") final RequestHandler handler,
-			@Primary final SessionPersistedObjectAnalyzer analyzer,
-			final Logger log) {
+	    public PortletResourceRequestHandler build(List<PortletResourceRequestFilter> configuration,
+	            @InjectService("PipelineBuilder")
+	            PipelineBuilder builder, final PortletPageResolver pageResolver,
+	            @InjectService("RequestGlobals")
+	            final RequestGlobals requestGlobals, 
+	            @InjectService("PortletRequestGlobals")
+	            final PortletRequestGlobals portletRequestGlobals, 
+	            @InjectService("RequestHandler")
+	            final RequestHandler handler, 
+	            @Primary
+	            final SessionPersistedObjectAnalyzer analyzer,
+	        	final PortalUtilities portalUtil,
+	            final Logger log)
+	    {
 
-		PortletResourceRequestHandler terminator = new PortletResourceRequestHandler() {
-			public boolean service(ResourceRequest request,
-					ResourceResponse response) throws IOException,
-					PortletException {
-				String pageName = pageResolver.resolve(request);
-				log.info("PORTLET RESSOURCES REQUEST HANDLER for page "	+ pageName);
+	        PortletResourceRequestHandler terminator = new PortletResourceRequestHandler()
+	        {
+	            public boolean service(ResourceRequest request, ResourceResponse response)
+	                    throws IOException, PortletException
+	            {
+	                String pageName = pageResolver.resolve(request);
+	                log.info("PORTLET RESSOURCES REQUEST HANDLER for page " + pageName);
 
-				Request portletRequest = PortletUtilities.buildPortlet(request,	pageName, analyzer);
-				Response portletResponse = new PortletResourceResponseImpl(	response);
+	                Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
+	                Response portletResponse = portalUtil.buildResourceReponse(response);
 
-				requestGlobals.storeRequestResponse(portletRequest,portletResponse);
-				portletRequestGlobals.store(request, response);
+	                requestGlobals.storeRequestResponse(portletRequest, portletResponse);
+	                portletRequestGlobals.store(request, response);
 
-				return handler.service(portletRequest, portletResponse);
-			}
-		};
+	                return handler.service(portletRequest, portletResponse);
+	            }
+	        };
 
-		return builder.build(log, PortletResourceRequestHandler.class,
-				PortletResourceRequestFilter.class, configuration, terminator);
+	        return builder.build(log, PortletResourceRequestHandler.class,
+	                PortletResourceRequestFilter.class, configuration, terminator);
 
-	}
+	    }
 
-	public PortletEventRequestHandler buildPortletEventRequestHandler(
-			List<PortletEventRequestFilter> configuration,
-			@InjectService("PipelineBuilder") PipelineBuilder builder,
-			final PortletPageResolver pageResolver,
-			@InjectService("RequestGlobals") final RequestGlobals requestGlobals,
-			@InjectService("PortletRequestGlobals") final PortletRequestGlobals portletRequestGlobals,
-			@InjectService("RequestHandler") final RequestHandler handler,
-			@Primary final SessionPersistedObjectAnalyzer analyzer,
-			final RequestPageCache pageCache,
-			@Local final PortletLinkSource linkSource, final Logger log) {
+	    public PortletEventRequestHandler buildPortletEventRequestHandler(
+	            List<PortletEventRequestFilter> configuration, @InjectService("PipelineBuilder")
+	            PipelineBuilder builder, final PortletPageResolver pageResolver,
+	            @InjectService("RequestGlobals")
+	            final RequestGlobals requestGlobals, 
+	            @InjectService("PortletRequestGlobals")
+	            final PortletRequestGlobals portletRequestGlobals, 
+	            @InjectService("RequestHandler")
+	            final RequestHandler handler, 
+	            @Primary
+	            final SessionPersistedObjectAnalyzer analyzer, final RequestPageCache pageCache, 
+	            @Local
+	            final PortletLinkSource linkSource,
+	        	final PortalUtilities portalUtil,
+	            final Logger log)
+	    {
 
-		PortletEventRequestHandler terminator = new PortletEventRequestHandler() {
+	        PortletEventRequestHandler terminator = new PortletEventRequestHandler()
+	        {
 
-			public boolean service(EventRequest request, EventResponse response)
-					throws IOException, PortletException {
-				// Resolve against configuration or default page
-				String pageName = pageResolver.resolve(null);
-				log.info("PORTLET EVENT REQUEST HANDLER for page " + pageName);
+	            public boolean service(EventRequest request, EventResponse response)
+	                    throws IOException, PortletException
+	            {
+	                // Resolve against configuration or default page
+	                String pageName = pageResolver.resolve(null);
+	                log.info("PORTLET EVENT REQUEST HANDLER for page " + pageName);
 
-				Request portletRequest = PortletUtilities.buildPortlet(request,
-						pageName + ":" + request.getEvent().getName() + "/"
-								+ request.getEvent().getValue().toString(),
-						analyzer);
-				Response portletResponse = new PortletResponseImpl(response,portletRequest);
+	                Request portletRequest = portalUtil.buildPortletRequest(request, pageName + ":"
+	                        + request.getEvent().getName() + "/"
+	                        + request.getEvent().getValue().toString(), analyzer);
+	                Response portletResponse = new PortletResponseImpl(response, portletRequest);
 
-				requestGlobals.storeRequestResponse(portletRequest,	portletResponse);
-				portletRequestGlobals.store(request, response);
+	                requestGlobals.storeRequestResponse(portletRequest, portletResponse);
+	                portletRequestGlobals.store(request, response);
 
-				return handler.service(portletRequest, portletResponse);
-			}
-		};
+	                return handler.service(portletRequest, portletResponse);
+	            }
+	        };
 
-		return builder.build(log, PortletEventRequestHandler.class,
-				PortletEventRequestFilter.class, configuration, terminator);
+	        return builder.build(log, PortletEventRequestHandler.class,
+	                PortletEventRequestFilter.class, configuration, terminator);
 
-	}
+	    }
 
 	@Marker({ Portlet.class })
 	public PortletResponseRenderer buildPortletResponseRenderer(

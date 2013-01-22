@@ -221,4 +221,9 @@ public class PortletRequestImpl implements Request
         return session != null && session.isInvalidated();
 	}
 
+	@Override
+	public List<String> getAttributeNames() {
+		 return InternalUtils.toList(request.getAttributeNames());
+	}
+
 }
