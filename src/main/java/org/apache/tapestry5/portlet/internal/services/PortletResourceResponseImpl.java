@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class PortletResourceResponseImpl extends PortletResponseImpl
 {
 
-    private final Logger _logger = LoggerFactory.getLogger(PortletRenderResponseImpl.class);
+    private final Logger _logger = LoggerFactory.getLogger(PortletResourceResponseImpl.class);
 
     private final ResourceResponse _resourceResponse;
 
@@ -46,4 +46,11 @@ public class PortletResourceResponseImpl extends PortletResponseImpl
         return _resourceResponse.getWriter();
     }
 
+    @Override
+    public void setHeader(String name, String value)
+    {
+        _logger.info("ResourceResponse Header: " + name + " " + value + " Class: " + _resourceResponse.getClass());
+        _resourceResponse.addProperty(name, value);
+    }
+    
 }
