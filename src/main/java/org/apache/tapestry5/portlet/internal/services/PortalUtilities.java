@@ -14,9 +14,11 @@
 package org.apache.tapestry5.portlet.internal.services;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
 
 
@@ -41,8 +43,20 @@ public interface PortalUtilities{;
  *            object.
  * @return
  */
-	public Request buildPortletRequest(PortletRequest request, String pageName, SessionPersistedObjectAnalyzer analyzer);
+public Request buildPortletRequest(PortletRequest request, String pageName, SessionPersistedObjectAnalyzer analyzer);
 
+	
+	/**
+	 * This method create the corresponding ResourceResponse depending on the request
+	 * type this method may be overrided to use ResourceResponse implementation by the portlet container. 
+	 * 
+	 * @param response
+	 *            The outgoing portlet response
+	
+	 * @return
+	 */
+public Response buildResourceReponse(ResourceResponse response);
+	
 	
 /**
  * Even if portletRequest provide many informations from the original HttpServletRequest, it is needed some times get direct access to 

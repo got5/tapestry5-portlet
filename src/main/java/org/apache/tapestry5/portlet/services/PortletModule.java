@@ -29,6 +29,7 @@ import javax.portlet.EventResponse;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -161,7 +162,7 @@ public final class PortletModule
         binder.bind(PortletPageResolver.class, PortletPageResolverImpl.class);
         binder.bind(PortletIdAllocatorFactory.class, PortletIdAllocatorFactoryImpl.class);
         binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
-        binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class).eagerLoad();
+        binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class);
     }
 
     public PortletRequest build(PortletRequestGlobals portletGlobals,
@@ -204,9 +205,8 @@ public final class PortletModule
             @InjectService("PortletRequestGlobals")
             final PortletRequestGlobals portletRequestGlobals, 
             @InjectService("RequestHandler")
-            final RequestHandler handler, 
-            @InjectService("PortalUtilities")
-            final PortalUtilities portalUtil, 
+            final RequestHandler handler,
+        	final PortalUtilities portalUtil,
             @Primary
             final SessionPersistedObjectAnalyzer analyzer, final Logger log)
     {
@@ -248,11 +248,9 @@ public final class PortletModule
             final SessionPersistedObjectAnalyzer analyzer, 
             @Inject
             @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE)
-            final String exceptionPage,
-            @InjectService("PortalUtilities")
-            final PortalUtilities portalUtil, 
-            final RequestPageCache pageCache, 
-            final Logger log)
+            final String exceptionPage, 
+        	final PortalUtilities portalUtil,
+            final RequestPageCache pageCache, final Logger log)
     {
 
         PortletRenderRequestHandler terminator = new PortletRenderRequestHandler()
@@ -265,10 +263,10 @@ public final class PortletModule
 
                 // In case of exception page, let the page set up for the new
                 // exception.
-                if (request.getPortletSession()
-                        .getAttribute(PortletConstants.LAST_ACTION_EXCEPTION) != null)
+                if (request.getPortletSession().getAttribute(PortletConstants.LAST_ACTION_EXCEPTION) != null)
                 {
                     pageName = exceptionPage;
+                    portletRequestGlobals.store(request, response);
                     Page page = pageCache.get(exceptionPage);
                     ExceptionReporter rootComponent = (ExceptionReporter) page.getRootComponent();
                     rootComponent.reportException((Throwable) request.getPortletSession()
@@ -303,8 +301,7 @@ public final class PortletModule
             final RequestHandler handler, 
             @Primary
             final SessionPersistedObjectAnalyzer analyzer,
-            @InjectService("PortalUtilities")
-            final PortalUtilities portalUtil, 
+        	final PortalUtilities portalUtil,
             final Logger log)
     {
 
@@ -317,7 +314,7 @@ public final class PortletModule
                 log.info("PORTLET RESSOURCES REQUEST HANDLER for page " + pageName);
 
                 Request portletRequest = portalUtil.buildPortletRequest(request, pageName, analyzer);
-                Response portletResponse = new PortletResourceResponseImpl(response);
+                Response portletResponse = portalUtil.buildResourceReponse(response);
 
                 requestGlobals.storeRequestResponse(portletRequest, portletResponse);
                 portletRequestGlobals.store(request, response);
@@ -346,8 +343,7 @@ public final class PortletModule
             final RequestPageCache pageCache, 
             @Local
             final PortletLinkSource linkSource,
-            @InjectService("PortalUtilities")
-            final PortalUtilities portalUtil, 
+        	final PortalUtilities portalUtil,
             final Logger log)
     {
 
@@ -661,7 +657,10 @@ public final class PortletModule
      */
     @Match(value = "RequestExceptionHandler")
     public RequestExceptionHandler decorateRequestExceptionHandler(
-            final RequestExceptionHandler delegate, final PortletRequestGlobals globals, @Inject
+            final RequestExceptionHandler delegate, 
+            final PortletRequestGlobals globals,
+            final RequestGlobals requestGlobals,   
+            @Inject
             @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE)
             final String exceptionPage, final Logger log)
     {
@@ -674,10 +673,23 @@ public final class PortletModule
                 // Bypass exception rendering in case of action request
                 if (globals.getActionRequest() != null)
                 {
-                    log.debug("handleRequestException saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION");
-                    globals.getPortletRequest().getPortletSession()
-                            .setAttribute(PortletConstants.LAST_ACTION_EXCEPTION, exception);
-                    return;
+                    
+                    PortletSession session =   globals.getPortletRequest().getPortletSession();
+                    if(session!=null)
+                    {
+                    	if(requestGlobals.getRequest().isRequestedSessionIdValid())
+                    	{
+                    		log.debug("handleRequestException saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION");
+                    		session.setAttribute(PortletConstants.LAST_ACTION_EXCEPTION, exception);
+                    		return;
+                    	}   
+                    	else
+                    	{
+                    		log.debug("handleRequestException not saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION as RequestedSessionIdValid");
+                    		log.debug("exception is "+exception);
+                    		return;
+                    	}
+                    }
                 }
                 log.debug("handleRequestException redirect to delegate");
                 delegate.handleRequestException(exception);

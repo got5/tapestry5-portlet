@@ -16,10 +16,12 @@ package org.apache.tapestry5.portlet.internal.services;
 
 
 import javax.portlet.PortletRequest;
+import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tapestry5.portlet.internal.services.PortletRequestImpl;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +42,19 @@ public class PortalUtilitiesImpl implements PortalUtilities
 	{
 		return  new PortletRequestImpl(request,pageName, analyzer);
 	}
+	
+
+	public Response buildResourceReponse(ResourceResponse response) {
+		return new PortletResourceResponseImpl(response);
+	}
+	
 
 	public HttpServletRequest getOriginalServletRequest() {
 		
 		return null;
 	}
+
+	
 	
 	
 
