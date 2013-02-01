@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.3.3-SNAPSHOT</version>
+	<version>5.3.3</version>
 	<name>Tapestry5 Portlet 2.0 Integration</name>
 	<!--  packaging>war</packaging-->
 	<dependencies>

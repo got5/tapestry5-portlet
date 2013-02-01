@@ -1,9 +1,9 @@
-# Tapestry 5 Portlet Bridge Module - 5.3.3-SNAPSHOT
+# Tapestry 5 Portlet Bridge Module - 5.3.3
 
 
 ## Changelog
-- 5.3.3-SNAPSHOT: Remove Liferay dependencies 
-		 		  Update to Tapestry 5.3.6   
+- 5.3.3: Remove Liferay dependencies 
+		 Update to Tapestry 5.3.6   
 - 5.3.2: CookieSink & CookieSource 
 		 Update To Tapestry 5.3.5	
 - 5.3.1 : Adding templating, PortletApplicationScopePersistentFieldStrategy
