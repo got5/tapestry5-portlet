@@ -1,12 +1,13 @@
-# Tapestry 5 Portlet Bridge Module - 5.4-alpha-1-SNAPSHOT
+# Tapestry 5 Portlet Bridge Module - 5.4-alpha-3-SNAPSHOT
 
 
 ## Changelog
-- 5.4-alpha-1-SNAPSHOT : Update to Tapestry 5.4-alpha-1 -> branch : master
-- 5.3.2-SNAPSHOT : CookieSink & CookieSource 
-				   Update To Tapestry 5.3.5	
+- 5.4-5.4-alpha-3-SNAPSHOT : Update to Tapestry 5.4-alpha-3-SNAPSHOT -> branch : master
+- 5.4-alpha-1-SNAPSHOT : Update to Tapestry 5.4-alpha-1 
+- 5.3.3: Remove Liferay dependencies + Update to Tapestry 5.3.6  -> branch : maint-5.3 
+- 5.3.2: CookieSink & CookieSource + Update To Tapestry 5.3.5		
 - 5.3.1 : Adding templating, PortletApplicationScopePersistentFieldStrategy
-- 5.3.1-SNAPSHOT : Update to Tapestry 5.3.4 -> branch : maint-5.3
+- 5.3.1-SNAPSHOT : Update to Tapestry 5.3.4 
 - 5.3.0-SNAPSHOT : Update to Tapestry 5.3.3
 - 5.2.0-SNAPSHOT : Update to Tapestry 5.2.6 -> branch : maint-5.2
 
