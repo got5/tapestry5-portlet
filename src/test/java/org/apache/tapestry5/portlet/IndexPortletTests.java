@@ -66,7 +66,7 @@ public class IndexPortletTests extends SeleniumTestCase
 
         click(SubmitLastName);
 
-        assertText("//div[contains(@id,'errorpopup')][starts-with(@id,'lastName')]/span", "You must provide a value for Last Name.");
+        assertText("//p[starts-with(@data-error-block-for,'lastName')]", "You must provide a value for Last Name.");
 
         type(InputLastName, "fac");
         click(SubmitLastName);
@@ -125,8 +125,9 @@ public class IndexPortletTests extends SeleniumTestCase
     {
     	String InputName = "//input[starts-with(@id,'nom')]";
     	String InputId = "//input[starts-with(@id,'id')]";
-    	String addRow = "//*[starts-with(@id,'addrowlink')]";
+    	final String removeRow ="//a[contains(@data-afl-behavior,'remove')]";
     	String textarea = "//textarea[starts-with(@id,'texte')]";
+   
     	
     	open(AboutLocation);	
 
@@ -143,7 +144,7 @@ public class IndexPortletTests extends SeleniumTestCase
     	
     	type(InputName, "AjaxFormLoop");
     	    	
-    	click("xpath=//a[contains(@id,'addrowlink')]");
+    	click("xpath=//a[contains(@data-afl-trigger,'add')]");
     	    	
     	
     	new Wait()
@@ -151,7 +152,7 @@ public class IndexPortletTests extends SeleniumTestCase
             @Override
             public boolean until()
             {
-                return getXpathCount("//fieldset[starts-with(@id,'rowInjector_')]").equals(1);
+                return getXpathCount(removeRow).equals(1);
             }
         }.wait("We should have just one row.", 1000);
     	
@@ -164,14 +165,14 @@ public class IndexPortletTests extends SeleniumTestCase
         assertTextPresent("MyAjaxFormLoopTexte");
         
              
-        click("xpath=//a[contains(@id,'removerowlink')]");
+        click("xpath="+removeRow);
     	
     	new Wait()
         {
             @Override
             public boolean until()
             {
-                return getXpathCount("//fieldset[starts-with(@id,'rowInjector_')]").equals(0);
+                return getXpathCount(removeRow).equals(0);
             }
         }.wait("The first row should be deleted.", 1000);
         

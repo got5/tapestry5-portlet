@@ -36,13 +36,12 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.StateAwareResponse;
 import javax.servlet.http.Cookie;
 
-import org.apache.tapestry5.Asset;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.corelib.components.AjaxFormLoop;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -119,7 +118,6 @@ import org.apache.tapestry5.portlet.internal.services.PortletRenderRequestFilter
 import org.apache.tapestry5.portlet.internal.services.PortletRenderResponseImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletRequestGlobalsImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletResourceResponseIdentifierImpl;
-import org.apache.tapestry5.portlet.internal.services.PortletResourceResponseImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletResponseImpl;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ApplicationGlobals;
@@ -127,7 +125,6 @@ import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.AssetFactory;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClassResolver;
-import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventRequestFilter;
 import org.apache.tapestry5.services.ComponentEventRequestHandler;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
@@ -135,7 +132,6 @@ import org.apache.tapestry5.services.ContextProvider;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.FormSupport;
-import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRenderer;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.MarkupWriterFactory;
@@ -442,19 +438,11 @@ public final class PortletModule {
 
 	public void contributePartialMarkupRenderer(
 			OrderedConfiguration<PartialMarkupRendererFilter> configuration,
-
-			@Path("${tapestry.spacer-image}") final Asset spacerImage,
-
 			final SymbolSource symbolSource,
-
 			final AssetSource assetSource,
-
 			final Environment environment,
-
 			final PortletIdAllocatorFactory iaFactory,
-
 			final JavaScriptStackSource javascriptStackSource,
-
 			final JavaScriptStackPathConstructor javascriptStackPathConstructor) {
 		PartialMarkupRendererFilter javascriptSupport = new PartialMarkupRendererFilter() {
 			public void renderMarkup(MarkupWriter writer, JSONObject reply,
@@ -708,6 +696,7 @@ public final class PortletModule {
         ajaxFormLoop.addEvent(EventConstants.ADD_ROW);
         ajaxFormLoop.addEvent(EventConstants.REMOVE_ROW);
         ajaxFormLoop.addEvent("triggerRemoveRow"); //See AjaxFormLoop.formLoopContext for more details
+        ajaxFormLoop.addEvent("injectRow"); //See AjaxFormLoop for more details
 		configuration.add(ajaxFormLoop);
 		// declare core mixin that will return resource response form ajax call
 		configuration.add(new DeclaredResourceResponseSender(Autocomplete.class.getName(), true));
@@ -751,5 +740,6 @@ public final class PortletModule {
 				new PortletApplicationScopePersistentFieldStrategy(globals));
 
 	}
-
+	
+		
 }

@@ -168,31 +168,32 @@ public class PortletRequestImpl implements Request
     }
 
     /**
-     * Not allowed in a portlet.
-     * 
-     * @throws IllegalStateException
-     *             Not allowed in a portlet.
+     * PLT 19.3.4: getRemotePort and getLocalPort now return ‘0’ instead of null
      */
     public int getLocalPort()
     {
     	if (request instanceof HttpServletRequest) {
     	return ((HttpServletRequest) request).getLocalPort();
     	}
-        throw new IllegalStateException("getLocalPort Not allowed in a portlet");
+    	else return 0;
+    	//PLT 19.3.4: getRemotePort and getLocalPort now return ‘0’ instead of null
     }
 
     /**
-     * Not allowed in a portlet.
-     * 
-     * @throws IllegalStateException
-     *             Not allowed in a portlet.
+    * The following methods of the HttpServletRequest must be equivalent to the methods  5 
+	* of the  PortletRequest of similar name:  getScheme, getServerName, 
+    * getServerPort, getAttribute, getAttributeNames, setAttribute, 
+	* removeAttribute, getLocale, getLocales, isSecure, getAuthType, 
+	* getContextPath, getRemoteUser, getUserPrincipal, getRequestedSessionId, 
+	* isRequestedSessionIdValid, getCookies.ccxxiii
      */
     public int getServerPort()
     {
     	if (request instanceof HttpServletRequest) {
     		return ((HttpServletRequest) request).getServerPort();
       	}
-    	throw new IllegalStateException("getServerPort Not allowed in a portlet");
+    	else return request.getServerPort();
+    	
     }
 
     /**
