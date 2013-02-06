@@ -1,4 +1,4 @@
-// Copyright 2005 The Apache Software Foundation
+// Copyright 2013 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,7 +69,6 @@ public class PortletContextImpl implements Context
         return portletContext.getInitParameter(name);
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getResourcePaths(String path)
     {
         return InternalUtils.toList((new Vector<String>(portletContext.getResourcePaths(path)))

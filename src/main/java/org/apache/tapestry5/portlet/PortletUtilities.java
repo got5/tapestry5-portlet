@@ -20,16 +20,12 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
-import org.apache.tapestry5.portlet.internal.services.PortletRequestImpl;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

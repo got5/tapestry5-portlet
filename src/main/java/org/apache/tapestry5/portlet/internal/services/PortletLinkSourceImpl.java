@@ -35,6 +35,7 @@ import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.slf4j.Logger;
 
+@SuppressWarnings("all")
 public class PortletLinkSourceImpl
 		implements PortletLinkSource, LinkCreationHub {
 
@@ -60,14 +61,12 @@ public class PortletLinkSourceImpl
 	
 	private final PortletResourceResponseIdentifier resourceResponseIdentifier;
 	
-	private final Logger log;
-
+	
 	public PortletLinkSourceImpl(PageRenderQueue pageRenderQueue, PageActivationContextCollector contextCollector,
 			TypeCoercer typeCoercer, ComponentClassResolver resolver, ComponentEventLinkEncoder linkEncoder,
-			RequestGlobals requestGlobals,PortletRequestGlobals portletGlobals, RequestPageCache pageCache,
-			ComponentSource componentSource,
-			PortletResourceResponseIdentifier resourceResponseIdentifier,
-			Logger log) {
+			RequestGlobals requestGlobals, RequestPageCache pageCache, List<LinkCreationListener2> configuration,
+			ComponentSource componentSource, PortletRequestGlobals portletGlobals,PortletResourceResponseIdentifier resourceResponseIdentifier) 
+	{
 		this.pageRenderQueue = pageRenderQueue;
 		this.contextCollector = contextCollector;
 		this.typeCoercer = typeCoercer;
@@ -77,24 +76,25 @@ public class PortletLinkSourceImpl
 		this.componentSource = componentSource;
 		this.requestGlobals = requestGlobals;
 		this.pageCache = pageCache;
+		
+		listeners.addAll(configuration);
+		
 		this.resourceResponseIdentifier = resourceResponseIdentifier;
-		this.log = log;
+	
 	}
 
 	public Link createComponentEventLink(Page page, String nestedId, String eventType, boolean forForm,
-			Object... eventContext) {
+			Object... eventContext) 
+	{
 
-		String baseMsg = "PortletLinkSourceImpl->createComponentEventLink page="+page+" eventType="+eventType;
 		Link link = createComponentEventLinkForServletContainer(page, nestedId, eventType, forForm, eventContext);
 
 		// If in action request then return the default generated link
 		if(portletGlobals.getPortletResponse() != null && portletGlobals.getPortletResponse() instanceof StateAwareResponse) 
 		{
-			log.info("----------- actionRequest then return link="+link.toString() );
 		    return link;
 		}
 		
-		Component component = componentSource.getComponent(page.getName() + ":" + toBlank(nestedId));
 		boolean isXHR = isXHR(page.getName(),nestedId,eventType);
 		
 		// If in portlet request then generate the corresponding portlet URL
@@ -112,12 +112,10 @@ public class PortletLinkSourceImpl
 			{
 				ResourceURL resourceUrl = MimeResponse.class.cast(portletGlobals.getPortletResponse()).createResourceURL();
 				Link res = new ResourceLinkImpl(resourceUrl, link, portletGlobals.getPortletResponse());
-				log.info("----------- resourceRequest then return link="+res.toString() );
 				return res;
 			} else {
 				PortletURL actionUrl = MimeResponse.class.cast(portletGlobals.getPortletResponse()).createActionURL();
 				Link act=new PortletLinkImpl(actionUrl, link, portletGlobals.getPortletResponse());
-				log.info("----------- actionRequest then return link="+act.toString() );
 				return act;
 			}
 		}
@@ -125,18 +123,18 @@ public class PortletLinkSourceImpl
 		return link;
 	}
 
-	private String toBlank(String input) {
+	private String toBlank(String input) 
+	{
 		return input == null ? "" : input;
 	}
 
-	public Link createPageRenderLink(String pageName, boolean override, Object... pageActivationContext) {
+	public Link createPageRenderLink(String pageName, boolean override, Object... pageActivationContext) 
+	{
 
-		String baseMsg = "PortletLinkSourceImpl->createPageRenderLink page="+pageName;
 		Link link = createPageRenderLinkForServletContainer(pageName, override, pageActivationContext);
 
 	      // If in action request then return the default generated link
         if(portletGlobals.getPortletResponse() != null && portletGlobals.getPortletResponse() instanceof StateAwareResponse) {
-        	log.info(baseMsg + " actionRequest then return link="+link.toString() );
         	return link;
         }
 		
@@ -151,7 +149,6 @@ public class PortletLinkSourceImpl
 
 			PortletURL actionUrl = MimeResponse.class.cast(portletGlobals.getPortletResponse()).createRenderURL();
 			Link portletLink = new PortletLinkImpl(actionUrl, link, portletGlobals.getPortletResponse());
-			log.info(baseMsg + " actionRequest then return link="+portletLink.toString() );
 			return portletLink;
 		}
 
@@ -189,7 +186,8 @@ public class PortletLinkSourceImpl
 
 	@Override
 	public Link createPageRenderLinkForServletContainer(String pageName, boolean override,
-			Object... pageActivationContext) {
+			Object... pageActivationContext) 
+	{
 		// Resolve the page name to its canonical format (the best version for
 		// URLs). This also
 		// validates the page name.
@@ -213,30 +211,29 @@ public class PortletLinkSourceImpl
 		return link;
 	}
 
-	public LinkCreationHub getLinkCreationHub() {
+	public LinkCreationHub getLinkCreationHub() 
+	{
 		return this;
 	}
 
-	public void addListener(LinkCreationListener listener) {
+	public void addListener(LinkCreationListener listener) 
+	{
 		assert listener!=null;
 
-		 addListener(TapestryInternalUtils.toLinkCreationListener2(listener));
+		addListener(TapestryInternalUtils.toLinkCreationListener2(listener));
 	}
 
-	public void removeListener(LinkCreationListener listener) {
-		assert listener!=null;
-
-		throw new UnsupportedOperationException("Removing listeners from LinkSource is not longer supported.");
-	}
 
 	@Override
-	public void addListener(LinkCreationListener2 listener) {
+	public void addListener(LinkCreationListener2 listener) 
+	{
 		 assert listener != null;
 
 	     listeners.add(listener);
 	}
 
-	private boolean isXHR(String containingPageName, String nestedComponentId, String eventType) {
+	private boolean isXHR(String containingPageName, String nestedComponentId, String eventType) 
+	{
        // get the element for which we are creating the Link to see if it's triggering a zone (i.e. is an AJAX event).
        // EventLink is using the containing page's ComponentResource to generate the url so nestedComponentId is ALWAYS null!
        if (!InternalUtils.isBlank(nestedComponentId)) {
@@ -262,7 +259,6 @@ public class PortletLinkSourceImpl
 	        		if(inPlaceBound) 
 	        		{
 	        			ParameterConduit paramInPlaceConduit = internalResContainer.getParameterConduit("inPlace");
-	        			log.info(cptName+" "+paramInPlaceConduit.toString());
 	        			return true;
 	        		}
 	        		else
@@ -275,7 +271,6 @@ public class PortletLinkSourceImpl
 	        if(zoneBounded)
 	        {
 	        	ParameterConduit paramConduit = internalRes.getParameterConduit("zone");
-	        	log.info(cptName+" "+paramConduit.toString());
 	        	//Fix: make sure zone is bound to a real component       
 	        	if(!paramConduit.isBound()) return false;
 	        	else return true;

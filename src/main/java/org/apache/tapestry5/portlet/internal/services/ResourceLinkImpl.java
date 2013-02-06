@@ -18,6 +18,5 @@ public class ResourceLinkImpl
 		super(portletUrl, delegate, response);
 	}
 
-	// TODO Implement resource specific attributes
 	
 }

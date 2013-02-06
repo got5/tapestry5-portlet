@@ -18,22 +18,17 @@ import static org.apache.tapestry5.ioc.internal.util.CollectionFactory.newList;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.portlet.PortletSession;
 
-import org.apache.tapestry5.internal.services.AbstractSessionPersistentFieldStrategy;
 import org.apache.tapestry5.internal.services.PersistentFieldChangeImpl;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.PortletUtilities;
 import org.apache.tapestry5.portlet.services.PortletRequestGlobals;
 import org.apache.tapestry5.services.PersistentFieldChange;
 import org.apache.tapestry5.services.PersistentFieldStrategy;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestGlobals;
-import org.apache.tapestry5.services.Session;
+
 
 /**
  * A strategy for storing persistent page properties into the {@link PortletSession session}.

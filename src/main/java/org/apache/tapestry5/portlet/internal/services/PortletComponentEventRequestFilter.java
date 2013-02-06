@@ -6,7 +6,6 @@ import org.apache.tapestry5.portlet.services.PortletRequestGlobals;
 import org.apache.tapestry5.services.ComponentEventRequestFilter;
 import org.apache.tapestry5.services.ComponentEventRequestHandler;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
-import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
 /**
@@ -22,17 +21,14 @@ public class PortletComponentEventRequestFilter implements ComponentEventRequest
 
     private final ComponentEventRequestHandler portletHandler;
 
-    private final Request request;
-
-    private final Logger log;
+      private final Logger log;
 
     public PortletComponentEventRequestFilter(PortletRequestGlobals globals,
-            ComponentEventRequestHandler handler, Request request, Logger log)
+            ComponentEventRequestHandler handler, Logger log)
     {
         super();
         this.globals = globals;
         this.portletHandler = handler;
-        this.request = request;
         this.log = log;
     }
 

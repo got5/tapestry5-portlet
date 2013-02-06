@@ -487,7 +487,7 @@ public final class PortletModule {
 			@Portlet ComponentEventRequestHandler portletHandler,
 			PortletRequestGlobals globals, Request request, Logger log) {
 		configuration.add("Portlet", new PortletComponentEventRequestFilter(
-				globals, portletHandler, request, log), "before:Ajax");
+				globals, portletHandler, log), "before:Ajax");
 	}
 
 	@Marker({ Portlet.class })

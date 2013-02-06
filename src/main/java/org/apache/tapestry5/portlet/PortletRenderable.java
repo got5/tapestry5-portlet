@@ -12,7 +12,7 @@ public class PortletRenderable
 {
 
 	/**
-     * The logical name of the protlet to link to.
+     * The logical name of the portlet to link to.
      */
     private String pageName;
 
