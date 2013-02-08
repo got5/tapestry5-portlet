@@ -61,6 +61,11 @@ limitations under the License.
       <portlet context="/tapestry5-portlet" name="Grid"/>
        <portlet context="/tapestry5-portlet" name="About"/>
     </page>
+     <page name="Ajax" uri="/WEB-INF/themes/pluto-default-theme.jsp">
+      <portlet context="/tapestry5-portlet" name="AjaxCallback"/>
+      <portlet context="/tapestry5-portlet" name="Grid"/>
+       <portlet context="/tapestry5-portlet" name="About"/>
+    </page>
   </render-config>
 
 </pluto-portal-driver>

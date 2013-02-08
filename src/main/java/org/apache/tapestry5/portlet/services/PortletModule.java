@@ -29,6 +29,7 @@ import javax.portlet.EventResponse;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -649,28 +650,41 @@ public final class PortletModule {
 	public RequestExceptionHandler decorateRequestExceptionHandler(
 			final RequestExceptionHandler delegate,
 			final PortletRequestGlobals globals,
-			@Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) final String exceptionPage,
-			final Logger log) {
+			final RequestGlobals requestGlobals,
+			@Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) 
+			final String exceptionPage,
+			final Logger log) 
+	{
 
-		return new RequestExceptionHandler() {
+		return new RequestExceptionHandler()
+        {
+            public void handleRequestException(Throwable exception) throws IOException
+            {
+                // Bypass exception rendering in case of action request
+                if (globals.getActionRequest() != null)
+                {
+                	PortletSession session =   globals.getPortletRequest().getPortletSession();
+                    if(session!=null)
+                    {
+                    	if(requestGlobals.getRequest().isRequestedSessionIdValid())
+                    	{
+                    		log.debug("handleRequestException saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION");
+                    		session.setAttribute(PortletConstants.LAST_ACTION_EXCEPTION, exception);
+                    		return;
+                    	}   
+                    	else
+                    	{
+                    		log.debug("handleRequestException not saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION as RequestedSessionIdValid");
+                    		log.debug("exception is "+exception);
+                    		return;
+                    	}
+                    }
+                }
+                log.debug("handleRequestException redirect to delegate");
+                delegate.handleRequestException(exception);
+            }
 
-			public void handleRequestException(Throwable exception)
-					throws IOException {
-				// Bypass exception rendering in case of action request
-				if (globals.getActionRequest() != null) {
-					log.debug("handleRequestException saved at PortletRequest->PortletSession->Attribute=LAST_ACTION_EXCEPTION");
-					globals.getPortletRequest()
-							.getPortletSession()
-							.setAttribute(
-									PortletConstants.LAST_ACTION_EXCEPTION,
-									exception);
-					return;
-				}
-				log.debug("handleRequestException redirect to delegate");
-				delegate.handleRequestException(exception);
-			}
-
-		};
+        };
 	}
 
 	@Decorate(serviceInterface = ComponentResourceLocator.class)

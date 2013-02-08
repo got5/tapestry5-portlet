@@ -147,6 +147,15 @@
 <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet>
+<servlet-name>AjaxCallback</servlet-name>
+<servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
+<init-param>
+<param-name>portlet-name</param-name>
+<param-value>AjaxCallback</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet>
 <servlet-name>AboutPortlet</servlet-name>
 <servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
 <init-param>
@@ -222,6 +231,10 @@
 <servlet-mapping>
 <servlet-name>AjaxFormLoopExample</servlet-name>
 <url-pattern>/PlutoInvoker/AjaxFormLoopExample</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>AjaxCallback</servlet-name>
+<url-pattern>/PlutoInvoker/AjaxCallback</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
 <servlet-name>AboutPortlet</servlet-name>

@@ -1,8 +1,13 @@
 package org.apache.tapestry5.portlet.services;
 
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.corelib.components.AjaxFormLoop;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.portlet.DeclaredResourceResponseSender;
+import org.apache.tapestry5.portlet.pages.AjaxCallback;
 import org.apache.tapestry5.portlet.upload.services.PortletUploadModule;
 
 /**
@@ -23,4 +28,15 @@ public class AppModule
         configuration.add(SymbolConstants.APPLICATION_CATALOG, "context:WEB-INF/app.properties");
     }
 
+    public static void contributePortletResourceResponseIdentifier(
+            Configuration<DeclaredResourceResponseSender> configuration)
+    {
+    	 DeclaredResourceResponseSender ajaxCallbackPage = new DeclaredResourceResponseSender(
+    			 AjaxCallback.class.getName());
+    	 ajaxCallbackPage.addEvent("multiplezoneupdate");
+    	 ajaxCallbackPage.addEvent("sendjson");
+		configuration.add(ajaxCallbackPage);
+
+    }	
+    
 }

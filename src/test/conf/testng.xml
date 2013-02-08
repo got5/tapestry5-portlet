@@ -8,6 +8,8 @@
     <test name="Pluto Integration Tests" enabled="true">
         <parameter name="tapestry.web-app-folder" value="src/main/webapp"/>
 		<parameter name="tapestry.context-path" value="/tapestry5-portlet"/>
+	    <parameter name="tapestry.browser-start-command" value="*firefox C:\Program Files (x86)\Firefox3_6\firefox.exe" />
+	
         <packages>
             <package name="org.apache.tapestry5.portlet"/>
         </packages>
