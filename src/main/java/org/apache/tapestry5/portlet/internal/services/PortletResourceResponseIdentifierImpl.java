@@ -3,6 +3,7 @@ package org.apache.tapestry5.portlet.internal.services;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.internal.InternalComponentResources;
@@ -22,11 +23,14 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 	
 	private final Logger log;
 	
+	private final Map<String, Boolean> cache = CollectionFactory.newConcurrentMap();
+	
 	public  PortletResourceResponseIdentifierImpl(Collection <DeclaredResourceResponseSender> drrs, ComponentSource componentSource,Logger log)
     {
         this.ResourceSenders = CollectionFactory.newList(drrs);
         this.componentSource = componentSource;
         this.log = log;
+        
     }
 
 	@Override
@@ -43,11 +47,20 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 			//for page or event or component like tapestry-jQuery.bind  that send json or zoneupdate       
 			cptName = containingPageName;
 		}	
-	    Component component = this.componentSource.getComponent(cptName);
+	    
+		String key = cptName + "." + eventType;
+		Boolean result = cache.get(key);
+        if (result != null)
+        {
+        	log.debug("according to cache "+ key + " is link to " + result);
+            return result.booleanValue();
+        }
+		
+		Component component = this.componentSource.getComponent(cptName);
 	    Class cpt = component.getClass();
 	    
 	    String cptClassName = cpt.getName();
-	   
+	     
 		for ( Iterator<DeclaredResourceResponseSender> iter = ResourceSenders.iterator(); iter.hasNext(); ) 
 		{
 			 
@@ -61,11 +74,12 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 			    	 Object mixin = internalRes.getMixinByClassName(d.getClassName());
 			    	 if(mixin!=null)
 			    	 {
-			    		 log.info(cptName+" is bind to a mixin of type "+d.getClassName());
+			    		 log.debug(cptName+" is bind to a mixin of type "+d.getClassName());
 			    		 List<String> events = d.getEventList();
 						 if(events.size()==0)
 						 {
-							 log.info(cptName+" is declared as resource response sender");
+							 log.debug(cptName+" is declared as resource response sender");
+							 cache.put(key, new Boolean(true));
 							 return true;
 						 }
 						 else
@@ -74,8 +88,9 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 							{
 								String e = evt.next();
 								if(eventType.equalsIgnoreCase(e)) {
-									 log.info(cptName+" is declared as resource response sender for event "+ e );
-									return true; 
+									log.debug(cptName+" is declared as resource response sender for event "+ e );
+									cache.put(key, new Boolean(true));
+									return true;
 								}
 							}
 									
@@ -94,7 +109,8 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 				 List<String> events = d.getEventList();
 				 if(events.size()==0)
 				 {
-					 log.info(cptName+" is declared as resource response sender");
+					 log.debug(cptName+" is declared as resource response sender");
+					 cache.put(key, new Boolean(true));
 					 return true;
 				 }
 				 else
@@ -103,8 +119,9 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 					{
 						String e = evt.next();
 						if(eventType.equalsIgnoreCase(e)) {
-							 log.info(cptName+" is declared as resource response sender for event "+ e );
-							return true; 
+							 log.debug(cptName+" is declared as resource response sender for event "+ e );
+							 cache.put(key, new Boolean(true));
+							 return true; 
 						}
 					}
 							
@@ -113,6 +130,7 @@ public class PortletResourceResponseIdentifierImpl implements PortletResourceRes
 			 }
 
 		}
+		cache.put(key, new Boolean(false));
 		return false;
 	}
 

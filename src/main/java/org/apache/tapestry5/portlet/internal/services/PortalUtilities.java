@@ -1,4 +1,4 @@
-// Copyright 2012 The Apache Software Foundation
+// Copyright 2012,2013 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,15 +46,14 @@ public interface PortalUtilities{;
 public Request buildPortletRequest(PortletRequest request, String pageName, SessionPersistedObjectAnalyzer analyzer);
 
 	
-	/**
-	 * This method create the corresponding ResourceResponse depending on the request
-	 * type this method may be overrided to use ResourceResponse implementation by the portlet container. 
-	 * 
-	 * @param response
-	 *            The outgoing portlet response
-	
-	 * @return
-	 */
+/**
+ * This method create the corresponding ResourceResponse depending on the request
+ * type this method may be overrided to use ResourceResponse implementation by the portlet container. 
+ * 
+ * @param response
+ *            The outgoing portlet response
+ * @return
+ */
 public Response buildResourceReponse(ResourceResponse response);
 	
 	
