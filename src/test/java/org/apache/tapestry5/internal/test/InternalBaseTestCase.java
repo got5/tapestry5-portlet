@@ -32,6 +32,7 @@ import org.apache.tapestry5.ioc.services.ClassPropertyAdapter;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.ioc.services.PropertyAdapter;
 import org.apache.tapestry5.model.ComponentModel;
+import org.apache.tapestry5.portlet.services.PortletLinkSource;
 import org.apache.tapestry5.portlet.services.PortletRequestGlobals;
 import org.apache.tapestry5.portlet.services.PortletResourceResponseIdentifier;
 import org.apache.tapestry5.root.FieldComponent;
@@ -50,6 +51,7 @@ import java.lang.annotation.Annotation;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.Event;
 
 import static org.easymock.EasyMock.isA;
 
@@ -448,6 +450,26 @@ public class InternalBaseTestCase extends TapestryTestCase implements Registry
     protected final ActionResponse mockActionResponse()
     {
         return newMock(ActionResponse.class);
+    }
+    
+    protected final Event mockEvent()
+    {
+        return newMock(Event.class);
+    }
+    
+    protected final PortletLinkSource mockPortletLinkSource()
+    {
+        return newMock(PortletLinkSource.class);
+    }
+    
+    protected final void train_getEventName(Event event, String eventName)
+    {
+        expect(event.getName()).andReturn(eventName).atLeastOnce();
+    }
+    
+    protected final void train_getEventValue(Event event, String eventValue)
+    {
+        expect(event.getValue()).andReturn(eventValue).atLeastOnce();
     }
     
 }

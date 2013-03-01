@@ -522,7 +522,7 @@ public final class PortletModule {
 	 * component requests.
 	 */
 	@Marker(Portlet.class)
-	public ComponentEventResultProcessor buildPorletComponentEventResultProcessor(
+	public ComponentEventResultProcessor buildPortletComponentEventResultProcessor(
 			Map<Class, ComponentEventResultProcessor> configuration,
 			StrategyBuilder strategyBuilder) {
 		return constructComponentEventResultProcessor(configuration,strategyBuilder);
@@ -533,7 +533,7 @@ public final class PortletModule {
 	 * 
 	 * @param processors
 	 */
-	public void contributePorletComponentEventResultProcessor(
+	public void contributePortletComponentEventResultProcessor(
 			MappedConfiguration<Class, ComponentEventResultProcessor> configuration,
 			final PortletRequestGlobals portletGlobals) {
 		configuration.addInstance(PortletRenderable.class,PortletActionResultProcessor.class);
