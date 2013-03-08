@@ -13,6 +13,7 @@
 // limitations under the License.
 package org.apache.tapestry5.portlet.upload.internal.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import org.apache.tapestry5.upload.services.UploadSymbols;
 
 /**
  * @author Raphael Jean
+ * @author ffacon
  */
 public class PortletMultipartDecoderImpl extends MultipartDecoderImpl implements
         PortletMultipartDecoder
@@ -43,6 +45,8 @@ public class PortletMultipartDecoderImpl extends MultipartDecoderImpl implements
     private final long maxRequestSize;
 
     private final long maxFileSize;
+    
+    private final String requestEncoding;
 
     public PortletMultipartDecoderImpl(FileItemFactory fileItemFactory,
             @Symbol(UploadSymbols.REQUESTSIZE_MAX)
@@ -59,11 +63,21 @@ public class PortletMultipartDecoderImpl extends MultipartDecoderImpl implements
         this.fileItemFactory = fileItemFactory;
         this.maxRequestSize = maxRequestSize;
         this.maxFileSize = maxFileSize;
+        this.requestEncoding = requestEncoding;
     }
 
     public ActionRequest decode(ActionRequest request)
     {
+    	try
+        {
+    		request.setCharacterEncoding(requestEncoding);
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+            throw new RuntimeException(ex);
+        }
         List<FileItem> fileItems = parseRequest(request);
+        
         return processFileItems(request, fileItems);
     }
 
@@ -104,7 +118,16 @@ public class PortletMultipartDecoderImpl extends MultipartDecoderImpl implements
         {
             if (item.isFormField())
             {
-                wrapper.addParameter(item.getFieldName(), item.getString());
+            	String fieldValue;
+
+                try
+                {
+                    fieldValue = item.getString(requestEncoding);
+                } catch (UnsupportedEncodingException ex)
+                {
+                     throw new RuntimeException(ex);
+                }
+                wrapper.addParameter(item.getFieldName(), fieldValue);
             }
             else
             {

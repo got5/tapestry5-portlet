@@ -67,6 +67,10 @@ public class Index
 
     @Property
     private UploadedFile file;
+    
+    @Persist
+    @Property
+    private String filename;
 
     public String getWindowState()
     {
@@ -217,6 +221,7 @@ public class Index
     {
         File copy = File.createTempFile(file.getFileName(), null);
         System.out.println(copy.getPath());
+        System.out.println("filename:"+filename);
         file.write(copy);
     }
 }
