@@ -32,6 +32,7 @@ group (the left column) displays portlets with odd IDs, while the second group
 
 <head>
     <title>Pluto Portal</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css" title="currentStyle" media="screen">
         @import "<c:out value="${pageContext.request.contextPath}"/>/pluto.css";
         @import "<c:out value="${pageContext.request.contextPath}"/>/portlet-spec-1.0.css";
