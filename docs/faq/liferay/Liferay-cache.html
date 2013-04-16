@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html> 
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Tapestry5 Portlet - faq Liferay</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+
+	<script src="../../js/jquery.js"></script>
+	<script src="../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+
+	<div data-role="header" data-theme="f">
+		<h1>Quick start guide</h1>
+		
+		
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		
+		<div class="content-primary">
+		
+		<h2>How to cache in Liferay</h2>
+
+		<p>Caching content helps improving the Portal response time for users. It also helps reducing the load on servers. <br/> 
+		   The Portlet Specification defines an expiration based caching mechanism. This caching 
+		   mechanism is per portlet. Cached content must not be shared across different user clients 
+		   displaying the same portlet for the private cache scope. <br/>
+		   
+		   Portlet containers are not required to implement expiration caching. Portlet containers 
+		   implementing this caching mechanism may disable it, partially or completely, at any time 
+		   to free memory resources. 
+		   </p> 
+		   
+		<h2>Expiration Cache</h2>
+		  
+		<p>Portlets that want their content to be  cached using expiration cache should define the 
+		   default duration (in seconds) of the expiration cache in the deployment descriptor. The 
+		   portlet container should treat portlets with no default duration in the deployment 
+		   descriptor as always expired as default. <br/> 
+		   
+		   The following is an example of a portlet definition where the portlet defines that its 
+		   content should be cached for 5 minutes (300 seconds) and must not be shared across 
+		   users.</p> 
+
+<textarea readonly="readonly">		   
+  ... 
+  <portlet> 
+    ... 
+      <expiration-cache>300</expiration-cache> 
+    <cache-scope>private</cache-scope> 
+    ... 
+  </portlet>  
+  ... 
+</textarea>  
+
+	<p>A portlet may programmatically alter the expiration time or caching scope by setting a 
+	property in the  RenderResponse or  ResourceResponse object using the 
+	EXPIRATION_CACHE or CACHE_SCOPE constant defined in the MimeResponse interface in 
+	forwarded or included servlets/JSPs. Inside the portlet the CacheControl object is 
+	available via the MimeResponse for setting the expiration time or caching scope via the 
+	calls setExpirationTime or setScope.</p>
+
+
+	<p>The portlet should set the expiration time or caching scope before writing to the output 
+	stream as otherwise portals / portlet containers may ignore the values. 
+	If the expiration property is set to 0, the returned markup fragment should be treated as 
+	always expired. If the expiration cache property is set to –1, the cache does not expire. If 
+	during a render invocation the expiration cache property is not set, the expiration time  
+	defined in the deployment descriptor should be used.  If the caching scope is set to 
+	PRIVATE_SCOPE the cached data must not be shared across users. If the caching scope is 
+	set to PUBLIC_SCOPE the cached data may be shared across users. The private scope is the 
+	default scope if no scope is provided in  the deployment descriptor or via the 
+	RenderResponse or ResourceResponse.</p>
+
+	<p><strong>Important Note :</strong> Liferay only support the private scope for now.</p>
+  
+	<p>If the content of a portlet is cached, the cache has not expired and the portlet is not the 
+	target of an action or event the request handling methods of the  portlet should not be 
+	invoked as part of the client request. Instead, the portlet-container  should use the data 
+	from the cache.<br/></p> 
+	
+	<p>If the content of a portlet is cached and the portlet is target of request with an action-type  
+	semantic (e.g. an action or event call), the portlet container should discard the cache and 
+	invoke the corresponding request handling methods of the portlet like processAction,or 
+	processEvent.</p>  
+
+	<p><strong>Important Note :</strong> 
+		Liferay only support the private scope for now.
+	</p>
+	
+
+	<p>In Liferay, the Expiration cache implementation is made by a Servlet Filter called FilterCache. <br/> 
+	   If your want your portlet to be cached by this filter, you will have to set 
+	   the layout-cacheable value.</p> 
+
+
+<textarea readonly="readonly">		   
+ <portlet>
+	<portlet-name>DataTable</portlet-name>
+
+	<!-- Enable container redirect-after-posts -->
+	<action-url-redirect>true</action-url-redirect>
+
+	<layout-cacheable>true</layout-cacheable>
+
+	<!-- Allows to add multiple instance for a portlet -->
+	<instanceable>true</instanceable>
+
+	<!-- Important, if true then all the js and css files will be in the body 
+			instead of the header -->
+	<private-request-attributes>false</private-request-attributes>
+	
+</portlet>
+</textarea>  
+
+	<p>And of course, if you want to use the CacheFilter provided by Liferay, 
+	you will have to declare this filter and the related filter mapping in your web.xml.</p> 
+
+<textarea readonly="readonly">	
+...
+<filter>
+	<filter-name>Cache Filter - Resource Tapestry</filter-name>
+	<filter-class>com.liferay.portal.kernel.servlet.PortalClassLoaderFilter</filter-class>
+	<init-param>
+			<param-name>filter-class</param-name>
+			<param-value>com.liferay.portal.servlet.filters.cache.CacheFilter</param-value>
+		</init-param>
+		
+	<init-param>
+		<param-name>pattern</param-name>
+		<param-value>1</param-value> <!--  1 = LAYOUT-->
+	</init-param>
+</filter>
+....
+<filter-mapping>
+		<filter-name>Cache Filter - Resource Tapestry</filter-name>
+		<url-pattern>/*</url-pattern>
+</filter-mapping>
+</textarea>
+
+	<p>During the deployment of your war, Liferay 6.1 and upper make copy of your web.xml and add many more filter to a new liferay-web.xml. 
+	If you let's this default behaviour, you will have to face error raise by InvokerFilte. 
+	So in order to disable the use of liferay-web.xml, just add the following line to the file 'docroot/WEB-INF/liferay-plugin-package.properties' 
+	in your project.
+	</p> 
+
+<textarea readonly="readonly">	
+...
+liferay-web-xml-enabled=false
+...
+</textarea>
+
+
+		<p>In Liferay, in order to activate the expiration cache you will have to change the default configuration of your liferay portal.
+		   To do that add the following lines to your portal-ext.properties that must be located under \webapps\ROOT\WEB-INF\classes.		
+		</p> 
+		
+<textarea readonly="readonly">		   
+  ... 
+com.liferay.portal.servlet.filters.cache.CacheFilter=true
+com.liferay.portal.servlet.filters.layoutcache.LayoutCacheFilter=true
+// Deactivate not used filters if not required
+com.liferay.portal.servlet.filters.audit.AuditFilter=false
+com.liferay.portal.servlet.filters.autologin.AutoLoginFilter=false
+com.liferay.portal.servlet.filters.sso.cas.CASFilter=false
+com.liferay.portal.servlet.filters.charbufferpool.CharBufferPoolFilter=true
+com.liferay.portal.servlet.filters.gzip.GZipFilter=false
+com.liferay.portal.servlet.filters.i18n.I18nFilter=false
+com.liferay.portal.servlet.filters.monitoring.MonitoringFilter=false
+com.liferay.portal.servlet.filters.sso.ntlm.NtlmFilter=false
+com.liferay.portal.servlet.filters.sso.ntlm.NtlmPostFilter=false
+com.liferay.portal.servlet.filters.sso.opensso.OpenSSOFilter=false
+com.liferay.portal.sharepoint.SharepointFilter=false
+com.liferay.portal.servlet.filters.strip.StripFilter=false
+com.liferay.portal.servlet.filters.validhtml.ValidHtmlFilter=false
+  ... 
+</textarea>
+
+		<p>In the same portal-ext.properties, you will also have to inform the portal where is located your ehcache configuration cache.</p> 
+
+<textarea readonly="readonly">		   
+... 
+ehcache.single.vm.config.location=/ehcache/liferay-single-vm.xml
+ehcache.multi.vm.config.location=/ehcache/liferay-multi-vm.xml
+... 
+</textarea>  
+		<h2>Validation-Based Content caching</h2>
+		
+		<p><strong>Important Note :</strong> Liferay is not supported this Validation-Based caching behaviour. <a href="http://issues.liferay.com/browse/LPS-28799">http://issues.liferay.com/browse/LPS-28799</a> </p>
+		
+		
+		<p>Validation based caching  strategy extends the expiration caching strategy by allowing portlets to validate the
+		cached content after the expiration time has passed. If a portlet finds that the cached content is still valid,then the
+		portlet instructs the portlet container to use the cached content for another expiration period. If the cache becomes
+		invalid, then the portlet generates fresh content.</p> 
+		
+		<p>For more details see <a href="http://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/303132.pdf">Portlets in Action</a>.</p> 
+		
+					
+		</div><!--/content-primary -->		
+		
+		<div class="content-secondary">
+			
+			<div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+				
+					<h3>More in this section</h3>
+					
+					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
+					<li data-role="list-divider">Liferay Integration</li>
+						<li data-theme="a"><a href="../../docs/faq/Liferay.html">Liferay Integration</a></li>	
+						<li><a href="../../docs/faq/Liferay-cache.html">Liferay Cache</a></li>				
+						
+					</ul>
+			</div>
+		</div>		
+
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</div>	
+	
+	
+</div><!-- /page -->
+
+</body>
+</html>
