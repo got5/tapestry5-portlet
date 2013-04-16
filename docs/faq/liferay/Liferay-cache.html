@@ -4,12 +4,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<title>Tapestry5 Portlet - faq Liferay</title> 
-	<link rel="stylesheet"  href="../../css/themes/default/jquery.mobile-1.2.0.css" /> 
-	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+	<link rel="stylesheet"  href="../../../css/themes/default/jquery.mobile-1.2.0.css" /> 
+	<link rel="stylesheet" href="../../_assets/css/jqm-docs.css"/>
 
-	<script src="../../js/jquery.js"></script>
-	<script src="../../docs/_assets/js/jqm-docs.js"></script>
-	<script src="../../js/jquery.mobile-1.2.0.js"></script>
+	<script src="../../../js/jquery.js"></script>
+	<script src="../../../docs/_assets/js/jqm-docs.js"></script>
+	<script src="../../../js/jquery.mobile-1.2.0.js"></script>
 
 </head> 
 <body> 
@@ -20,8 +20,8 @@
 		<h1>Quick start guide</h1>
 		
 		
-		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
-		<a href="../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
+		<a href="../../../" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<a href="../../nav.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -64,7 +64,7 @@
 
 	<p>A portlet may programmatically alter the expiration time or caching scope by setting a 
 	property in the  RenderResponse or  ResourceResponse object using the 
-	EXPIRATION_CACHE or CACHE_SCOPE constant defined in the MimeResponse interface in 
+	<strong>EXPIRATION_CACHE</strong> or <strong>CACHE_SCOPE</strong> constant defined in the MimeResponse interface in 
 	forwarded or included servlets/JSPs. Inside the portlet the CacheControl object is 
 	available via the MimeResponse for setting the expiration time or caching scope via the 
 	calls setExpirationTime or setScope.</p>
@@ -76,8 +76,8 @@
 	always expired. If the expiration cache property is set to –1, the cache does not expire. If 
 	during a render invocation the expiration cache property is not set, the expiration time  
 	defined in the deployment descriptor should be used.  If the caching scope is set to 
-	PRIVATE_SCOPE the cached data must not be shared across users. If the caching scope is 
-	set to PUBLIC_SCOPE the cached data may be shared across users. The private scope is the 
+	<strong>PRIVATE_SCOPE</strong> the cached data must not be shared across users. If the caching scope is 
+	set to <strong>PUBLIC_SCOPE</strong> the cached data may be shared across users. The private scope is the 
 	default scope if no scope is provided in  the deployment descriptor or via the 
 	RenderResponse or ResourceResponse.</p>
 
@@ -88,19 +88,10 @@
 	invoked as part of the client request. Instead, the portlet-container  should use the data 
 	from the cache.<br/></p> 
 	
-	<p>If the content of a portlet is cached and the portlet is target of request with an action-type  
-	semantic (e.g. an action or event call), the portlet container should discard the cache and 
-	invoke the corresponding request handling methods of the portlet like processAction,or 
-	processEvent.</p>  
-
-	<p><strong>Important Note :</strong> 
-		Liferay only support the private scope for now.
-	</p>
 	
-
 	<p>In Liferay, the Expiration cache implementation is made by a Servlet Filter called FilterCache. <br/> 
 	   If your want your portlet to be cached by this filter, you will have to set 
-	   the layout-cacheable value.</p> 
+	   the layout-cacheable value in your <strong>liferay-portlet.xml</strong>. </p> 
 
 
 <textarea readonly="readonly">		   
@@ -216,8 +207,8 @@ ehcache.multi.vm.config.location=/ehcache/liferay-multi-vm.xml
 					
 					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
 					<li data-role="list-divider">Liferay Integration</li>
-						<li><a href="../../docs/faq/liferay/Liferay.html">Liferay Integration</a></li>	
-						<li data-theme="a"><a href="../docs/faq/liferay/Liferay-cache.html">Liferay Cache</a></li>				
+						<li><a href="./Liferay.html">Liferay Integration</a></li>	
+						<li data-theme="a"><a href="./Liferay-cache.html">Liferay Caching</a></li>				
 						
 					</ul>
 			</div>
