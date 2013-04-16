@@ -25,6 +25,29 @@
 	<div data-role="content">
 		
 	<div class="content-primary">
+	
+	<h2>Use tapestry-Liferay instead of tapestry5-portlet</h2>
+
+	<p>If you want to use Liferay api, it would be better to use https://github.com/got5/tapestry5-liferay
+	This is module will help you to fill the gap between portlet JSR and liferay implemenation. 
+	this lib come with a sub module that can be used as a demo see 
+	https://github.com/got5/tapestry5-liferay/tree/master/tapestry-liferay-demo.</p>
+
+<textarea readonly="readonly">
+...
+	<dependency>
+		<groupId>org.apache.tapestry</groupId>
+		<artifactId>tapestry-liferay</artifactId>
+		<version>${tapestry-portlet-version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.tapestry</groupId>
+		<artifactId>tapestry5-portlet</artifactId>
+		<version>${tapestry-portlet-version}</version>
+	</dependency>
+...
+</textarea>
 		
 	<h2>Deploying on LiferayOnce</h2>
 
@@ -48,7 +71,8 @@
         </manifestEntries>
     </archive>
   </configuration>
-</plugin></textarea>
+</plugin>
+</textarea>
 
 	<p>By doing this, you will be able to generate the war file directly in the "deploy" directory of your liferay installation. Once the file is copied in this directory, Liferay will hot deploy it. 
 	  We also have to define the Module Class of our portlet, in order to load it.</p>		
@@ -105,8 +129,8 @@
 					
 					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
 						<li data-role="list-divider">Liferay Integration</li>
-						<li data-theme="a"><a href="../../docs/faq/Liferay.html">Liferay Integration</a></li>	
-						<li><a href="../../docs/faq/Liferay-cache.html">Liferay Caching</a></li>
+						<li data-theme="a"><a href="../../faq/Liferay.html">Liferay Integration</a></li>	
+						<li><a href="../../faq/Liferay-cache.html">Liferay Caching</a></li>
 						
 				
 					</ul>
