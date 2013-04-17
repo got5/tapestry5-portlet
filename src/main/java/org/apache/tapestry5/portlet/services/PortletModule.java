@@ -734,7 +734,13 @@ public final class PortletModule
         // form ajax call
         configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.AjaxUpload"));
         configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.CarouselItem"));
-        configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.DataTable"));
+        configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.AjaxUpload"));
+        configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.CarouselItem"));
+        DeclaredResourceResponseSender datatable = new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.DataTable");
+        datatable.addEvent("Data");
+        datatable.addEvent("filterData");
+        datatable.addEvent("sortData");
+        configuration.add(datatable);
         configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.DialogAjaxLink"));
         configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.InPlaceEditor"));
         configuration.add(new DeclaredResourceResponseSender("org.got5.tapestry5.jquery.components.ProgressiveDisplay"));
