@@ -125,6 +125,7 @@ import org.apache.tapestry5.portlet.internal.services.PortletResponseImpl;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ApplicationGlobals;
 import org.apache.tapestry5.services.ApplicationInitializer;
+import org.apache.tapestry5.services.ApplicationStatePersistenceStrategy;
 import org.apache.tapestry5.services.AssetFactory;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClassResolver;
@@ -168,7 +169,7 @@ public final class PortletModule
         binder.bind(PortletResourceResponseIdentifier.class,PortletResourceResponseIdentifierImpl.class);
         binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");
         binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class);
-
+		binder.bind(ApplicationStatePersistenceStrategy.class, PorletSessionApplicationStatePersistenceStrategy.class);
     }
 
     @Decorate(serviceInterface = ComponentResourceLocator.class)
@@ -775,5 +776,13 @@ public final class PortletModule
         configuration.add(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE, new PortletApplicationScopePersistentFieldStrategy(globals));
        
     }
+	/**
+     * Contribute SessionState persistence strategy. This strategy uses scope Application. 
+     */
+    public void contributeApplicationStatePersistenceStrategySource(
+			MappedConfiguration<String, ApplicationStatePersistenceStrategy> configuration,
+			@Local ApplicationStatePersistenceStrategy sessionStategy) {
+		configuration.add(PortletConstants.SESSION_STATE_APPLICATION_SCOPE, sessionStategy);
+	}
 
 }
