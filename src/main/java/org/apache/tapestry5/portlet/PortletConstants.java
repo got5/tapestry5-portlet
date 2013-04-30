@@ -45,7 +45,11 @@ public final class PortletConstants
 	 */
 	public static final String LAST_ACTION_EXCEPTION = "LAST_ACTION_EXCEPTION";
 	
-	
+	/**
+	 * This key is used to define a new persistence strategy for objects annoted with
+	 * SessionState. This way, scope is Application instead of Portlet.
+	 */
+	public static final String SESSION_STATE_APPLICATION_SCOPE = "sessionApplication";
 	
 
 
