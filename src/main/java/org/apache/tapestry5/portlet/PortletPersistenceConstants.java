@@ -31,6 +31,9 @@ public class PortletPersistenceConstants
      * in the PortletSession. So value will be available to all the portlets .
      * Default @Persist storevalue in PORTLET_SCOPE
      * 
+     * It is also used to define a new persistence strategy for SessionState objects. Default scope is
+     * PORTLET_SCOPE for these objects, but you can redefine the strategy in the module of your application
+     * to use APPLICATION_SCOPE.
      */
     public static final String PORTLET_SESSION_APPLICATION_SCOPE = "PortletSessionApplicationScope";
 }

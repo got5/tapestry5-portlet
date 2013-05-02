@@ -783,6 +783,6 @@ public final class PortletModule
     public void contributeApplicationStatePersistenceStrategySource(
 			MappedConfiguration<String, ApplicationStatePersistenceStrategy> configuration,
 			@Local ApplicationStatePersistenceStrategy sessionStategy) {
-		configuration.add(PortletConstants.SESSION_STATE_APPLICATION_SCOPE, sessionStategy);
+		configuration.add(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE, sessionStategy);
 	}
 }
