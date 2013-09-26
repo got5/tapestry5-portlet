@@ -138,4 +138,10 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
     	return this.delegate.getSecurity();
     }
     
+    //5.3.7
+    public String[] getParameterValues(String parameterName)
+    {
+    	return this.delegate.getParameterValues(parameterName);
+    }
+    
 }
