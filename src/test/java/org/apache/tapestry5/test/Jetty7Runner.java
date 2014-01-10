@@ -56,7 +56,7 @@ public class Jetty7Runner implements ServletContainerRunner
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath(contextPath);
         webapp.setWar(expandedPath);
-        File desc = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/main/webapp/WEB-INF/plugin-web-testng.xml");
+        File desc = new File(TapestryRunnerConstants.MODULE_BASE_DIR, "src/main/webapp/WEB-INF/plugin-web-testng.xml");
         
         webapp.setDescriptor(desc.getAbsolutePath());
        
@@ -64,7 +64,7 @@ public class Jetty7Runner implements ServletContainerRunner
         System.setProperty("org.apache.pluto.embedded.portletId", "my-portlet");*/
        
         // SSL support
-        File keystoreFile = new File(TapestryTestConstants.MODULE_BASE_DIR, "src/test/conf/keystore");
+        File keystoreFile = new File(TapestryRunnerConstants.MODULE_BASE_DIR, "src/test/conf/keystore");
 
         if (keystoreFile.exists())
         {
@@ -135,6 +135,6 @@ public class Jetty7Runner implements ServletContainerRunner
         if (path.isAbsolute() && path.isDirectory())
             return moduleLocalPath;
 
-        return new File(TapestryTestConstants.MODULE_BASE_DIR, moduleLocalPath).getPath();
+        return new File(TapestryRunnerConstants.MODULE_BASE_DIR, moduleLocalPath).getPath();
     }
 }

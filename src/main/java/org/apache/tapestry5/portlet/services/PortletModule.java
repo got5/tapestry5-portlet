@@ -614,9 +614,12 @@ public final class PortletModule {
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
 	 */
+	
 	@Advise(serviceInterface = Environment.class)
 	public static void adaptFormSupport(MethodAdviceReceiver receiver,
-			final PortletRequestGlobals globals) throws SecurityException,
+			final PortletRequestGlobals globals,
+            final Logger log
+            ) throws SecurityException,
 			NoSuchMethodException {
 
 		MethodAdvice advice = new MethodAdvice() {
@@ -635,11 +638,18 @@ public final class PortletModule {
 
 		};
 
-		Method push = Environment.class.getMethod("push", Class.class,
-				Object.class);
-		receiver.adviseMethod(push, advice);
+		//Method push = Environment.class.getMethod("push", Class.class, Object.class);
+		//receiver.adviseMethod(push, advice);
+		  for (Method m : receiver.getInterface().getMethods()) { 
+              if ("push".equals(m.getName())) { 
+                      log.debug("\n\nAdvising: " + m.getName());
+                      //receiver.adviseMethod(m, advice);
+              } 
+      } 
 	}
 
+	
+	
 	/**
 	 * Exception handling on action request must keep information between
 	 * request.

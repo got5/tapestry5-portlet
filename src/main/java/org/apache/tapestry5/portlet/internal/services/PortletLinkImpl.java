@@ -8,6 +8,7 @@ import javax.portlet.WindowState;
 import javax.portlet.WindowStateException;
 
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.LinkSecurity;
 import org.apache.tapestry5.portlet.PortletLink;
 
 public class PortletLinkImpl
@@ -49,4 +50,9 @@ public class PortletLinkImpl
 		}
 	}
 
+	
+
+	
+
+	
 }

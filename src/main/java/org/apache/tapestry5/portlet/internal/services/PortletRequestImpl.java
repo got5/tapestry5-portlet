@@ -168,7 +168,7 @@ public class PortletRequestImpl implements Request
     }
 
     /**
-     * PLT 19.3.4: getRemotePort and getLocalPort now return ‘0’ instead of null
+     * PLT 19.3.4: getRemotePort and getLocalPort now return '0' instead of null
      */
     public int getLocalPort()
     {
@@ -176,7 +176,7 @@ public class PortletRequestImpl implements Request
     	return ((HttpServletRequest) request).getLocalPort();
     	}
     	else return 0;
-    	//PLT 19.3.4: getRemotePort and getLocalPort now return ‘0’ instead of null
+    	//PLT 19.3.4: getRemotePort and getLocalPort now return '0' instead of null
     }
 
     /**

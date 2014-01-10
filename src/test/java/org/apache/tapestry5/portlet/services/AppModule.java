@@ -21,10 +21,10 @@ public class AppModule
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration)
     {
-
+	configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
-        configuration.add(SymbolConstants.APPLICATION_VERSION, "5.4-alpha-3-SNAPSHOT");
+        configuration.add(SymbolConstants.APPLICATION_VERSION, "5.4-beta3");
         configuration.add(SymbolConstants.APPLICATION_CATALOG, "context:WEB-INF/app.properties");
     }
 

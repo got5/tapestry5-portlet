@@ -6,7 +6,7 @@ import javax.portlet.BaseURL;
 import javax.portlet.PortletResponse;
 
 import org.apache.tapestry5.Link;
-import org.apache.tapestry5.internal.services.LinkSecurity;
+import org.apache.tapestry5.LinkSecurity;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.portlet.PortletConstants;
 import org.apache.tapestry5.portlet.PortletUtilities;
@@ -38,9 +38,9 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
         return delegate.getParameterValue(name);
     }
 
-    public void addParameter(String parameterName, String value)
+    public Link addParameter(String parameterName, String value)
     {
-        delegate.addParameter(parameterName, value);
+        return delegate.addParameter(parameterName, value);
     }
 
     public String toURI()
@@ -62,9 +62,9 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
         return delegate.getAnchor();
     }
 
-    public void setAnchor(String anchor)
+    public Link setAnchor(String anchor)
     {
-        delegate.setAnchor(anchor);
+        return delegate.setAnchor(anchor);
     }
 
     public String toAbsoluteURI()
@@ -116,9 +116,9 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
         return this.delegate.getBasePath();
     }
 
-    public void removeParameter(String parameterName)
+    public Link removeParameter(String parameterName)
     {
-        this.delegate.removeParameter(parameterName);
+        return this.delegate.removeParameter(parameterName);
 
     }
 
@@ -136,6 +136,11 @@ public abstract class BasePortletLinkImpl<T extends BaseURL> implements Link
     public LinkSecurity getSecurity()
     {
     	return this.delegate.getSecurity();
+    }
+    
+    public String[] getParameterValues(String name)
+    {
+        return delegate.getParameterValues(name);
     }
     
 }
