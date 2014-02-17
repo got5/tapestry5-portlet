@@ -13,6 +13,12 @@
 	</context-param>
 
 	<context-param>
+		<param-name>tapestry.javascript-infrastructure-provider</param-name>
+		<param-value>jquery</param-value>
+	</context-param>
+
+
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/pluto-portal-driver-services-config.xml</param-value>
 	</context-param>
@@ -40,6 +46,16 @@
 	<filter-mapping>
 		<filter-name>app</filter-name>
 		<url-pattern>/assets/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>app</filter-name>
+		<url-pattern>/modules/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>app</filter-name>
+		<url-pattern>/modules.gz/*</url-pattern>
 	</filter-mapping>
 
 	<listener>
