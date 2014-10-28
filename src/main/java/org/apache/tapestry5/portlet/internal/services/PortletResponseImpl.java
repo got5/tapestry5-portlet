@@ -125,8 +125,13 @@ public class PortletResponseImpl implements Response
         return _isCommited;
     }
 
-	@Override
-	public void disableCompression() {
+	
+    public void disableCompression() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addHeader(String arg0, String arg1) {
 		// TODO Auto-generated method stub
 		
 	}
