@@ -38,6 +38,9 @@ import javax.portlet.StateAwareResponse;
 import javax.servlet.http.Cookie;
 
 
+
+
+import org.apache.tapestry5.BooleanHook;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
@@ -49,6 +52,7 @@ import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.FormInjector;
 import org.apache.tapestry5.corelib.internal.FormSupportImpl;
 import org.apache.tapestry5.corelib.mixins.Autocomplete;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.services.CookieSink;
 import org.apache.tapestry5.internal.services.CookieSource;
 import org.apache.tapestry5.internal.services.DocumentLinker;
@@ -405,6 +409,18 @@ public final class PortletModule {
             }
         };
     }
+    
+    private BooleanHook createBooleanHook(final Request request)
+    {
+        return new BooleanHook()
+        {
+            @Override
+            public boolean checkHook()
+            {
+                return request.getAttribute(InternalConstants.SUPPRESS_CORE_STYLESHEETS) != null;
+            }
+        };
+    }
 
 	public void contributeMarkupRenderer(
 			OrderedConfiguration<MarkupRendererFilter> configuration,
@@ -413,18 +429,20 @@ public final class PortletModule {
 			final PortletRequestGlobals globals,
 			final JavaScriptStackSource javascriptStackSource,
 			final JavaScriptStackPathConstructor javascriptStackPathConstructor,
-			final PortletIdAllocatorFactory iaFactory) {
-		MarkupRendererFilter javaScriptSupport = new MarkupRendererFilter() {
-			public void renderMarkup(MarkupWriter writer,
-					MarkupRenderer renderer) {
-				DocumentLinker linker = environment
-						.peekRequired(DocumentLinker.class);
+			final PortletIdAllocatorFactory iaFactory) 
+	{
+		final BooleanHook booleanHook = createBooleanHook(request);
+		
+		MarkupRendererFilter javaScriptSupport = new MarkupRendererFilter() 
+		{
+			public void renderMarkup(MarkupWriter writer,MarkupRenderer renderer) 
+			{
+				DocumentLinker linker = environment.peekRequired(DocumentLinker.class);
 
 				IdAllocator idAllocator = iaFactory.getNewPortletIdAllocator();
 
-				JavaScriptSupportImpl support = new JavaScriptSupportImpl(
-						linker, javascriptStackSource,
-						javascriptStackPathConstructor, idAllocator, false);
+				JavaScriptSupportImpl support = new JavaScriptSupportImpl(linker, javascriptStackSource,
+																		  javascriptStackPathConstructor, idAllocator, false, booleanHook);
 
 				environment.push(JavaScriptSupport.class, support);
 
@@ -446,7 +464,11 @@ public final class PortletModule {
 			final Environment environment,
 			final PortletIdAllocatorFactory iaFactory,
 			final JavaScriptStackSource javascriptStackSource,
-			final JavaScriptStackPathConstructor javascriptStackPathConstructor) {
+			final JavaScriptStackPathConstructor javascriptStackPathConstructor,
+			final Request request) 
+	{
+		final BooleanHook booleanHook = createBooleanHook(request);
+		
 		PartialMarkupRendererFilter javascriptSupport = new PartialMarkupRendererFilter() {
 			public void renderMarkup(MarkupWriter writer, JSONObject reply,
 					PartialMarkupRenderer renderer) {
@@ -458,9 +480,8 @@ public final class PortletModule {
 
 				DocumentLinker linker = environment.peekRequired(DocumentLinker.class);
 
-				JavaScriptSupportImpl support = new JavaScriptSupportImpl(
-						linker, javascriptStackSource,
-						javascriptStackPathConstructor, idAllocator, true);
+				JavaScriptSupportImpl support = new JavaScriptSupportImpl(linker, javascriptStackSource,
+																			javascriptStackPathConstructor, idAllocator, true,booleanHook);
 
 				environment.push(JavaScriptSupport.class, support);
 
