@@ -66,4 +66,9 @@ public class PortletFormSupportAdapter implements FormSupport
         return delegate.getFormValidationId();
     }
 
+	public <T> void storeCancel(T component, ComponentAction<T> action) 
+	{
+		delegate.storeCancel(component, action);
+	}
+
 }
