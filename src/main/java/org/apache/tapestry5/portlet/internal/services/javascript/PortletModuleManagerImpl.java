@@ -99,7 +99,8 @@ public class PortletModuleManagerImpl implements ModuleManager
         }
 
         // This part gets written out before any libraries are loaded (including RequireJS).
-        return String.format("var require = %s;\n", config.toString(compactJSON));
+        // in the portlet container context we have to take care of require value 
+        return String.format("if(!require) {var require = %s;\n}", config.toString(compactJSON));
     }
 
     private JSONObject buildBaseConfig(Map<String, JavaScriptModuleConfiguration> configuration, boolean devMode)
