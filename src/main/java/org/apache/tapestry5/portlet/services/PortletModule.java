@@ -37,9 +37,6 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.StateAwareResponse;
 import javax.servlet.http.Cookie;
 
-
-
-
 import org.apache.tapestry5.BooleanHook;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
@@ -73,6 +70,7 @@ import org.apache.tapestry5.ioc.ScopeConstants;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Advise;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
@@ -82,9 +80,11 @@ import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Primary;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.PipelineBuilder;
 import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
 import org.apache.tapestry5.ioc.services.StrategyBuilder;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.ioc.util.IdAllocator;
 import org.apache.tapestry5.ioc.util.StrategyRegistry;
@@ -124,6 +124,7 @@ import org.apache.tapestry5.portlet.internal.services.PortletRenderResponseImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletRequestGlobalsImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletResourceResponseIdentifierImpl;
 import org.apache.tapestry5.portlet.internal.services.PortletResponseImpl;
+import org.apache.tapestry5.portlet.internal.services.javascript.PortletModuleManagerImpl;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ApplicationGlobals;
 import org.apache.tapestry5.services.ApplicationInitializer;
@@ -151,8 +152,11 @@ import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
+import org.apache.tapestry5.services.compatibility.Compatibility;
+import org.apache.tapestry5.services.compatibility.Trait;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.apache.tapestry5.services.javascript.ModuleManager;
 import org.apache.tapestry5.services.pageload.ComponentRequestSelectorAnalyzer;
 import org.apache.tapestry5.services.pageload.ComponentResourceLocator;
 import org.slf4j.Logger;
@@ -172,6 +176,7 @@ public final class PortletModule {
 		binder.bind(ComponentRequestSelectorAnalyzer.class, PortletRequestSelectorAnalyzer.class).withId("PortletRequestSelectorAnalyzer");
 		binder.bind(PortalUtilities.class, PortalUtilitiesImpl.class);
 		binder.bind(ApplicationStatePersistenceStrategy.class, PorletSessionApplicationStatePersistenceStrategy.class);
+		binder.bind(ModuleManager.class, PortletModuleManagerImpl.class).withId("PortletModuleManager");
 	}
 
 	public PortletRequest build(PortletRequestGlobals portletGlobals,
@@ -183,7 +188,15 @@ public final class PortletModule {
 			MappedConfiguration<String, String> configuration) {
 		configuration.add(PortletSymbolConstants.EXCLUDE_ASSETS, "false");
 	}
+	
+	@Contribute( SymbolProvider.class )
+	@ApplicationDefaults
+	public static void switchProviderToJQuery( MappedConfiguration<String,Object> configuration )
+	{
+		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery" );
+	}
 
+		
 	public PortletApplicationInitializer build(
 			Logger logger,
 			List<PortletApplicationInitializerFilter> configuration,
@@ -617,13 +630,17 @@ public final class PortletModule {
 			
 			@InjectService("PortletLinkSource") final PortletLinkSource linkSource, 
 			
-			@InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer)
+			@InjectService("PortletRequestSelectorAnalyzer") final ComponentRequestSelectorAnalyzer analyzer,
+			
+			@InjectService("PortletModuleManager") final ModuleManager moduleManager
+			)
 
 	{
 		configuration.add(LinkSource.class, linkSource);
 		configuration.add(CookieSource.class, cookieSource);
 		configuration.add(CookieSink.class, cookieSink);
 		configuration.add(ComponentRequestSelectorAnalyzer.class, analyzer);
+		configuration.add(ModuleManager.class, moduleManager);
 	}
 
 	/**
