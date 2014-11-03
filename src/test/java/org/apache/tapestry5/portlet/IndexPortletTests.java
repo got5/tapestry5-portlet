@@ -66,11 +66,11 @@ public class IndexPortletTests extends SeleniumTestCase
 
         click(SubmitLastName);
 
-        assertText("//p[starts-with(@data-error-block-for,'lastName')]", "You must provide a value for Last Name.");
+        assertTextPresent("You must provide a value for Last Name.");
+        
 
         type(InputLastName, "fac");
-        click(SubmitLastName);
-        waitForPageToLoad();
+        clickAndWait(SubmitLastName);
         assertTextPresent(" fac is stored in portlet session scope Application with @Persist!");
     }
     
@@ -82,7 +82,9 @@ public class IndexPortletTests extends SeleniumTestCase
     	String InputFirstName = "//input[starts-with(@id,'firstName')]";
     	
     	open(indexLocation);	
+    	sleep(1000);
         type(InputFirstName, "fra"); 
+        sleep(1000);
         click(SubmitFirstName);
         
         waitForAjaxRequestsToComplete("1000");
@@ -96,9 +98,12 @@ public class IndexPortletTests extends SeleniumTestCase
     	String InputSurname = "//input[starts-with(@id,'surname')]";
     	
     	open(indexLocation);	
+    	sleep(1000);
         type(InputSurname, "frafac"); 
+        sleep(1000);
         click(SubmitSurname);
         
+       
         waitForAjaxRequestsToComplete("1000");
         assertTextPresent("your surname is frafac from Ajax Form without client id!");
     }
@@ -130,7 +135,7 @@ public class IndexPortletTests extends SeleniumTestCase
    
     	
     	open(AboutLocation);	
-
+    	sleep(1000);
     	    	
     	new Wait()
         {
