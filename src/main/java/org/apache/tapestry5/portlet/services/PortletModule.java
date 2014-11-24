@@ -189,14 +189,7 @@ public final class PortletModule {
 		configuration.add(PortletSymbolConstants.EXCLUDE_ASSETS, "false");
 	}
 	
-	@Contribute( SymbolProvider.class )
-	@ApplicationDefaults
-	public static void switchProviderToJQuery( MappedConfiguration<String,Object> configuration )
-	{
-		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery" );
-	}
-
-		
+			
 	public PortletApplicationInitializer build(
 			Logger logger,
 			List<PortletApplicationInitializerFilter> configuration,
@@ -814,5 +807,12 @@ public final class PortletModule {
 		configuration.add(PortletPersistenceConstants.PORTLET_SESSION_APPLICATION_SCOPE, sessionStategy);
 	}
 	
+    
+    public static void contributeApplicationDefaults(
+            MappedConfiguration<String, String> configuration)
+    {
+    	//GZIP compression not supported in Portlet Context 
+    	configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
+    }
 		
 }
