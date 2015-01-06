@@ -472,7 +472,7 @@ public final class PortletModule
             public void renderMarkup(MarkupWriter writer, JSONObject reply,
                     PartialMarkupRenderer renderer)
             {
-                String uid = Long.toHexString(System.currentTimeMillis());
+                String uid = Long.toHexString(System.nanoTime());
 
                 String namespace = "_" + uid;
 
