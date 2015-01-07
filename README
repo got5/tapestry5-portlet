@@ -1,7 +1,8 @@
-# Tapestry 5 Portlet Bridge Module - 5.3.5
+# Tapestry 5 Portlet Bridge Module - 5.3.6
 
 
 ## Changelog
+- 5.3.6: fix #4 Avoid clientID duplication 
 - 5.3.5: Update to Tapestry 5.3.7
 - 5.3.4: new persistence strategy for SessionState annotation.
 - 5.3.3: Remove Liferay dependencies 
@@ -19,7 +20,7 @@ This library is based on work of Markus Feindler, Le Xuan Trun and Kristina B. T
 (see http://code.google.com/p/tapestry5portlet/ for more details).
 
 Like Felix Scheffer (http://code.google.com/p/tapestry5-portlet-support/ for more details), 
-we have updated the dependencies of this library to use Tapestry 5.2.6.
+we have updated the dependencies of this library to use Tapestry 5.2.6  and higher version.  
 
 This library also support:
 - portlet event processing (JSR 286)
