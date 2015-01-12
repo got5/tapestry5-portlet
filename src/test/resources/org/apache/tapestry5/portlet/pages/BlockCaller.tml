@@ -1,4 +1,4 @@
-<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
 
 <body>
 	<h1>Block Caller Demo</h1>
