@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.4-beta-22</version>
+	<version>5.4-beta-26</version>
 	<name>Tapestry5 Portlet 2.0 Integration</name>
 	<!--  packaging>war</packaging-->
 	<dependencies>
@@ -401,16 +401,25 @@
 			<id>apache-snapshots</id>
 			<url>http://repository.apache.org/snapshots</url>
 		</repository>
+		
+		<repository>
+			<id>apache-staging</id>
+			<url>https://repository.apache.org/content/repositories/staging</url>
+		</repository>
 
 		<repository>
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
 		</repository>
+		
 		<repository>
 			<id>OpenQA_Release</id>
 			<name>OpenQA Release Repository</name>
 			<url>http://archiva.openqa.org/repository/releases/</url>
 		</repository>
+		
+		
+		
 	</repositories>
 
 	<pluginRepositories>
@@ -453,7 +462,7 @@
 	</pluginRepositories>
 
 	<properties>
-		<tapestry-release-version>5.4-beta-22</tapestry-release-version>
+		<tapestry-release-version>5.4-beta-26</tapestry-release-version>
 		<liferay.version>6.1.0</liferay.version>
 		<pluto.version>2.1.0-M2</pluto.version>
 	</properties>
