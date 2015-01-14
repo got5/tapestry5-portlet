@@ -46,7 +46,6 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.corelib.components.AjaxFormLoop;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.DateField;
-import org.apache.tapestry5.corelib.components.FormInjector;
 import org.apache.tapestry5.corelib.internal.FormSupportImpl;
 import org.apache.tapestry5.corelib.mixins.Autocomplete;
 import org.apache.tapestry5.internal.InternalConstants;
@@ -70,7 +69,6 @@ import org.apache.tapestry5.ioc.ScopeConstants;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Advise;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
-import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
@@ -80,11 +78,9 @@ import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Primary;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.PipelineBuilder;
 import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
 import org.apache.tapestry5.ioc.services.StrategyBuilder;
-import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.ioc.util.IdAllocator;
 import org.apache.tapestry5.ioc.util.StrategyRegistry;
@@ -152,8 +148,6 @@ import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
-import org.apache.tapestry5.services.compatibility.Compatibility;
-import org.apache.tapestry5.services.compatibility.Trait;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.services.javascript.ModuleManager;
@@ -478,7 +472,7 @@ public final class PortletModule {
 		PartialMarkupRendererFilter javascriptSupport = new PartialMarkupRendererFilter() {
 			public void renderMarkup(MarkupWriter writer, JSONObject reply,
 					PartialMarkupRenderer renderer) {
-				String uid = Long.toHexString(System.currentTimeMillis());
+				String uid = Long.toHexString(System.nanoTime());
 
 				String namespace = "_" + uid;
 
@@ -745,7 +739,6 @@ public final class PortletModule {
 		// declare core component that will return resource response form ajax
 		// call
 		configuration.add(new DeclaredResourceResponseSender(DateField.class.getName()));
-		configuration.add(new DeclaredResourceResponseSender(FormInjector.class.getName()));
 		configuration.add(new DeclaredResourceResponseSender(BeanEditForm.class.getName()));
 		// ajaxFormLoop
         DeclaredResourceResponseSender ajaxFormLoop = new DeclaredResourceResponseSender(
