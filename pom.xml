@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.3.6</version>
+	<version>5.3.7.0</version>
 	<name>Tapestry5 Portlet 2.0 Bridge</name>
 	<dependencies>
 		<dependency>
@@ -17,12 +17,6 @@
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-upload</artifactId>
 			<version>${tapestry-release-version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-io</artifactId>
-					<groupId>commons-io</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 		<dependency>
@@ -32,12 +26,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<artifactId>commons-io</artifactId>
-			<groupId>commons-io</groupId>
-			<version>1.4</version>
-		</dependency>
-
+	
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
 			plugin (which runs the tests) will fail, preventing Maven from packaging 
 			the WAR. Tapestry includes a large number of testing facilities designed 
