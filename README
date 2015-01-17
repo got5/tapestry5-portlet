@@ -5,6 +5,8 @@
 - 5.4-beta-26 : Update to Tapestry 5.4-beta-26
 - 5.4-beta22 : Update to Tapestry 5.4-beta-22 
 - 5.4-alpha-1-SNAPSHOT : Update to Tapestry 5.4-alpha-1 
+- 5.3.8.0: Update to Tapestry 5.3.8 -> branch maint-5.3
+- 5.3.7.0: removing commons-io dependency 
 - 5.3.6: fix #4 Avoid clientID duplication 
 - 5.3.5 : Update to Tapestry 5.3.7 
 - 5.3.4 : new persistence strategy for SessionState annotation.
