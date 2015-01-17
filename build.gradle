@@ -29,8 +29,8 @@ configurations {
 
 Project projectDef = project;
 
-tapestryVersion = "5.3.7"
-liferayVersion = "6.1.0"
+tapestryVersion = "5.3.8"
+liferayVersion = "6.1.2"
 servletapi = "2.5"
 spock = "0.6-groovy-1.8"
 

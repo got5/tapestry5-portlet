@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.tapestry</groupId>
 	<artifactId>tapestry5-portlet</artifactId>
-	<version>5.3.7.0</version>
+	<version>5.3.8.0</version>
 	<name>Tapestry5 Portlet 2.0 Bridge</name>
 	<dependencies>
 		<dependency>
@@ -391,7 +391,7 @@
 	</pluginRepositories>
 
 	<properties>
-		<tapestry-release-version>5.3.7</tapestry-release-version>
+		<tapestry-release-version>5.3.8</tapestry-release-version>
 		<pluto.version>2.1.0-M2</pluto.version>
 	</properties>
 </project>
