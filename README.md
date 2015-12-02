@@ -1,7 +1,8 @@
-# Tapestry 5 Portlet Bridge Module - 5.4-beta-35
+# Tapestry 5 Portlet Bridge Module - 5.4-rc-1
 
 
 ## Changelog
+- 5.4-rc-1 : Update to Tapestry 5.4-rc-1
 - 5.4-beta-35 : Update to Tapestry 5.4-beta-35
 - 5.4-beta-26 : Update to Tapestry 5.4-beta-26
 - 5.4-beta-22 : Update to Tapestry 5.4-beta-22 
